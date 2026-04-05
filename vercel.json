@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/admin/pending-check",
+      "schedule": "0 20 * * *"
+    },
+    {
+      "path": "/api/admin/pending-check",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/admin/expiry-check",
+      "schedule": "0 14 * * *"
+    }
+  ]
+}
