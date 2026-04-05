@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { SITE } from '@/lib/config/site';
 
-export const revalidate = 3600; // cache for 1 hour
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 function escapeXml(str: string): string {
   return str

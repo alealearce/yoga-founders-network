@@ -1,6 +1,8 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY ?? 'placeholder');
+}
 
 const FROM_EMAIL = 'Yoga Founders Network <hello@yogafoundersnetwork.com>';
 const ADMIN_EMAIL = 'info@yogafoundersnetwork.com';
@@ -65,7 +67,7 @@ export async function sendWelcomeEmail(to: string, name: string) {
     <p style="margin:0;">With gratitude,<br/>The Yoga Founders Network Team</p>
   `;
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject,
@@ -93,7 +95,7 @@ export async function sendApprovalEmail(
     <p style="margin:0;">With gratitude,<br/>The Yoga Founders Network Team</p>
   `;
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject,
@@ -119,7 +121,7 @@ export async function sendRejectionEmail(
     <p style="margin:0;">With gratitude,<br/>The Yoga Founders Network Team</p>
   `;
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject,
@@ -153,7 +155,7 @@ export async function sendLeadEmail(
     <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif;">This inquiry was sent through your listing on Yoga Founders Network.</p>
   `;
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject,
@@ -175,7 +177,7 @@ export async function sendNewsletterConfirmation(to: string, confirmUrl: string)
     <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif;">This link will expire in 48 hours.</p>
   `;
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject,
@@ -207,7 +209,7 @@ export async function sendAdminNewListing(
     </p>
   `;
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to: ADMIN_EMAIL,
     subject,

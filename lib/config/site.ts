@@ -38,13 +38,14 @@ export const SITE = {
 } as const;
 
 // ── Categories / Listing Types ───────────────────────────────────────────────
+// id matches the ListingType in supabase/types.ts (singular)
 export const LISTING_TYPES = [
-  { id: "studios",   label: "Studios",   slug: "studios",   icon: "🧘" },
-  { id: "teachers",  label: "Teachers",  slug: "teachers",  icon: "👤" },
-  { id: "schools",   label: "Schools",   slug: "schools",   icon: "🎓" },
-  { id: "retreats",  label: "Retreats",  slug: "retreats",  icon: "🌿" },
-  { id: "products",  label: "Products",  slug: "products",  icon: "🪷" },
-  { id: "workshops", label: "Workshops", slug: "workshops",  icon: "✨" },
+  { id: "studio",   label: "Studios",   slug: "studios",   icon: "🧘" },
+  { id: "teacher",  label: "Teachers",  slug: "teachers",  icon: "👤" },
+  { id: "school",   label: "Schools",   slug: "schools",   icon: "🎓" },
+  { id: "retreat",  label: "Retreats",  slug: "retreats",  icon: "🌿" },
+  { id: "product",  label: "Products",  slug: "products",  icon: "🪷" },
+  { id: "workshop", label: "Workshops", slug: "workshops",  icon: "✨" },
 ] as const;
 
 export type ListingTypeId = typeof LISTING_TYPES[number]["id"];
