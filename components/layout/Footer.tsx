@@ -140,7 +140,10 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-outline-variant/30 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-sans text-xs text-on-surface-variant/60">
-            © {new Date().getFullYear()} Yoga Founders Network. All rights reserved.
+            © {new Date().getFullYear()} Yoga Founders Network. All rights reserved. Managed by{' '}
+            <a href="https://alejandroarce.com" target="_blank" rel="noopener noreferrer" className="hover:text-on-surface-variant transition-colors underline underline-offset-2">
+              arce.ca
+            </a>
           </p>
           <div className="flex items-center gap-6">
             {FOOTER_LINKS.legal.map(link => (
