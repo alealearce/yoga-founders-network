@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { COPY, SITE } from "@/lib/config/site";
@@ -5,6 +6,7 @@ import type { Listing, BlogPost } from "@/lib/supabase/types";
 import type { Metadata } from "next";
 import HeroSection from "@/components/home/HeroSection";
 import ListingCard from "@/components/directory/ListingCard";
+import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
   title: `${SITE.name} — ${SITE.tagline}`,
@@ -86,7 +88,7 @@ export default async function HomePage() {
             </div>
           ) : (
             <EmptyState
-              icon="🌿"
+              icon={<YogaSilhouette pose="lotus" size={64} color="#c5c8bd" />}
               title="Our community is growing"
               description="Be among the first to list your studio, school, or practice in our global directory."
               cta={{ label: "List Your Space", href: "/submit" }}
@@ -126,7 +128,7 @@ export default async function HomePage() {
             </div>
           ) : (
             <EmptyState
-              icon="📖"
+              icon={<YogaSilhouette pose="seated" size={64} color="#c5c8bd" />}
               title="Stories coming soon"
               description="Insights, studio spotlights, and wisdom from the global yoga community."
               cta={{ label: "Read the Journal", href: "/community" }}
@@ -225,14 +227,14 @@ function EmptyState({
   description,
   cta,
 }: {
-  icon: string;
+  icon: React.ReactNode;
   title: string;
   description: string;
   cta: { label: string; href: string };
 }) {
   return (
     <div className="text-center py-20">
-      <div className="text-5xl mb-4">{icon}</div>
+      <div className="flex justify-center mb-4">{icon}</div>
       <h3 className="font-serif text-xl text-on-surface mb-2">{title}</h3>
       <p className="font-sans text-sm text-on-surface-variant max-w-sm mx-auto mb-6">
         {description}

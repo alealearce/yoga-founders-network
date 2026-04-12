@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { SITE } from "@/lib/config/site";
 import NewsletterSignup from "@/components/newsletter/NewsletterSignup";
+import YFNIcon from "@/components/ui/YFNIcon";
+import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -11,22 +13,22 @@ export const metadata: Metadata = {
 
 const CORE_VALUES = [
   {
-    icon: "🌿",
+    icon: "I",
     title: "Integrity",
     description: "We curate with care. Every listing is reviewed so you can trust what you find here.",
   },
   {
-    icon: "🤝",
+    icon: "C",
     title: "Collaboration",
     description: "We believe the yoga community grows stronger together — sharing resources, referrals, and wisdom.",
   },
   {
-    icon: "♻️",
+    icon: "S",
     title: "Sustainability",
     description: "We support business models that allow yoga founders to thrive without burning out.",
   },
   {
-    icon: "✨",
+    icon: "A",
     title: "Abundance",
     description: "There is enough space, students, and success for every yoga founder. We celebrate each other's growth.",
   },
@@ -111,23 +113,23 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                icon: "🔍",
+                icon: "D",
                 title: "Global Directory",
                 description: "A curated, searchable directory of yoga studios, teachers, schools, retreats, products, and workshops — free to discover, easy to list.",
               },
               {
-                icon: "🤝",
+                icon: "N",
                 title: "Founder Network",
                 description: "Connect with other yoga business owners. Share resources, referrals, and collective wisdom from the global yoga founder community.",
               },
               {
-                icon: "📣",
+                icon: "V",
                 title: "Visibility Tools",
                 description: "Verified listings, featured placements, SEO-optimized profiles, and newsletter spotlights — designed to help students find you.",
               },
             ].map(item => (
               <div key={item.title} className="bg-surface-card rounded-2xl p-8">
-                <div className="text-3xl mb-4">{item.icon}</div>
+                <div className="mb-4"><YFNIcon letter={item.icon} size="lg" variant="soft" /></div>
                 <h3 className="font-serif text-xl font-bold text-on-surface mb-3">
                   {item.title}
                 </h3>
@@ -155,7 +157,7 @@ export default function AboutPage() {
           <div className="grid sm:grid-cols-2 gap-6">
             {CORE_VALUES.map(value => (
               <div key={value.title} className="bg-surface-card rounded-2xl p-8 flex gap-5">
-                <div className="text-3xl flex-shrink-0">{value.icon}</div>
+                <div className="flex-shrink-0"><YFNIcon letter={value.icon} size="lg" variant="soft" /></div>
                 <div>
                   <h3 className="font-serif text-xl font-bold text-on-surface mb-2">
                     {value.title}
@@ -194,8 +196,8 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="bg-surface-card rounded-2xl p-10 text-center">
-              <div className="w-24 h-24 rounded-full bg-secondary-container flex items-center justify-center text-4xl mx-auto mb-6">
-                🧘
+              <div className="flex justify-center mb-6">
+                <YogaSilhouette pose="seated" size={64} color="#536046" />
               </div>
               <p className="font-serif text-lg font-bold text-on-surface mb-2">
                 The YFN Team

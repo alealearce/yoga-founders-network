@@ -794,7 +794,7 @@ export default function WellnessPlannerPage() {
                     background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
                   }}
                 >
-                  Generate My Plan ✨
+                  Generate My Plan
                 </button>
               </div>
             </div>
@@ -838,7 +838,7 @@ export default function WellnessPlannerPage() {
                 {plan.routineNote && (
                   <div className="bg-secondary-container rounded-xl px-5 py-4 mb-4">
                     <p className="font-sans text-xs text-on-surface leading-relaxed">
-                      💡 {plan.routineNote}
+                      {plan.routineNote}
                     </p>
                   </div>
                 )}
@@ -924,7 +924,7 @@ export default function WellnessPlannerPage() {
                   Hydration
                 </p>
                 <p className="font-sans text-sm text-on-surface-variant leading-relaxed">
-                  💧 {plan.hydrationTip}
+                  {plan.hydrationTip}
                 </p>
               </div>
 

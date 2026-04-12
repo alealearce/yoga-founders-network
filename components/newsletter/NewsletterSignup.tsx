@@ -48,7 +48,7 @@ export default function NewsletterSignup({ variant = "inline" }: Props) {
           "font-sans text-sm font-medium",
           variant === "footer" ? "text-white" : "text-primary"
         )}>
-          🌿 {message}
+          {message}
         </p>
       </div>
     );

@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
 import ListingCard from "@/components/directory/ListingCard";
 import SearchBar from "@/components/directory/SearchBar";
+import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
   title: "Yoga Workshops & Events",
@@ -103,7 +104,7 @@ export default async function WorkshopsPage() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <div className="text-5xl mb-4">✨</div>
+              <div className="flex justify-center mb-4"><YogaSilhouette pose="warrior" size={64} color="#c5c8bd" /></div>
               <h3 className="font-serif text-xl text-on-surface mb-2">
                 Events coming soon
               </h3>

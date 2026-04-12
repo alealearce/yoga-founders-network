@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { LISTING_TYPES } from "@/lib/config/site";
 import { YOGA_CATEGORIES } from "@/lib/config/categories";
+import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
@@ -60,7 +61,7 @@ export default function SubmitPage() {
     return (
       <div className="min-h-screen bg-[#fafaf5] flex items-center justify-center px-6">
         <div className="max-w-md text-center py-20">
-          <div className="text-5xl mb-6">🌿</div>
+          <div className="flex justify-center mb-6"><YogaSilhouette pose="lotus" size={64} color="#536046" /></div>
           <h1 className="font-serif text-display-sm text-on-surface mb-4">
             You&apos;re in the queue!
           </h1>

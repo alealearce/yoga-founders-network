@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Listing, Review } from "@/lib/supabase/types";
 import { MapPin, Globe, Mail, Phone, BadgeCheck, Star, Instagram, Facebook, Youtube } from "lucide-react";
 import { SITE } from "@/lib/config/site";
+import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
@@ -93,7 +94,7 @@ export default async function ListingPage({ params }: Props) {
               />
             ) : (
               <div className="w-full h-full bg-surface-low flex items-center justify-center">
-                <span className="text-7xl opacity-40">🧘</span>
+                <YogaSilhouette pose="tree" size={80} color="#c5c8bd" />
               </div>
             )}
             {/* Gradient overlay */}

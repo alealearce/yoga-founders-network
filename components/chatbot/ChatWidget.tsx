@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { CHATBOT } from "@/lib/config/site";
+import YFNIcon from "@/components/ui/YFNIcon";
 
 interface Message {
   role: "user" | "assistant";
@@ -76,7 +77,7 @@ export function ChatWidget() {
           className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full font-sans font-semibold text-sm text-white shadow-float hover:opacity-90 transition-all duration-300"
           style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
         >
-          <span className="text-lg leading-none">🪷</span>
+          <YFNIcon letter="L" size="xs" variant="solid" className="bg-white/20 text-white border-0" />
           <span className="hidden sm:block">Ask Lotus</span>
         </button>
       )}
@@ -93,7 +94,7 @@ export function ChatWidget() {
             style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
           >
             <div className="flex items-center gap-2.5">
-              <span className="text-xl leading-none">🪷</span>
+              <YFNIcon letter="L" size="sm" variant="solid" className="bg-white/20 text-white border-0" />
               <div>
                 <p className="font-sans font-semibold text-sm text-white leading-tight">
                   {CHATBOT.name}

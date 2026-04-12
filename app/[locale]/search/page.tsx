@@ -3,6 +3,8 @@ import { createAdminClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
 import { LISTING_TYPES } from "@/lib/config/site";
 import Badge from "@/components/ui/Badge";
+import YFNIcon from "@/components/ui/YFNIcon";
+import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata = {
   title: "Search — Yoga Founders Network",
@@ -13,7 +15,15 @@ interface SearchPageProps {
 }
 
 function listingIcon(type: Listing["type"]): string {
-  return LISTING_TYPES.find((t) => t.id === type)?.icon ?? "🧘";
+  const map: Record<string, string> = {
+    studio: "S",
+    teacher: "T",
+    school: "Sc",
+    retreat: "R",
+    product: "P",
+    workshop: "W",
+  };
+  return map[type] ?? "Y";
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -108,7 +118,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         {/* Empty state */}
         {results.length === 0 && (query || typeFilter) && (
           <div className="text-center py-24">
-            <div className="text-5xl mb-5">🔍</div>
+            <div className="flex justify-center mb-5"><YogaSilhouette pose="mountain" size={64} color="#c5c8bd" /></div>
             <h2 className="font-serif text-xl text-on-surface mb-3">
               No results found
             </h2>
@@ -128,7 +138,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         {/* No query */}
         {!query && !typeFilter && (
           <div className="text-center py-24">
-            <div className="text-5xl mb-5">🧘</div>
+            <div className="flex justify-center mb-5"><YogaSilhouette pose="seated" size={64} color="#c5c8bd" /></div>
             <h2 className="font-serif text-xl text-on-surface mb-3">
               What are you looking for?
             </h2>
@@ -148,8 +158,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 className="group bg-surface-card rounded-2xl shadow-card p-5 hover:shadow-float transition-all duration-300 flex gap-4"
               >
                 {/* Icon / Logo */}
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-surface-low flex items-center justify-center text-2xl">
-                  {listingIcon(listing.type)}
+                <div className="flex-shrink-0">
+                  <YFNIcon letter={listingIcon(listing.type)} size="sm" variant="soft" />
                 </div>
 
                 {/* Content */}

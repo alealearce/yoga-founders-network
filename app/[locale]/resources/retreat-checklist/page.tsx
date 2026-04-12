@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import YFNIcon from "@/components/ui/YFNIcon";
 
 type RetreatType = "domestic" | "international";
 type BudgetLevel = "budget" | "midrange" | "luxury" | "ultraluxury";
@@ -43,12 +44,12 @@ interface ChecklistPhase {
 }
 
 const FOCUS_AREA_OPTIONS: { value: FocusArea; label: string; icon: string }[] = [
-  { value: "yoga", label: "Yoga", icon: "🧘" },
-  { value: "meditation", label: "Meditation", icon: "🕯️" },
-  { value: "adventure", label: "Adventure", icon: "🏔️" },
-  { value: "wellness", label: "Wellness / Spa", icon: "🌿" },
-  { value: "cultural", label: "Cultural", icon: "🏛️" },
-  { value: "nutrition", label: "Nutrition", icon: "🥗" },
+  { value: "yoga", label: "Yoga", icon: "Y" },
+  { value: "meditation", label: "Meditation", icon: "M" },
+  { value: "adventure", label: "Adventure", icon: "A" },
+  { value: "wellness", label: "Wellness / Spa", icon: "W" },
+  { value: "cultural", label: "Cultural", icon: "C" },
+  { value: "nutrition", label: "Nutrition", icon: "N" },
 ];
 
 const YOGA_STYLE_OPTIONS: { value: YogaStyle; label: string }[] = [
@@ -92,7 +93,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
     categories: [
       {
         name: "Vision & Concept",
-        icon: "✨",
+        icon: "V",
         tasks: [
           { id: "v1", text: "Define your retreat's core theme, intention, and transformation promise", priority: "high" },
           { id: "v2", text: "Identify your target audience (beginners, advanced, women-only, etc.)", priority: "high" },
@@ -104,7 +105,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Financials",
-        icon: "💰",
+        icon: "F",
         tasks: [
           { id: "f1", text: "Create a detailed budget spreadsheet: venue, food, transport, marketing, gear, teacher fees", priority: "high" },
           { id: "f2", text: `Calculate break-even price per person (minimum ${attendees} attendees)`, priority: "high" },
@@ -123,7 +124,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Venue Search",
-        icon: "🏡",
+        icon: "S",
         tasks: [
           { id: "vs1", text: "Research and shortlist 3–5 venues that match your vision and budget", priority: "high" },
           ...(isIntl ? [
@@ -147,7 +148,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
     categories: [
       {
         name: "Booking & Contracts",
-        icon: "📋",
+        icon: "B",
         tasks: [
           { id: "b1", text: "Sign venue contract — confirm deposit amount, cancellation terms, and included services", priority: "high" },
           { id: "b2", text: "Book guest teachers or facilitators and sign contracts", priority: "high" },
@@ -166,7 +167,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Marketing Launch",
-        icon: "📣",
+        icon: "Mk",
         tasks: [
           { id: "m1", text: "Create retreat sales page with full details, pricing, photos, and FAQ", priority: "high" },
           { id: "m2", text: "Set up online booking and payment system (deposit + balance)", priority: "high" },
@@ -182,7 +183,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Logistics Planning",
-        icon: "🗺️",
+        icon: "L",
         tasks: [
           { id: "l1", text: "Draft a detailed day-by-day schedule including yoga, meals, free time, and excursions", priority: "high" },
           { id: "l2", text: "Confirm food and dietary accommodation approach with venue (vegan, gluten-free, etc.)" },
@@ -210,7 +211,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
     categories: [
       {
         name: "Marketing Push",
-        icon: "🚀",
+        icon: "G",
         tasks: [
           { id: "mp1", text: "Follow up with waitlist and anyone who showed interest" },
           { id: "mp2", text: "Run paid ads on Instagram or Facebook targeting your ideal attendee" },
@@ -221,7 +222,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Programming",
-        icon: "📝",
+        icon: "P",
         tasks: [
           { id: "pr1", text: `Build ${form.durationDays}-day yoga sequence progression: opening, peak, integration, closing`, priority: "high" },
           { id: "pr2", text: "Prepare workshop curriculum, themes, journaling prompts, and integration exercises" },
@@ -236,7 +237,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Food & Nutrition",
-        icon: "🥗",
+        icon: "N",
         tasks: [
           { id: "fn1", text: "Collect all dietary restrictions and allergies from confirmed attendees", priority: "high" },
           { id: "fn2", text: "Finalize menu with venue chef — confirm all dietary needs are covered" },
@@ -258,7 +259,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
     categories: [
       {
         name: "Attendee Communications",
-        icon: "📧",
+        icon: "Cm",
         tasks: [
           { id: "ac1", text: "Send pre-retreat welcome email with full itinerary, packing list, and what to expect", priority: "high" },
           { id: "ac2", text: "Send physical waiver and liability forms to all attendees", priority: "high" },
@@ -274,7 +275,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Final Details",
-        icon: "✅",
+        icon: "D",
         tasks: [
           { id: "fd1", text: "Confirm final headcount with venue and update catering numbers" },
           { id: "fd2", text: "Collect all final balance payments" },
@@ -297,7 +298,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
     categories: [
       {
         name: "Final Preparations",
-        icon: "🎒",
+        icon: "Fp",
         tasks: [
           { id: "fp1", text: "Pack yoga props and teaching equipment (blocks, straps, music speaker, microphone)", priority: "high" },
           { id: "fp2", text: "Download all music playlists offline in case of no internet at venue" },
@@ -314,7 +315,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Venue & Logistics Checks",
-        icon: "🏡",
+        icon: "Vl",
         tasks: [
           { id: "vl1", text: "Call or email venue to reconfirm all details: headcount, arrival time, special requests" },
           { id: "vl2", text: "Reconfirm all activity bookings and send final attendee list to operators" },
@@ -335,7 +336,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
     categories: [
       {
         name: "Arrival & Setup",
-        icon: "🌅",
+        icon: "Ar",
         tasks: [
           { id: "ds1", text: "Arrive early to set up the yoga space before attendees arrive", priority: "high" },
           { id: "ds2", text: "Set up welcome area: name tags, welcome packets, refreshments" },
@@ -346,7 +347,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "During the Retreat",
-        icon: "🧘",
+        icon: "Dr",
         tasks: [
           { id: "dr1", text: "Hold a proper opening ceremony to set intentions and create safety" },
           { id: "dr2", text: "Check in daily with attendees (brief informal pulse check each morning or evening)" },
@@ -361,7 +362,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Closing",
-        icon: "🌙",
+        icon: "Cl",
         tasks: [
           { id: "cl1", text: "Distribute end-of-retreat feedback forms before departing", priority: "high" },
           { id: "cl2", text: "Share the group photo and any media (with consent) in the group chat" },
@@ -380,7 +381,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
     categories: [
       {
         name: "Follow-Up",
-        icon: "📧",
+        icon: "Fu",
         tasks: [
           { id: "au1", text: "Send a heartfelt thank-you email to all attendees within 48 hours", priority: "high" },
           { id: "au2", text: "Share a photo gallery or highlight reel from the retreat" },
@@ -392,7 +393,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
       },
       {
         name: "Business Review",
-        icon: "📊",
+        icon: "Rv",
         tasks: [
           { id: "br1", text: "Calculate final profit/loss against your original budget" },
           { id: "br2", text: "Write a personal post-retreat reflection: what worked, what to improve" },
@@ -741,7 +742,7 @@ export default function RetreatChecklistPage() {
                         : "bg-surface-low border border-outline-variant/40 text-on-surface-variant hover:border-primary/40"
                     }`}
                   >
-                    {type === "domestic" ? "🏠 Domestic" : "✈️ International"}
+                    {type === "domestic" ? "Domestic" : "International"}
                   </button>
                 ))}
               </div>
@@ -813,7 +814,6 @@ export default function RetreatChecklistPage() {
                           : "bg-surface-low border-outline-variant/40 text-on-surface-variant hover:border-primary/40"
                       }`}
                     >
-                      <span>{opt.icon}</span>
                       <span>{opt.label}</span>
                     </button>
                   );
@@ -832,7 +832,7 @@ export default function RetreatChecklistPage() {
             className="w-full py-4 rounded-full font-sans font-semibold text-white text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.99]"
             style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
           >
-            Generate My Personalized Checklist ✨
+            Generate My Personalized Checklist
           </button>
         </div>
       </section>
@@ -864,8 +864,7 @@ export default function RetreatChecklistPage() {
                   onClick={handlePrint}
                   className="flex items-center gap-2 font-sans text-sm font-semibold text-primary border border-primary/30 bg-secondary-container/30 hover:bg-secondary-container/60 px-4 py-2.5 rounded-full transition-colors"
                 >
-                  <span>🖨️</span>
-                  <span className="hidden sm:inline">Print</span>
+                  Print
                 </button>
               </div>
             </div>
@@ -884,7 +883,7 @@ export default function RetreatChecklistPage() {
               {totalProgress.done > 0 && (
                 <p className="font-sans text-xs text-on-surface-variant mt-1.5">
                   {Math.round((totalProgress.done / totalProgress.total) * 100)}% complete
-                  {totalProgress.done === totalProgress.total ? " — You're ready! 🎉" : ""}
+                  {totalProgress.done === totalProgress.total ? " — You're ready!" : ""}
                 </p>
               )}
             </div>
@@ -944,7 +943,7 @@ export default function RetreatChecklistPage() {
                         {phase.categories.map((cat, catIdx) => (
                           <div key={catIdx}>
                             <div className="flex items-center gap-2 mb-3">
-                              <span>{cat.icon}</span>
+                              <YFNIcon letter={cat.icon} size="xs" variant="soft" />
                               <p className="font-sans text-xs font-bold text-primary uppercase tracking-widest">
                                 {cat.name}
                               </p>

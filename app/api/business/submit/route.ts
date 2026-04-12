@@ -5,7 +5,7 @@ import { sendWelcomeEmail, sendAdminNewListing } from '@/lib/email/resend';
 
 const SubmitSchema = z.object({
   name:        z.string().min(2).max(100),
-  type:        z.enum(['studios', 'teachers', 'schools', 'retreats', 'products', 'workshops']),
+  type:        z.enum(['studio', 'teacher', 'school', 'retreat', 'product', 'workshop']),
   email:       z.string().email(),
   website:     z.string().url().optional().or(z.literal('')),
   phone:       z.string().max(30).optional(),

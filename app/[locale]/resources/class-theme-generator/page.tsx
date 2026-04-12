@@ -1224,7 +1224,7 @@ export default function ClassThemeGeneratorPage() {
               <div className="bg-secondary-container rounded-2xl p-6">
                 <SectionLabel>Playlist Vibe</SectionLabel>
                 <p className="font-sans text-sm text-on-surface leading-relaxed">
-                  🎵 {result.playlistVibe}
+                  {result.playlistVibe}
                 </p>
               </div>
 

@@ -4,15 +4,17 @@ import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/supabase/types";
 import { SITE } from "@/lib/config/site";
 import NewsletterSignup from "@/components/newsletter/NewsletterSignup";
+import YFNIcon from "@/components/ui/YFNIcon";
+import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 const RESOURCES = [
-  { href: "/resources/email-generator",         icon: "💌", title: "Re-Engagement Email Generator",   desc: "Win back dormant students with a 7-email sequence tailored to your studio's tone and offer." },
-  { href: "/resources/retreat-checklist",        icon: "🏝️", title: "Retreat Planning Checklist",      desc: "Generate a personalized step-by-step checklist for planning your next yoga retreat." },
-  { href: "/resources/class-theme-generator",   icon: "🧘", title: "Class Theme Generator",            desc: "Never run out of class ideas — get intentions, peak poses, playlist vibes, and more." },
-  { href: "/resources/wellness-planner",         icon: "🌅", title: "Yoga & Wellness Planner",         desc: "Build a personalized morning yoga routine and meal plan based on your lifestyle." },
-  { href: "/resources/teacher-finder",           icon: "🌿", title: "Find Your Perfect Teacher",       desc: "Answer a few questions and get matched with the right yoga teacher for your goals." },
-  { href: "/resources/studio-name-generator",    icon: "🏛️", title: "Studio Name Generator",          desc: "Discover the perfect name for your studio with domain suggestions and taglines." },
-  { href: "/resources/profitability-calculator", icon: "💰", title: "Profitability Calculator",        desc: "Understand your studio's true financial health and get actionable improvement tips." },
+  { href: "/resources/email-generator",         icon: "E", title: "Re-Engagement Email Generator",   desc: "Win back dormant students with a 7-email sequence tailored to your studio's tone and offer." },
+  { href: "/resources/retreat-checklist",        icon: "R", title: "Retreat Planning Checklist",      desc: "Generate a personalized step-by-step checklist for planning your next yoga retreat." },
+  { href: "/resources/class-theme-generator",   icon: "C", title: "Class Theme Generator",            desc: "Never run out of class ideas — get intentions, peak poses, playlist vibes, and more." },
+  { href: "/resources/wellness-planner",         icon: "W", title: "Yoga & Wellness Planner",         desc: "Build a personalized morning yoga routine and meal plan based on your lifestyle." },
+  { href: "/resources/teacher-finder",           icon: "F", title: "Find Your Perfect Teacher",       desc: "Answer a few questions and get matched with the right yoga teacher for your goals." },
+  { href: "/resources/studio-name-generator",    icon: "N", title: "Studio Name Generator",          desc: "Discover the perfect name for your studio with domain suggestions and taglines." },
+  { href: "/resources/profitability-calculator", icon: "P", title: "Profitability Calculator",        desc: "Understand your studio's true financial health and get actionable improvement tips." },
 ];
 
 export const metadata: Metadata = {
@@ -77,8 +79,8 @@ export default async function CommunityPage() {
                 href={resource.href}
                 className="group flex flex-col bg-surface-card rounded-2xl p-6 hover:shadow-card transition-all duration-400 hover:-translate-y-1 border border-outline-variant/10"
               >
-                <div className="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {resource.icon}
+                <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <YFNIcon letter={resource.icon} size="md" variant="soft" />
                 </div>
                 <h3 className="font-serif text-base font-bold text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">
                   {resource.title}
@@ -94,9 +96,7 @@ export default async function CommunityPage() {
             ))}
             {/* Coming Soon slot */}
             <div className="flex flex-col bg-surface-low rounded-2xl p-6 border border-outline-variant/10 border-dashed">
-              <div className="w-12 h-12 rounded-xl bg-surface-input flex items-center justify-center text-2xl mb-4 opacity-40">
-                ✨
-              </div>
+              <YFNIcon letter="+" size="md" variant="ghost" className="opacity-40 mb-4" />
               <h3 className="font-serif text-base font-bold text-on-surface-variant leading-snug mb-2">
                 More Coming Soon
               </h3>
@@ -177,7 +177,7 @@ export default async function CommunityPage() {
         <section className="pb-16 bg-[#fafaf5]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="bg-surface-card rounded-2xl p-16 text-center">
-              <div className="text-5xl mb-4">📖</div>
+              <div className="flex justify-center mb-4"><YogaSilhouette pose="seated" size={48} /></div>
               <h2 className="font-serif text-xl text-on-surface mb-2">
                 Stories coming soon
               </h2>

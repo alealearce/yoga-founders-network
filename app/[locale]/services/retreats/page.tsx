@@ -4,6 +4,7 @@ import type { Listing } from "@/lib/supabase/types";
 import { RETREAT_DURATIONS } from "@/lib/config/categories";
 import ListingCard from "@/components/directory/ListingCard";
 import SearchBar from "@/components/directory/SearchBar";
+import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
   title: "Yoga Retreats",
@@ -104,7 +105,7 @@ export default async function RetreatsPage() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <div className="text-5xl mb-4">🌿</div>
+              <div className="flex justify-center mb-4"><YogaSilhouette pose="tree" size={64} color="#c5c8bd" /></div>
               <h3 className="font-serif text-xl text-on-surface mb-2">
                 Retreats coming soon
               </h3>

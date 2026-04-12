@@ -63,7 +63,7 @@ function generateEmails(form: FormData): GeneratedEmail[] {
       title: "We've been thinking about you",
       goal: "Gentle reconnect — no pitch, just warmth and a human touch.",
       subjectLines: [
-        `We've been thinking about you, ${studentName} 💚`,
+        `We've been thinking about you, ${studentName}`,
         `It's been a while — how are you doing?`,
         `${studio} misses you, ${studentName}`,
       ],
@@ -78,7 +78,7 @@ function generateEmails(form: FormData): GeneratedEmail[] {
       title: "How are you doing?",
       goal: "Check in with genuine care and remind them of what makes your studio special.",
       subjectLines: [
-        `A quick check-in from ${studio} 🌿`,
+        `A quick check-in from ${studio}`,
         `We thought you might like to know...`,
         `What we've been up to at ${studio}`,
       ],
@@ -93,7 +93,7 @@ function generateEmails(form: FormData): GeneratedEmail[] {
       title: "Your mat misses you",
       goal: "Emotional connection to the physical and mental benefits of their yoga practice.",
       subjectLines: [
-        `Your mat is waiting, ${studentName} 🧘`,
+        `Your mat is waiting, ${studentName}`,
         `Remember how good this felt?`,
         `The benefits you've been missing`,
       ],
@@ -108,12 +108,12 @@ function generateEmails(form: FormData): GeneratedEmail[] {
       title: "A special welcome back offer just for you",
       goal: "Introduce the offer clearly and make it feel exclusive and personal.",
       subjectLines: [
-        `We have something for you, ${studentName} 🎁`,
+        `We have something for you, ${studentName}`,
         `Your welcome-back gift from ${studio}`,
         `A little something to make it easier to return`,
       ],
       previewText: `Because you're part of our community — here's something just for you.`,
-      body: `${greeting},\n\nWe've been reaching out because we genuinely miss having you in class — and we want to make it as easy as possible for you to come back.\n\nSo we've put together something just for returning students like you:\n\n✨ ${offer}\n\nThis offer is our way of saying: no awkward re-entry, no catching up required. Just show up, unroll your mat, and remember why you fell in love with yoga in the first place.\n\nThis offer is available for the next ${expiry} days — just for you.\n\n${signoff},\nThe ${studio} Team`,
+      body: `${greeting},\n\nWe've been reaching out because we genuinely miss having you in class — and we want to make it as easy as possible for you to come back.\n\nSo we've put together something just for returning students like you:\n\n${offer}\n\nThis offer is our way of saying: no awkward re-entry, no catching up required. Just show up, unroll your mat, and remember why you fell in love with yoga in the first place.\n\nThis offer is available for the next ${expiry} days — just for you.\n\n${signoff},\nThe ${studio} Team`,
       ctaText: "Claim Your Offer",
       bestSendTime: "Tuesday or Thursday, 10am–12pm",
     },
@@ -123,7 +123,7 @@ function generateEmails(form: FormData): GeneratedEmail[] {
       title: "Let's remove the barriers",
       goal: "Address common objections — time, cost, intimidation, fitness level — with empathy.",
       subjectLines: [
-        `"I've been meaning to get back..." — we hear you 💚`,
+        `"I've been meaning to get back..." — we hear you`,
         `Whatever's been holding you back, let's talk`,
         `The honest reason most people don't return (and how to fix it)`,
       ],
@@ -138,12 +138,12 @@ function generateEmails(form: FormData): GeneratedEmail[] {
       title: "Your offer expires soon",
       goal: "Create urgency — remind them the offer is expiring and make the CTA unmistakable.",
       subjectLines: [
-        `${studentName}, your offer expires in 48 hours ⏰`,
+        `${studentName}, your offer expires in 48 hours`,
         `Last chance to claim your welcome-back gift`,
         `Don't let this one slip away`,
       ],
       previewText: `This is your nudge — the offer disappears soon.`,
-      body: `${greeting},\n\nJust a quick heads-up — the special welcome-back offer we shared with you is expiring very soon.\n\n🎁 ${offer}\n\nThis is just for you, and it won't be around much longer. We'd love to see you back on the mat before it's gone.\n\nOne click. One class. That's all it takes to remember why you started.\n\nWe hope to see you soon,\n${signoff},\nThe ${studio} Team`,
+      body: `${greeting},\n\nJust a quick heads-up — the special welcome-back offer we shared with you is expiring very soon.\n\n${offer}\n\nThis is just for you, and it won't be around much longer. We'd love to see you back on the mat before it's gone.\n\nOne click. One class. That's all it takes to remember why you started.\n\nWe hope to see you soon,\n${signoff},\nThe ${studio} Team`,
       ctaText: "Claim Before It Expires",
       bestSendTime: "Thursday or Friday, 9–11am",
     },
@@ -153,7 +153,7 @@ function generateEmails(form: FormData): GeneratedEmail[] {
       title: "The farewell email",
       goal: "Final email in the sequence — gracefully close the campaign, leave on a warm note, no pressure.",
       subjectLines: [
-        `This is our last email, ${studentName} 🙏`,
+        `This is our last email, ${studentName}`,
         `Signing off — but the door's always open`,
         `No more emails from us — take care`,
       ],
@@ -398,7 +398,7 @@ export default function EmailGeneratorPage() {
             className="w-full py-4 rounded-full font-sans font-semibold text-white text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.99]"
             style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
           >
-            Generate My 7-Email Sequence ✨
+            Generate My 7-Email Sequence
           </button>
           {!isFormValid && (
             <p className="font-sans text-xs text-on-surface-variant/60 text-center mt-3">
@@ -424,8 +424,7 @@ export default function EmailGeneratorPage() {
                 onClick={handlePrint}
                 className="flex items-center gap-2 font-sans text-sm font-semibold text-primary border border-primary/30 bg-secondary-container/30 hover:bg-secondary-container/60 px-4 py-2.5 rounded-full transition-colors"
               >
-                <span>🖨️</span>
-                <span className="hidden sm:inline">Print / Export</span>
+                Print / Export
               </button>
             </div>
 

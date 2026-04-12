@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Star, MapPin, BadgeCheck } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import YFNIcon from "@/components/ui/YFNIcon";
 
 interface ListingCardProps {
   id:           string;
@@ -41,8 +42,8 @@ export default function ListingCard({
           {coverImage ? (
             <Image src={coverImage} alt={name} fill className="object-cover group-hover:scale-105 transition-transform duration-400" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-3xl">
-              {TYPE_ICONS[type] ?? "🧘"}
+            <div className="w-full h-full flex items-center justify-center">
+              <YFNIcon letter={TYPE_ICONS[type] ?? "Y"} size="lg" variant="soft" />
             </div>
           )}
           {is_verified && (
@@ -103,8 +104,8 @@ export default function ListingCard({
             className="object-cover group-hover:scale-105 transition-transform duration-[600ms]"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-5xl bg-surface-low">
-            {TYPE_ICONS[type] ?? "🧘"}
+          <div className="w-full h-full flex items-center justify-center bg-surface-low">
+            <YFNIcon letter={TYPE_ICONS[type] ?? "Y"} size="xl" variant="soft" />
           </div>
         )}
         {/* Badges */}
@@ -171,8 +172,8 @@ export default function ListingCard({
 }
 
 const TYPE_ICONS: Record<string, string> = {
-  studio: "🧘", teacher: "👤", school: "🎓",
-  retreat: "🌿", product: "🪷", workshop: "✨",
+  studio: "S", teacher: "T", school: "Sc",
+  retreat: "R", product: "P", workshop: "W",
 };
 
 const TYPE_LABELS: Record<string, string> = {

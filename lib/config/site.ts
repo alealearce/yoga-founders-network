@@ -40,12 +40,12 @@ export const SITE = {
 // ── Categories / Listing Types ───────────────────────────────────────────────
 // id matches the ListingType in supabase/types.ts (singular)
 export const LISTING_TYPES = [
-  { id: "studio",   label: "Studios",   slug: "studios",   icon: "🧘" },
-  { id: "teacher",  label: "Teachers",  slug: "teachers",  icon: "👤" },
-  { id: "school",   label: "Schools",   slug: "schools",   icon: "🎓" },
-  { id: "retreat",  label: "Retreats",  slug: "retreats",  icon: "🌿" },
-  { id: "product",  label: "Products",  slug: "products",  icon: "🪷" },
-  { id: "workshop", label: "Workshops", slug: "workshops",  icon: "✨" },
+  { id: "studio",   label: "Studios",   slug: "studios",   icon: "S" },
+  { id: "teacher",  label: "Teachers",  slug: "teachers",  icon: "T" },
+  { id: "school",   label: "Schools",   slug: "schools",   icon: "Sc" },
+  { id: "retreat",  label: "Retreats",  slug: "retreats",  icon: "R" },
+  { id: "product",  label: "Products",  slug: "products",  icon: "P" },
+  { id: "workshop", label: "Workshops", slug: "workshops",  icon: "W" },
 ] as const;
 
 export type ListingTypeId = typeof LISTING_TYPES[number]["id"];
@@ -54,8 +54,8 @@ export type ListingTypeId = typeof LISTING_TYPES[number]["id"];
 export const CHATBOT = {
   name:     "Lotus",
   persona:  "You are Lotus, a warm and knowledgeable guide for the Yoga Founders Network. You help visitors discover yoga studios, teachers, retreats, schools, and products worldwide. You speak in a calm, grounded, and encouraging tone — like a trusted yoga teacher who also understands business. Keep responses concise and helpful.",
-  greeting: "Namaste 🙏 I'm Lotus, your guide to the Yoga Founders Network. I can help you find studios, teachers, retreats, or anything else in our global yoga community. How can I help?",
-  avatar:   "🪷",
+  greeting: "Namaste — I'm Lotus, your guide to the Yoga Founders Network. I can help you find studios, teachers, retreats, or anything else in our global yoga community. How can I help?",
+  avatar:   "L",
 } as const;
 
 // ── Homepage Copy ────────────────────────────────────────────────────────────

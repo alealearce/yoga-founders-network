@@ -6,12 +6,13 @@ import Image from "next/image";
 import { Menu, X, ChevronDown, User } from "lucide-react";
 import { SITE } from "@/lib/config/site";
 import { cn } from "@/lib/utils/cn";
+import YFNIcon from "@/components/ui/YFNIcon";
 
 const SERVICES_ITEMS = [
-  { label: "Teacher Training & Schools", href: "/services/schools",   icon: "🎓", desc: "Certifications & teacher training programs" },
-  { label: "Retreat Centers",            href: "/services/retreats",   icon: "🌿", desc: "Yoga retreats around the world" },
-  { label: "Products",                   href: "/services/products",   icon: "🪷", desc: "Mats, props, apparel & more" },
-  { label: "Workshops & Events",         href: "/services/workshops",  icon: "✨", desc: "Intensives, workshops & special events" },
+  { label: "Teacher Training & Schools", href: "/services/schools",   icon: "Sc", desc: "Certifications & teacher training programs" },
+  { label: "Retreat Centers",            href: "/services/retreats",   icon: "R",  desc: "Yoga retreats around the world" },
+  { label: "Products",                   href: "/services/products",   icon: "P",  desc: "Mats, props, apparel & more" },
+  { label: "Workshops & Events",         href: "/services/workshops",  icon: "W",  desc: "Intensives, workshops & special events" },
 ];
 
 export default function Navbar() {
@@ -108,7 +109,7 @@ export default function Navbar() {
                         onClick={() => setServicesOpen(false)}
                         className="flex items-start gap-3 px-4 py-3 rounded-xl hover:bg-surface-low transition-colors duration-200 group"
                       >
-                        <span className="text-lg mt-0.5">{item.icon}</span>
+                        <YFNIcon letter={item.icon} size="xs" variant="soft" className="mt-0.5 flex-shrink-0" />
                         <div>
                           <p className="font-sans text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">
                             {item.label}
@@ -208,7 +209,7 @@ export default function Navbar() {
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl font-sans text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-low transition-colors"
                   >
-                    <span>{item.icon}</span>
+                    <YFNIcon letter={item.icon} size="xs" variant="soft" />
                     {item.label}
                   </Link>
                 ))}
