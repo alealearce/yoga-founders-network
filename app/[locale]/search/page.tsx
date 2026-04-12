@@ -3,7 +3,6 @@ import { createAdminClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
 import { LISTING_TYPES } from "@/lib/config/site";
 import Badge from "@/components/ui/Badge";
-import YFNIcon from "@/components/ui/YFNIcon";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata = {
@@ -12,18 +11,6 @@ export const metadata = {
 
 interface SearchPageProps {
   searchParams: Promise<{ q?: string; type?: string }>;
-}
-
-function listingIcon(type: Listing["type"]): string {
-  const map: Record<string, string> = {
-    studio: "S",
-    teacher: "T",
-    school: "Sc",
-    retreat: "R",
-    product: "P",
-    workshop: "W",
-  };
-  return map[type] ?? "Y";
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -157,11 +144,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 href={`/listing/${listing.slug}`}
                 className="group bg-surface-card rounded-2xl shadow-card p-5 hover:shadow-float transition-all duration-300 flex gap-4"
               >
-                {/* Icon / Logo */}
-                <div className="flex-shrink-0">
-                  <YFNIcon letter={listingIcon(listing.type)} size="sm" variant="soft" />
-                </div>
-
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">

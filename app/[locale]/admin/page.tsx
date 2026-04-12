@@ -4,7 +4,6 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { ADMIN } from "@/lib/config/site";
 import type { Listing } from "@/lib/supabase/types";
 import AdminClient from "./AdminClient";
-import YFNIcon from "@/components/ui/YFNIcon";
 
 export const metadata = {
   title: "Admin — Yoga Founders Network",
@@ -72,7 +71,6 @@ export default async function AdminPage({
         {/* Header */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-2">
-            <YFNIcon letter="A" size="sm" variant="soft" />
             <h1 className="font-serif text-display-sm text-on-surface">
               Admin Dashboard
             </h1>

@@ -4,17 +4,16 @@ import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/supabase/types";
 import { SITE } from "@/lib/config/site";
 import NewsletterSignup from "@/components/newsletter/NewsletterSignup";
-import YFNIcon from "@/components/ui/YFNIcon";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 const RESOURCES = [
-  { href: "/resources/email-generator",         icon: "E", title: "Re-Engagement Email Generator",   desc: "Win back dormant students with a 7-email sequence tailored to your studio's tone and offer." },
-  { href: "/resources/retreat-checklist",        icon: "R", title: "Retreat Planning Checklist",      desc: "Generate a personalized step-by-step checklist for planning your next yoga retreat." },
-  { href: "/resources/class-theme-generator",   icon: "C", title: "Class Theme Generator",            desc: "Never run out of class ideas — get intentions, peak poses, playlist vibes, and more." },
-  { href: "/resources/wellness-planner",         icon: "W", title: "Yoga & Wellness Planner",         desc: "Build a personalized morning yoga routine and meal plan based on your lifestyle." },
-  { href: "/resources/teacher-finder",           icon: "F", title: "Find Your Perfect Teacher",       desc: "Answer a few questions and get matched with the right yoga teacher for your goals." },
-  { href: "/resources/studio-name-generator",    icon: "N", title: "Studio Name Generator",          desc: "Discover the perfect name for your studio with domain suggestions and taglines." },
-  { href: "/resources/profitability-calculator", icon: "P", title: "Profitability Calculator",        desc: "Understand your studio's true financial health and get actionable improvement tips." },
+  { href: "/resources/email-generator",         title: "Re-Engagement Email Generator",   desc: "Win back dormant students with a 7-email sequence tailored to your studio's tone and offer." },
+  { href: "/resources/retreat-checklist",        title: "Retreat Planning Checklist",      desc: "Generate a personalized step-by-step checklist for planning your next yoga retreat." },
+  { href: "/resources/class-theme-generator",   title: "Class Theme Generator",            desc: "Never run out of class ideas — get intentions, peak poses, playlist vibes, and more." },
+  { href: "/resources/wellness-planner",         title: "Yoga & Wellness Planner",         desc: "Build a personalized morning yoga routine and meal plan based on your lifestyle." },
+  { href: "/resources/teacher-finder",           title: "Find Your Perfect Teacher",       desc: "Answer a few questions and get matched with the right yoga teacher for your goals." },
+  { href: "/resources/studio-name-generator",    title: "Studio Name Generator",          desc: "Discover the perfect name for your studio with domain suggestions and taglines." },
+  { href: "/resources/profitability-calculator", title: "Profitability Calculator",        desc: "Understand your studio's true financial health and get actionable improvement tips." },
 ];
 
 export const metadata: Metadata = {
@@ -79,9 +78,6 @@ export default async function CommunityPage() {
                 href={resource.href}
                 className="group flex flex-col bg-surface-card rounded-2xl p-6 hover:shadow-card transition-all duration-400 hover:-translate-y-1 border border-outline-variant/10"
               >
-                <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <YFNIcon letter={resource.icon} size="md" variant="soft" />
-                </div>
                 <h3 className="font-serif text-base font-bold text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">
                   {resource.title}
                 </h3>
@@ -96,7 +92,6 @@ export default async function CommunityPage() {
             ))}
             {/* Coming Soon slot */}
             <div className="flex flex-col bg-surface-low rounded-2xl p-6 border border-outline-variant/10 border-dashed">
-              <YFNIcon letter="+" size="md" variant="ghost" className="opacity-40 mb-4" />
               <h3 className="font-serif text-base font-bold text-on-surface-variant leading-snug mb-2">
                 More Coming Soon
               </h3>

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import YFNIcon from "@/components/ui/YFNIcon";
 
 export const metadata: Metadata = {
   title: "Resources",
@@ -10,7 +9,6 @@ export const metadata: Metadata = {
 const RESOURCES = [
   {
     href: "/resources/email-generator",
-    icon: "E",
     title: "Re-Engagement Email Generator",
     desc: "Win back dormant students with a complete 7-email sequence tailored to your studio's voice, tone, and offer. Includes subject lines, preview text, and send timing.",
     tag: "Studio Owners",
@@ -18,7 +16,6 @@ const RESOURCES = [
   },
   {
     href: "/resources/retreat-checklist",
-    icon: "R",
     title: "Retreat Planning Checklist",
     desc: "Generate a comprehensive, personalized checklist for planning your next yoga retreat — from booking venues to post-retreat follow-up, with pro tips.",
     tag: "Retreat Leaders",
@@ -26,7 +23,6 @@ const RESOURCES = [
   },
   {
     href: "/resources/class-theme-generator",
-    icon: "C",
     title: "Class Theme Generator",
     desc: "Never run out of creative class ideas. Get a complete theme with intentions, peak poses, music suggestions, opening and closing scripts, and teaching points.",
     tag: "Teachers",
@@ -34,7 +30,6 @@ const RESOURCES = [
   },
   {
     href: "/resources/wellness-planner",
-    icon: "W",
     title: "Yoga & Wellness Planner",
     desc: "Build a personalized morning yoga routine and daily meal plan based on your experience level, goals, and available time.",
     tag: "Practitioners",
@@ -42,7 +37,6 @@ const RESOURCES = [
   },
   {
     href: "/resources/teacher-finder",
-    icon: "F",
     title: "Find Your Perfect Teacher",
     desc: "Answer a few questions about your goals, style preferences, and priorities — and get matched with teachers whose approach aligns with your practice.",
     tag: "Students",
@@ -50,7 +44,6 @@ const RESOURCES = [
   },
   {
     href: "/resources/studio-name-generator",
-    icon: "N",
     title: "Studio Name Generator",
     desc: "Discover the perfect name for your studio with domain suggestions, taglines, and name meanings — generated based on your vibe, audience, and style.",
     tag: "Studio Owners",
@@ -58,7 +51,6 @@ const RESOURCES = [
   },
   {
     href: "/resources/profitability-calculator",
-    icon: "P",
     title: "Profitability Calculator",
     desc: "Understand your studio's true financial health. Enter your costs and revenue streams, get an instant profit/loss summary and actionable improvement recommendations.",
     tag: "Studio Owners",
@@ -95,9 +87,6 @@ export default function ResourcesPage() {
                 className="group flex flex-col bg-surface-card rounded-2xl p-6 hover:shadow-card transition-all duration-400 hover:-translate-y-1 border border-outline-variant/10"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="group-hover:scale-110 transition-transform duration-300">
-                    <YFNIcon letter={resource.icon} size="md" variant="soft" />
-                  </div>
                   <span className="font-sans text-xs font-bold text-primary/70 bg-secondary-container/60 px-2.5 py-1 rounded-full">
                     {resource.tag}
                   </span>
@@ -122,7 +111,6 @@ export default function ResourcesPage() {
 
             {/* Coming Soon */}
             <div className="flex flex-col bg-surface-low rounded-2xl p-6 border border-dashed border-outline-variant/30">
-              <YFNIcon letter="+" size="md" variant="ghost" className="opacity-40 mb-4" />
               <h2 className="font-serif text-base font-bold text-on-surface-variant leading-snug mb-2">
                 More Coming Soon
               </h2>

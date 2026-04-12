@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import YFNIcon from "@/components/ui/YFNIcon";
 
 type RetreatType = "domestic" | "international";
 type BudgetLevel = "budget" | "midrange" | "luxury" | "ultraluxury";
@@ -942,12 +941,9 @@ export default function RetreatChecklistPage() {
                       <div className="px-5 pb-5 border-t border-outline-variant/10 pt-5 space-y-6">
                         {phase.categories.map((cat, catIdx) => (
                           <div key={catIdx}>
-                            <div className="flex items-center gap-2 mb-3">
-                              <YFNIcon letter={cat.icon} size="xs" variant="soft" />
-                              <p className="font-sans text-xs font-bold text-primary uppercase tracking-widest">
-                                {cat.name}
-                              </p>
-                            </div>
+                            <p className="font-sans text-xs font-bold text-primary uppercase tracking-widest mb-3">
+                              {cat.name}
+                            </p>
                             <div className="space-y-2">
                               {cat.tasks.map((task) => {
                                 const isChecked = checkedTasks.has(task.id);

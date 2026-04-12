@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { SITE } from "@/lib/config/site";
 import NewsletterSignup from "@/components/newsletter/NewsletterSignup";
-import YFNIcon from "@/components/ui/YFNIcon";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
@@ -129,7 +128,6 @@ export default function AboutPage() {
               },
             ].map(item => (
               <div key={item.title} className="bg-surface-card rounded-2xl p-8">
-                <div className="mb-4"><YFNIcon letter={item.icon} size="lg" variant="soft" /></div>
                 <h3 className="font-serif text-xl font-bold text-on-surface mb-3">
                   {item.title}
                 </h3>
@@ -157,7 +155,6 @@ export default function AboutPage() {
           <div className="grid sm:grid-cols-2 gap-6">
             {CORE_VALUES.map(value => (
               <div key={value.title} className="bg-surface-card rounded-2xl p-8 flex gap-5">
-                <div className="flex-shrink-0"><YFNIcon letter={value.icon} size="lg" variant="soft" /></div>
                 <div>
                   <h3 className="font-serif text-xl font-bold text-on-surface mb-2">
                     {value.title}
