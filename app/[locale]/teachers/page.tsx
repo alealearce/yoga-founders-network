@@ -68,7 +68,7 @@ export default async function TeachersPage() {
                 key={cat.id}
                 className="px-4 py-1.5 rounded-full bg-surface-low text-on-surface-variant font-sans text-sm font-medium hover:bg-secondary-container hover:text-primary transition-all duration-300 cursor-pointer"
               >
-                {cat.icon} {cat.label}
+                {cat.label}
               </span>
             ))}
           </div>

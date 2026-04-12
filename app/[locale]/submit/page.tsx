@@ -136,7 +136,7 @@ export default function SubmitPage() {
                     <option value="">Select a type...</option>
                     {LISTING_TYPES.map(t => (
                       <option key={t.id} value={t.id}>
-                        {t.icon} {t.label}
+                        {t.label}
                       </option>
                     ))}
                   </select>
@@ -242,7 +242,7 @@ export default function SubmitPage() {
                         : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
                     }`}
                   >
-                    {cat.icon} {cat.label}
+                    {cat.label}
                   </button>
                 ))}
               </div>

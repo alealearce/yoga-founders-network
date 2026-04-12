@@ -95,7 +95,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     : undefined
                 }
               >
-                <span>{t.icon}</span>
                 {t.label}
               </Link>
             );

@@ -576,7 +576,7 @@ export default function RetreatChecklistPage() {
     </div>
     ${phase.categories.map((cat) => `
     <div class="category">
-      <div class="cat-title">${cat.icon} ${cat.name}</div>
+      <div class="cat-title">${cat.name}</div>
       ${cat.tasks.map((task) => `
       <div class="task">
         <div class="checkbox ${checkedTasks.has(task.id) ? "checked" : ""}"></div>
