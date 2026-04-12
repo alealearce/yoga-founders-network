@@ -26,7 +26,7 @@ interface FormData {
 interface ChecklistTask {
   id: string;
   text: string;
-  priority?: "high" | "medium";
+  priority?: string;
   note?: string;
 }
 
