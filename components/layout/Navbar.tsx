@@ -129,6 +129,12 @@ export default function Navbar() {
               >
                 Community
               </Link>
+              <Link
+                href="/resources"
+                className="font-sans text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors duration-300"
+              >
+                Resources
+              </Link>
             </nav>
 
             {/* Desktop Actions */}
@@ -209,6 +215,7 @@ export default function Navbar() {
               </div>
 
               <MobileNavLink href="/community" onClick={() => setMobileOpen(false)}>Community</MobileNavLink>
+              <MobileNavLink href="/resources" onClick={() => setMobileOpen(false)}>Resources</MobileNavLink>
             </nav>
 
             <div className="mt-auto flex flex-col gap-3 pt-6 border-t border-outline-variant/30">

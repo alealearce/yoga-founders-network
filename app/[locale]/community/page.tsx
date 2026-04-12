@@ -5,6 +5,16 @@ import type { BlogPost } from "@/lib/supabase/types";
 import { SITE } from "@/lib/config/site";
 import NewsletterSignup from "@/components/newsletter/NewsletterSignup";
 
+const RESOURCES = [
+  { href: "/resources/email-generator",         icon: "💌", title: "Re-Engagement Email Generator",   desc: "Win back dormant students with a 7-email sequence tailored to your studio's tone and offer." },
+  { href: "/resources/retreat-checklist",        icon: "🏝️", title: "Retreat Planning Checklist",      desc: "Generate a personalized step-by-step checklist for planning your next yoga retreat." },
+  { href: "/resources/class-theme-generator",   icon: "🧘", title: "Class Theme Generator",            desc: "Never run out of class ideas — get intentions, peak poses, playlist vibes, and more." },
+  { href: "/resources/wellness-planner",         icon: "🌅", title: "Yoga & Wellness Planner",         desc: "Build a personalized morning yoga routine and meal plan based on your lifestyle." },
+  { href: "/resources/teacher-finder",           icon: "🌿", title: "Find Your Perfect Teacher",       desc: "Answer a few questions and get matched with the right yoga teacher for your goals." },
+  { href: "/resources/studio-name-generator",    icon: "🏛️", title: "Studio Name Generator",          desc: "Discover the perfect name for your studio with domain suggestions and taglines." },
+  { href: "/resources/profitability-calculator", icon: "💰", title: "Profitability Calculator",        desc: "Understand your studio's true financial health and get actionable improvement tips." },
+];
+
 export const metadata: Metadata = {
   title: "The Journal",
   description: "Insights, stories, and wisdom from the global yoga community. Studio spotlights, founder interviews, practice guides, and more.",
@@ -38,6 +48,63 @@ export default async function CommunityPage() {
           <p className="font-sans text-lg text-on-surface-variant max-w-xl leading-relaxed">
             Insights, studio spotlights, and wisdom from the global yoga community — curated for founders and practitioners alike.
           </p>
+        </div>
+      </section>
+
+      {/* Resources Section */}
+      <section className="pb-16 bg-[#fafaf5]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-2">
+                Tools &amp; Guides
+              </p>
+              <h2 className="font-serif text-display-sm text-on-surface">
+                Resources
+              </h2>
+            </div>
+            <Link
+              href="/resources"
+              className="hidden sm:flex font-sans text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              View all →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {RESOURCES.map(resource => (
+              <Link
+                key={resource.href}
+                href={resource.href}
+                className="group flex flex-col bg-surface-card rounded-2xl p-6 hover:shadow-card transition-all duration-400 hover:-translate-y-1 border border-outline-variant/10"
+              >
+                <div className="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                  {resource.icon}
+                </div>
+                <h3 className="font-serif text-base font-bold text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">
+                  {resource.title}
+                </h3>
+                <p className="font-sans text-sm text-on-surface-variant leading-relaxed flex-1">
+                  {resource.desc}
+                </p>
+                <div className="mt-4 flex items-center gap-1 font-sans text-xs font-semibold text-primary">
+                  Try it free
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+                </div>
+              </Link>
+            ))}
+            {/* Coming Soon slot */}
+            <div className="flex flex-col bg-surface-low rounded-2xl p-6 border border-outline-variant/10 border-dashed">
+              <div className="w-12 h-12 rounded-xl bg-surface-input flex items-center justify-center text-2xl mb-4 opacity-40">
+                ✨
+              </div>
+              <h3 className="font-serif text-base font-bold text-on-surface-variant leading-snug mb-2">
+                More Coming Soon
+              </h3>
+              <p className="font-sans text-sm text-on-surface-variant/60 leading-relaxed">
+                New tools and guides are added regularly.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

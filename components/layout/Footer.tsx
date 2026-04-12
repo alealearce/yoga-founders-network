@@ -15,6 +15,7 @@ const FOOTER_LINKS = {
   ],
   community: [
     { label: "The Journal",    href: "/community" },
+    { label: "Resources",      href: "/resources" },
     { label: "About Us",       href: "/about" },
     { label: "List Your Space",href: "/submit" },
     { label: "Sign In",        href: "/login" },
