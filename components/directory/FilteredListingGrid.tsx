@@ -7,7 +7,7 @@ import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 interface FilterGroup {
   label?: string;
-  options: string[];
+  options: readonly string[];
   field: "yoga_styles" | "experience_levels";
 }
 
