@@ -25,7 +25,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     const supabase = createAdminClient();
     let req = supabase
       .from("listings")
-      .select("id, name, slug, type, tagline, city, country, is_verified, is_featured, rating_avg, rating_count, logo_url")
+      .select("id, name, slug, type, tagline, city, country, is_verified, is_featured, logo_url")
       .eq("status", "approved");
 
     if (typeFilter) {
@@ -38,7 +38,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       );
     }
 
-    const { data } = await req.order("is_featured", { ascending: false }).order("rating_avg", { ascending: false }).limit(48);
+    const { data } = await req.order("is_featured", { ascending: false }).limit(48);
     results = (data ?? []) as Listing[];
   }
 
@@ -174,14 +174,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                         <span className="font-sans text-xs text-on-surface-variant">
                           {listing.city}
                           {listing.country ? `, ${listing.country}` : ""}
-                        </span>
-                      </>
-                    )}
-                    {listing.rating_count > 0 && (
-                      <>
-                        <span className="text-outline-variant">·</span>
-                        <span className="font-sans text-xs text-on-surface-variant">
-                          {listing.rating_avg.toFixed(1)} ★
                         </span>
                       </>
                     )}
