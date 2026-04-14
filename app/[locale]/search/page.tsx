@@ -4,6 +4,7 @@ import type { Listing } from "@/lib/supabase/types";
 import { LISTING_TYPES } from "@/lib/config/site";
 import Badge from "@/components/ui/Badge";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
+import { getListingUrl } from "@/lib/utils/listingUrl";
 
 export const metadata = {
   title: "Search — Yoga Founders Network",
@@ -42,7 +43,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafaf5] px-6 py-16">
+    <div className="min-h-screen bg-[#ffffff] px-6 py-16">
       <div className="max-w-5xl mx-auto">
 
         {/* Header */}
@@ -69,7 +70,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             }`}
             style={
               !typeFilter
-                ? { background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }
+                ? { background: "#111111" }
                 : undefined
             }
           >
@@ -91,7 +92,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 }`}
                 style={
                   isActive
-                    ? { background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }
+                    ? { background: "#111111" }
                     : undefined
                 }
               >
@@ -104,7 +105,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         {/* Empty state */}
         {results.length === 0 && (query || typeFilter) && (
           <div className="text-center py-24">
-            <div className="flex justify-center mb-5"><YogaSilhouette pose="mountain" size={64} color="#c5c8bd" /></div>
+            <div className="flex justify-center mb-5"><YogaSilhouette pose="mountain" size={64} color="#d0d0d0" /></div>
             <h2 className="font-serif text-xl text-on-surface mb-3">
               No results found
             </h2>
@@ -114,7 +115,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <Link
               href="/"
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
-              style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+              style={{ background: "#111111" }}
             >
               Explore all listings
             </Link>
@@ -124,7 +125,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         {/* No query */}
         {!query && !typeFilter && (
           <div className="text-center py-24">
-            <div className="flex justify-center mb-5"><YogaSilhouette pose="seated" size={64} color="#c5c8bd" /></div>
+            <div className="flex justify-center mb-5"><YogaSilhouette pose="seated" size={64} color="#d0d0d0" /></div>
             <h2 className="font-serif text-xl text-on-surface mb-3">
               What are you looking for?
             </h2>
@@ -140,7 +141,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             {results.map((listing) => (
               <Link
                 key={listing.id}
-                href={`/listing/${listing.slug}`}
+                href={getListingUrl(listing.type, listing.slug)}
                 className="group bg-surface-card rounded-2xl shadow-card p-5 hover:shadow-float transition-all duration-300 flex gap-4"
               >
                 {/* Content */}

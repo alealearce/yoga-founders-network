@@ -7,13 +7,13 @@ export default function HeroSection() {
   const lines = COPY.hero.headline.split("\n");
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#fafaf5]">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#ffffff]">
       {/* Background subtle gradient */}
       <div
         className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 70% 50%, #dde5d4 0%, transparent 70%)",
+            "radial-gradient(ellipse 80% 60% at 70% 50%, #e8e8e8 0%, transparent 70%)",
         }}
       />
 
@@ -44,9 +44,9 @@ export default function HeroSection() {
             {/* CTAs */}
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/studios"
+                href="/yogastudio"
                 className="px-7 py-3.5 rounded-full font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+                style={{ background: "#111111" }}
               >
                 {COPY.hero.cta}
               </Link>
@@ -92,7 +92,7 @@ export default function HeroSection() {
                 className="absolute inset-0 opacity-10"
                 style={{
                   background:
-                    "linear-gradient(135deg, #536046 0%, transparent 60%)",
+                    "transparent",
                 }}
               />
             </div>
@@ -104,7 +104,7 @@ export default function HeroSection() {
       <div
         className="absolute inset-0 -z-10 lg:hidden opacity-10"
         style={{
-          background: "radial-gradient(circle at 50% 80%, #dde5d4 0%, transparent 60%)",
+          background: "radial-gradient(circle at 50% 80%, #e8e8e8 0%, transparent 60%)",
         }}
       />
     </section>

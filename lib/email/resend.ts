@@ -8,8 +8,8 @@ const FROM_EMAIL = 'Yoga Founders Network <hello@yogafoundersnetwork.com>';
 const ADMIN_EMAIL = 'info@yogafoundersnetwork.com';
 
 // ── Brand styles (inline, for email client compatibility) ──────────────────
-const SAGE = '#536046';
-const BG = '#fafaf5';
+const SAGE = '#111111';
+const BG = '#ffffff';
 const BORDER = '#e8e8e0';
 
 function baseTemplate(title: string, bodyHtml: string): string {

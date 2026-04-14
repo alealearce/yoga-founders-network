@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
-import { PRODUCT_TYPES } from "@/lib/config/categories";
-import ListingCard from "@/components/directory/ListingCard";
+import { PRODUCT_CATEGORIES } from "@/lib/config/categories";
 import SearchBar from "@/components/directory/SearchBar";
+import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
 
 export const metadata: Metadata = {
   title: "Yoga Products",
@@ -28,7 +28,7 @@ export default async function ProductsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#fafaf5]">
+      <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-2xl">
             <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
@@ -54,71 +54,16 @@ export default async function ProductsPage() {
         </div>
       </section>
 
-      {/* Category Filters */}
-      <section className="py-4 bg-[#fafaf5] border-b border-outline-variant/20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2">
-            <span className="px-4 py-1.5 rounded-full bg-primary text-white font-sans text-sm font-medium">
-              All Products
-            </span>
-            {PRODUCT_TYPES.map(type => (
-              <span
-                key={type}
-                className="px-4 py-1.5 rounded-full bg-surface-low text-on-surface-variant font-sans text-sm font-medium hover:bg-secondary-container hover:text-primary transition-all duration-300 cursor-pointer"
-              >
-                {type}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Grid */}
-      <section className="py-16 lg:py-20 bg-[#fafaf5]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {products.map(product => (
-                <ListingCard
-                  key={product.id}
-                  id={product.id}
-                  slug={product.slug}
-                  name={product.name}
-                  type={product.type}
-                  tagline={product.tagline ?? undefined}
-                  city={product.city ?? undefined}
-                  country={product.country ?? undefined}
-                  logo_url={product.logo_url}
-                  images={product.images}
-                  yoga_styles={product.yoga_styles}
-                  rating_avg={product.rating_avg}
-                  rating_count={product.rating_count}
-                  is_verified={product.is_verified}
-                  is_featured={product.is_featured}
-                  price_range={product.price_range}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20">
-              <div className="text-5xl mb-4">🪷</div>
-              <h3 className="font-serif text-xl text-on-surface mb-2">
-                Products coming soon
-              </h3>
-              <p className="font-sans text-sm text-on-surface-variant max-w-sm mx-auto mb-6">
-                Sell yoga products? List them in our community marketplace.
-              </p>
-              <a
-                href="/submit"
-                className="inline-flex px-6 py-3 rounded-full font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
-              >
-                List Your Product
-              </a>
-            </div>
-          )}
-        </div>
-      </section>
+      <FilteredListingGrid
+        listings={products}
+        columns="4"
+        filterGroups={[
+          { label: "Category:", field: "experience_levels", options: [...PRODUCT_CATEGORIES] },
+        ]}
+        emptyTitle="Products coming soon"
+        emptyDescription="Sell yoga products? List them in our community marketplace."
+        emptyCta="List Your Product"
+      />
     </>
   );
 }

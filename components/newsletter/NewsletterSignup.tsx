@@ -5,7 +5,7 @@ import { Send } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 interface Props {
-  variant?: "footer" | "inline" | "hero";
+  variant?: "footer" | "inline" | "hero" | "compact";
 }
 
 export default function NewsletterSignup({ variant = "inline" }: Props) {
@@ -54,6 +54,28 @@ export default function NewsletterSignup({ variant = "inline" }: Props) {
     );
   }
 
+  if (variant === "compact") {
+    return (
+      <form onSubmit={handleSubmit} className="flex items-center rounded-full border border-outline-variant/30 overflow-hidden bg-white pr-1">
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="Add your email"
+          required
+          className="flex-1 px-4 py-2.5 font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none bg-transparent"
+        />
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className="flex-shrink-0 px-4 py-2 rounded-full bg-on-surface text-white font-sans text-xs font-semibold transition-all duration-300 hover:opacity-80 disabled:opacity-60"
+        >
+          {status === "loading" ? "..." : "Subscribe"}
+        </button>
+      </form>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
       <input
@@ -77,7 +99,7 @@ export default function NewsletterSignup({ variant = "inline" }: Props) {
           "flex items-center gap-2 px-5 py-3 rounded-full font-sans text-sm font-semibold transition-all duration-300",
           "disabled:opacity-60 disabled:cursor-not-allowed",
           variant === "footer"
-            ? "bg-white text-[#536046] hover:bg-white/90"
+            ? "bg-white text-[#111111] hover:bg-white/90"
             : "bg-primary text-white hover:bg-primary-container"
         )}
       >

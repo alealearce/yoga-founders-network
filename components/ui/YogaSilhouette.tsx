@@ -16,7 +16,7 @@ interface YogaSilhouetteProps {
 export default function YogaSilhouette({
   pose      = "seated",
   size      = 64,
-  color     = "#536046",
+  color     = "#111111",
   className = "",
 }: YogaSilhouetteProps) {
   return (

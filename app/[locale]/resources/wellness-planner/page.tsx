@@ -471,7 +471,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
                     ? "text-white"
                     : "bg-surface-low border-2 border-outline-variant text-on-surface-variant"
                 }`}
-                style={isActive ? { background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" } : {}}
+                style={isActive ? { background: "#111111" } : {}}
               >
                 {isDone ? "✓" : step}
               </div>
@@ -581,9 +581,9 @@ export default function WellnessPlannerPage() {
   const step1Valid = formData.goals.length > 0;
 
   return (
-    <div className="min-h-screen bg-[#fafaf5]">
+    <div className="min-h-screen bg-[#ffffff]">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#fafaf5]">
+      <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-2xl mx-auto px-4">
           <Link
             href="/resources"
@@ -622,7 +622,7 @@ export default function WellnessPlannerPage() {
                     setFormData((prev) => ({ ...prev, name: e.target.value }))
                   }
                   placeholder="e.g. Sarah"
-                  className="w-full border border-outline-variant rounded-xl px-4 py-3 font-sans text-sm text-on-surface bg-[#fafaf5] placeholder-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
+                  className="w-full border border-outline-variant rounded-xl px-4 py-3 font-sans text-sm text-on-surface bg-[#ffffff] placeholder-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
 
@@ -679,7 +679,7 @@ export default function WellnessPlannerPage() {
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, wakeTime: e.target.value }))
                   }
-                  className="border border-outline-variant rounded-xl px-4 py-3 font-sans text-sm text-on-surface bg-[#fafaf5] focus:outline-none focus:border-primary transition-colors"
+                  className="border border-outline-variant rounded-xl px-4 py-3 font-sans text-sm text-on-surface bg-[#ffffff] focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
 
@@ -708,7 +708,7 @@ export default function WellnessPlannerPage() {
                 disabled={!step1Valid}
                 className="w-full py-4 rounded-full text-white font-semibold font-sans text-base transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{
-                  background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
+                  background: "#111111",
                 }}
               >
                 Review My Info →
@@ -791,7 +791,7 @@ export default function WellnessPlannerPage() {
                   onClick={handleNext}
                   className="flex-1 py-4 rounded-full text-white font-semibold font-sans text-base transition-opacity hover:opacity-90"
                   style={{
-                    background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
+                    background: "#111111",
                   }}
                 >
                   Generate My Plan
@@ -808,7 +808,7 @@ export default function WellnessPlannerPage() {
                 className="rounded-2xl p-8 text-white"
                 style={{
                   background:
-                    "linear-gradient(135deg, #536046 0%, #6b795d 60%, #7a8f6d 100%)",
+                    "#111111",
                 }}
               >
                 <p className="font-sans text-xs font-bold tracking-widest uppercase opacity-70 mb-2">
@@ -851,7 +851,7 @@ export default function WellnessPlannerPage() {
                     >
                       <div
                         className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold font-sans text-sm"
-                        style={{ background: "#536046" }}
+                        style={{ background: "#111111" }}
                       >
                         {i + 1}
                       </div>
@@ -935,7 +935,7 @@ export default function WellnessPlannerPage() {
                   onClick={handleReset}
                   className="flex-1 py-4 rounded-full text-white font-semibold font-sans text-base transition-opacity hover:opacity-90"
                   style={{
-                    background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
+                    background: "#111111",
                   }}
                 >
                   Create Another Plan

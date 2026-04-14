@@ -1045,9 +1045,9 @@ export default function ClassThemeGeneratorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafaf5]">
+    <div className="min-h-screen bg-[#ffffff]">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#fafaf5]">
+      <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-3xl mx-auto px-4">
           <Link
             href="/resources"
@@ -1172,7 +1172,7 @@ export default function ClassThemeGeneratorPage() {
             onClick={handleGenerate}
             className="w-full py-4 rounded-full text-white font-semibold font-sans text-base transition-opacity hover:opacity-90 active:opacity-80"
             style={{
-              background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
+              background: "#111111",
             }}
           >
             Generate Class Theme
@@ -1186,7 +1186,7 @@ export default function ClassThemeGeneratorPage() {
               <div
                 className="rounded-2xl p-8 text-white"
                 style={{
-                  background: "linear-gradient(135deg, #536046 0%, #6b795d 60%, #7a8f6d 100%)",
+                  background: "#111111",
                 }}
               >
                 <p className="font-sans text-xs font-bold tracking-widest uppercase opacity-70 mb-3">
@@ -1239,7 +1239,7 @@ export default function ClassThemeGeneratorPage() {
                     >
                       <span
                         className="text-xs font-bold font-sans rounded-full w-6 h-6 flex items-center justify-center text-white shrink-0"
-                        style={{ background: "#536046" }}
+                        style={{ background: "#111111" }}
                       >
                         {i + 1}
                       </span>
@@ -1270,11 +1270,11 @@ export default function ClassThemeGeneratorPage() {
               {/* Quote */}
               <div
                 className="rounded-2xl p-8 relative overflow-hidden"
-                style={{ background: "#fafaf5", border: "1.5px solid #dde5d4" }}
+                style={{ background: "#ffffff", border: "1.5px solid #e8e8e8" }}
               >
                 <span
                   className="absolute top-2 left-6 font-serif text-8xl leading-none select-none"
-                  style={{ color: "#dde5d4" }}
+                  style={{ color: "#e8e8e8" }}
                 >
                   &ldquo;
                 </span>
@@ -1295,7 +1295,7 @@ export default function ClassThemeGeneratorPage() {
                   onClick={handleGenerateAnother}
                   className="flex-1 py-4 rounded-full text-white font-semibold font-sans text-base transition-opacity hover:opacity-90"
                   style={{
-                    background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
+                    background: "#111111",
                   }}
                 >
                   Generate Another Theme

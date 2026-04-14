@@ -65,7 +65,7 @@ export default async function AdminPage({
   const all = (allData ?? []) as AdminListing[];
 
   return (
-    <div className="min-h-screen bg-[#fafaf5] px-6 py-16">
+    <div className="min-h-screen bg-[#ffffff] px-6 py-16">
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}

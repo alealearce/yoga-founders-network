@@ -74,7 +74,7 @@ export function ChatWidget() {
           onClick={() => setOpen(true)}
           aria-label={`Open ${CHATBOT.name} chat`}
           className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full font-sans font-semibold text-sm text-white shadow-float hover:opacity-90 transition-all duration-300"
-          style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+          style={{ background: "#111111" }}
         >
           <span>Ask Lotus</span>
         </button>
@@ -89,7 +89,7 @@ export function ChatWidget() {
           {/* Header */}
           <div
             className="flex items-center justify-between px-5 py-4 flex-shrink-0"
-            style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+            style={{ background: "#111111" }}
           >
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
@@ -128,7 +128,7 @@ export function ChatWidget() {
               <div className="flex items-end gap-2">
                 <div
                   className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-base"
-                  style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+                  style={{ background: "#111111" }}
                 >
                   🪷
                 </div>

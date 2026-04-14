@@ -143,7 +143,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
   const phase2: ChecklistPhase = {
     phase: "Phase 2",
     timeframe: "6–12 Months Before",
-    color: "#536046",
+    color: "#111111",
     categories: [
       {
         name: "Booking & Contracts",
@@ -206,7 +206,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
   const phase3: ChecklistPhase = {
     phase: "Phase 3",
     timeframe: "3–6 Months Before",
-    color: "#6b795d",
+    color: "#333333",
     categories: [
       {
         name: "Marketing Push",
@@ -254,7 +254,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
   const phase4: ChecklistPhase = {
     phase: "Phase 4",
     timeframe: "1–3 Months Before",
-    color: "#536046",
+    color: "#111111",
     categories: [
       {
         name: "Attendee Communications",
@@ -331,7 +331,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
   const phase6: ChecklistPhase = {
     phase: "Phase 6",
     timeframe: "Day Before & During",
-    color: "#536046",
+    color: "#111111",
     categories: [
       {
         name: "Arrival & Setup",
@@ -376,7 +376,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
   const phase7: ChecklistPhase = {
     phase: "Phase 7",
     timeframe: "After the Retreat",
-    color: "#43483e",
+    color: "#555555",
     categories: [
       {
         name: "Follow-Up",
@@ -544,24 +544,24 @@ export default function RetreatChecklistPage() {
   <meta charset="UTF-8" />
   <title>Retreat Planning Checklist — ${formData.retreatName || "My Retreat"}</title>
   <style>
-    body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 32px; color: #1a1c19; }
+    body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 32px; color: #111111; }
     h1 { font-size: 24px; margin-bottom: 4px; }
-    .meta { color: #43483e; font-size: 14px; margin-bottom: 8px; }
-    .progress { font-size: 13px; color: #536046; font-weight: bold; margin-bottom: 32px; }
+    .meta { color: #555555; font-size: 14px; margin-bottom: 8px; }
+    .progress { font-size: 13px; color: #111111; font-weight: bold; margin-bottom: 32px; }
     .phase { margin-bottom: 32px; }
-    .phase-header { background: #dde5d4; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; }
+    .phase-header { background: #e8e8e8; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; }
     .phase-title { font-size: 16px; font-weight: bold; margin: 0; }
-    .phase-time { font-size: 12px; color: #536046; font-family: sans-serif; margin: 0; }
+    .phase-time { font-size: 12px; color: #111111; font-family: sans-serif; margin: 0; }
     .category { margin-bottom: 16px; }
-    .cat-title { font-family: sans-serif; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; color: #536046; margin-bottom: 6px; }
+    .cat-title { font-family: sans-serif; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; color: #111111; margin-bottom: 6px; }
     .task { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
-    .checkbox { width: 14px; height: 14px; border: 1.5px solid #c5c8bd; border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
-    .checkbox.checked { background: #536046; border-color: #536046; }
+    .checkbox { width: 14px; height: 14px; border: 1.5px solid #d0d0d0; border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+    .checkbox.checked { background: #111111; border-color: #111111; }
     .task-text { font-size: 13px; line-height: 1.5; }
-    .task-note { font-size: 11px; color: #43483e; font-style: italic; margin-top: 2px; }
-    .tips { background: #f4f4ef; border-left: 3px solid #536046; padding: 16px 20px; border-radius: 4px; margin-top: 32px; }
+    .task-note { font-size: 11px; color: #555555; font-style: italic; margin-top: 2px; }
+    .tips { background: #f5f5f5; border-left: 3px solid #111111; padding: 16px 20px; border-radius: 4px; margin-top: 32px; }
     .tips h2 { font-size: 14px; margin: 0 0 10px; }
-    .tip { font-size: 13px; margin-bottom: 6px; color: #43483e; }
+    .tip { font-size: 13px; margin-bottom: 6px; color: #555555; }
     @media print { .phase { break-inside: avoid; } }
   </style>
 </head>
@@ -610,9 +610,9 @@ export default function RetreatChecklistPage() {
   const totalProgress = showResults ? getTotalProgress() : { done: 0, total: 0 };
 
   return (
-    <div className="min-h-screen bg-[#fafaf5]">
+    <div className="min-h-screen bg-[#ffffff]">
       {/* Hero */}
-      <section className="pt-32 pb-12 bg-[#fafaf5]">
+      <section className="pt-32 pb-12 bg-[#ffffff]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Link
             href="/resources"
@@ -829,7 +829,7 @@ export default function RetreatChecklistPage() {
             onClick={handleGenerate}
             disabled={!isFormValid}
             className="w-full py-4 rounded-full font-sans font-semibold text-white text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.99]"
-            style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+            style={{ background: "#111111" }}
           >
             Generate My Personalized Checklist
           </button>
@@ -875,7 +875,7 @@ export default function RetreatChecklistPage() {
                   className="h-2 rounded-full transition-all duration-500"
                   style={{
                     width: totalProgress.total > 0 ? `${(totalProgress.done / totalProgress.total) * 100}%` : "0%",
-                    background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
+                    background: "#111111",
                   }}
                 />
               </div>
@@ -906,7 +906,7 @@ export default function RetreatChecklistPage() {
                     >
                       <div
                         className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
-                        style={{ background: isComplete ? "#536046" : "#dde5d4" }}
+                        style={{ background: isComplete ? "#111111" : "#e8e8e8" }}
                       >
                         {isComplete ? (
                           <span className="text-white text-lg">✓</span>

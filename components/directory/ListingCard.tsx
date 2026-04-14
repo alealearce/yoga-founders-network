@@ -1,7 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Star, MapPin, BadgeCheck } from "lucide-react";
+import { MapPin, BadgeCheck } from "lucide-react";
+import CoverImage from "@/components/ui/CoverImage";
 import { cn } from "@/lib/utils/cn";
+import { getListingUrl } from "@/lib/utils/listingUrl";
 
 interface ListingCardProps {
   id:           string;
@@ -24,8 +25,8 @@ interface ListingCardProps {
 
 export default function ListingCard({
   slug, name, type, tagline, city, country,
-  logo_url, images, yoga_styles, rating_avg, rating_count,
-  is_verified, is_featured, price_range, variant = "card",
+  logo_url, images, yoga_styles,
+  is_verified, is_featured, variant = "card",
 }: ListingCardProps) {
   const coverImage = images?.[0] ?? logo_url ?? null;
   const location   = [city, country].filter(Boolean).join(", ");
@@ -33,13 +34,13 @@ export default function ListingCard({
   if (variant === "row") {
     return (
       <Link
-        href={`/listing/${slug}`}
+        href={getListingUrl(type, slug)}
         className="group flex items-start gap-5 p-4 rounded-2xl bg-surface-card hover:shadow-card transition-all duration-400"
       >
         {/* Thumbnail */}
         <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-surface-low">
           {coverImage ? (
-            <Image src={coverImage} alt={name} fill className="object-cover group-hover:scale-105 transition-transform duration-400" />
+            <CoverImage src={coverImage} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-400" />
           ) : (
             <div className="w-full h-full bg-secondary-container/40 rounded-xl" />
           )}
@@ -74,32 +75,19 @@ export default function ListingCard({
           )}
         </div>
 
-        {/* Rating */}
-        {rating_avg && (
-          <div className="flex-shrink-0 flex items-center gap-1">
-            <Star size={13} className="text-amber-500 fill-amber-500" />
-            <span className="font-sans text-sm font-semibold text-on-surface">{rating_avg.toFixed(1)}</span>
-            {rating_count && <span className="font-sans text-xs text-on-surface-variant">({rating_count})</span>}
-          </div>
-        )}
       </Link>
     );
   }
 
   return (
     <Link
-      href={`/listing/${slug}`}
+      href={getListingUrl(type, slug)}
       className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 hover:-translate-y-1"
     >
       {/* Cover Image */}
       <div className="relative h-52 bg-surface-low overflow-hidden">
         {coverImage ? (
-          <Image
-            src={coverImage}
-            alt={name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-[600ms]"
-          />
+          <CoverImage src={coverImage} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[600ms]" />
         ) : (
           <div className="w-full h-full bg-secondary-container/30" />
         )}
@@ -116,13 +104,6 @@ export default function ListingCard({
             </span>
           )}
         </div>
-        {price_range && (
-          <div className="absolute top-3 right-3">
-            <span className="px-2.5 py-1 rounded-full bg-white/90 font-sans text-xs font-semibold text-on-surface">
-              {price_range}
-            </span>
-          </div>
-        )}
       </div>
 
       {/* Content */}
@@ -150,15 +131,6 @@ export default function ListingCard({
                 {s}
               </span>
             ))}
-          </div>
-        )}
-        {rating_avg && (
-          <div className="flex items-center gap-1.5 pt-4 border-t border-outline-variant/20">
-            <Star size={13} className="text-amber-500 fill-amber-500" />
-            <span className="font-sans text-sm font-semibold text-on-surface">{rating_avg.toFixed(1)}</span>
-            {rating_count && (
-              <span className="font-sans text-xs text-on-surface-variant">({rating_count} reviews)</span>
-            )}
           </div>
         )}
       </div>

@@ -48,7 +48,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafaf5] flex items-center justify-center px-6 py-24">
+    <div className="min-h-screen bg-[#ffffff] flex items-center justify-center px-6 py-24">
       <div className="w-full max-w-md">
 
         <div className="text-center mb-10">
@@ -126,7 +126,7 @@ export default function ResetPasswordPage() {
                 type="submit"
                 disabled={state === "loading"}
                 className="w-full py-3.5 rounded-full font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
-                style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+                style={{ background: "#111111" }}
               >
                 {state === "loading" ? (
                   <span className="flex items-center justify-center gap-3">

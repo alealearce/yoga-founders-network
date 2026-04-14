@@ -5,18 +5,18 @@
  */
 import type { Config } from "tailwindcss";
 
-// ── Brand Colors (The Digital Atrium palette) ───────────────────────────────
-const BG                    = "#fafaf5"  // Warm organic background
-const SURFACE_LOW           = "#f4f4ef"  // Secondary sectioning
+// ── Brand Colors (Black & White palette) ────────────────────────────────────
+const BG                    = "#ffffff"  // Pure white background
+const SURFACE_LOW           = "#f5f5f5"  // Secondary sectioning
 const SURFACE_LOWEST        = "#ffffff"  // Interactive cards
-const PRIMARY               = "#536046"  // Sage green — primary actions
-const PRIMARY_CONTAINER     = "#6b795d"  // Gradient end / hover
+const PRIMARY               = "#111111"  // Near-black — primary actions
+const PRIMARY_CONTAINER     = "#333333"  // Hover state
 const ON_PRIMARY            = "#ffffff"  // Text on primary
-const SECONDARY_CONTAINER   = "#dde5d4"  // Secondary buttons
-const ON_SURFACE            = "#1a1c19"  // High-contrast text (never pure black)
-const ON_SURFACE_VARIANT    = "#43483e"  // Secondary text
-const OUTLINE_VARIANT       = "#c5c8bd"  // Ghost borders (at low opacity)
-const SURFACE_HIGHEST       = "#e2e3dc"  // Input backgrounds
+const SECONDARY_CONTAINER   = "#e8e8e8"  // Secondary buttons
+const ON_SURFACE            = "#111111"  // High-contrast text
+const ON_SURFACE_VARIANT    = "#555555"  // Secondary text
+const OUTLINE_VARIANT       = "#d0d0d0"  // Ghost borders
+const SURFACE_HIGHEST       = "#f0f0f0"  // Input backgrounds
 
 const config: Config = {
   content: [

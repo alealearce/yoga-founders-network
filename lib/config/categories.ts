@@ -121,7 +121,9 @@ export function getCategoryBySlug(slug: string): YogaCategory | undefined {
 }
 
 // ── Listing-type specific filters ────────────────────────────────────────────
-export const EXPERIENCE_LEVELS = ["Beginner", "Intermediate", "Advanced", "All Levels"] as const;
-export const LISTING_LANGUAGES = ["English", "Spanish", "French", "German", "Portuguese", "Italian", "Japanese", "Chinese", "Hindi"] as const;
-export const RETREAT_DURATIONS = ["Weekend (2–3 days)", "Short (4–7 days)", "Week+ (8–14 days)", "Long (15+ days)"] as const;
-export const PRODUCT_TYPES     = ["Mats & Props", "Apparel", "Books & Media", "Supplements", "Online Courses", "Accessories"] as const;
+export const EXPERIENCE_LEVELS      = ["Beginner", "Intermediate", "Advanced", "All Levels"] as const;
+export const LISTING_LANGUAGES      = ["English", "Spanish", "French", "German", "Portuguese", "Italian", "Japanese", "Chinese", "Hindi"] as const;
+export const RETREAT_DURATIONS      = ["Weekend (2–3 days)", "Short (4–7 days)", "Week+ (8–14 days)", "Long (15+ days)"] as const;
+export const PRODUCT_TYPES          = ["Mats & Props", "Apparel", "Books & Media", "Supplements", "Online Courses", "Accessories"] as const;
+export const SCHOOL_CERTIFICATIONS  = ["100hr", "200hr", "300hr", "500hr", "Weekend Intensive", "Immersive"] as const;
+export const PRODUCT_CATEGORIES     = ["Yoga Mats", "Clothing & Apparel", "Altar & Ritual", "Props & Equipment", "Books & Media", "Supplements & Wellness", "Online Courses", "Accessories"] as const;

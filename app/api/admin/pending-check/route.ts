@@ -52,11 +52,11 @@ export async function GET(req: NextRequest) {
     subject: `${count} listing${count > 1 ? 's' : ''} pending review for 48h+ — Yoga Founders Network`,
     html: `
       <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:24px;">
-        <h2 style="color:#536046;">Pending Listings Reminder</h2>
+        <h2 style="color:#111111;">Pending Listings Reminder</h2>
         <p>The following ${count} listing${count > 1 ? 's have' : ' has'} been waiting for review for more than 48 hours:</p>
         <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e8e8e0;border-radius:4px;overflow:hidden;margin:16px 0;">
           <thead>
-            <tr style="background:#f4f4ef;">
+            <tr style="background:#f5f5f5;">
               <th style="padding:10px 12px;text-align:left;font-family:Arial,sans-serif;font-size:13px;">Name</th>
               <th style="padding:10px 12px;text-align:left;font-family:Arial,sans-serif;font-size:13px;">Type</th>
               <th style="padding:10px 12px;text-align:left;font-family:Arial,sans-serif;font-size:13px;">Submitted</th>
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
           <tbody>${listingRows}</tbody>
         </table>
         <a href="${SITE.url}/admin"
-           style="display:inline-block;background:#536046;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;">
+           style="display:inline-block;background:#111111;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:14px;">
           Review in Admin →
         </a>
         <p style="margin-top:24px;font-size:12px;color:#888;font-family:Arial,sans-serif;">Yoga Founders Network — Automated cron notification</p>

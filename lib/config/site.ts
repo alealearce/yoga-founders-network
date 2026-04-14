@@ -5,16 +5,16 @@
 
 // ── Colors (must stay in sync with tailwind.config.ts) ──────────────────────
 export const COLORS = {
-  bg:               "#fafaf5",
-  surfaceLow:       "#f4f4ef",
+  bg:               "#ffffff",
+  surfaceLow:       "#f5f5f5",
   surfaceCard:      "#ffffff",
-  primary:          "#536046",
-  primaryContainer: "#6b795d",
+  primary:          "#111111",
+  primaryContainer: "#333333",
   onPrimary:        "#ffffff",
-  secondaryContainer: "#dde5d4",
-  onSurface:        "#1a1c19",
-  onSurfaceVariant: "#43483e",
-  outlineVariant:   "#c5c8bd",
+  secondaryContainer: "#e8e8e8",
+  onSurface:        "#111111",
+  onSurfaceVariant: "#555555",
+  outlineVariant:   "#d0d0d0",
 } as const;
 
 // ── Site Identity ────────────────────────────────────────────────────────────
@@ -40,11 +40,11 @@ export const SITE = {
 // ── Categories / Listing Types ───────────────────────────────────────────────
 // id matches the ListingType in supabase/types.ts (singular)
 export const LISTING_TYPES = [
-  { id: "studio",   label: "Studios",   slug: "studios",   icon: "S" },
-  { id: "teacher",  label: "Teachers",  slug: "teachers",  icon: "T" },
-  { id: "school",   label: "Schools",   slug: "schools",   icon: "Sc" },
-  { id: "retreat",  label: "Retreats",  slug: "retreats",  icon: "R" },
-  { id: "product",  label: "Products",  slug: "products",  icon: "P" },
+  { id: "studio",   label: "Studios",   slug: "studios",    icon: "S" },
+  { id: "teacher",  label: "Teachers",  slug: "teachers",   icon: "T" },
+  { id: "school",   label: "Schools",   slug: "schools",    icon: "Sc" },
+  { id: "retreat",  label: "Retreats",  slug: "retreats",   icon: "R" },
+  { id: "product",  label: "Products",  slug: "products",   icon: "P" },
   { id: "workshop", label: "Workshops", slug: "workshops",  icon: "W" },
 ] as const;
 
@@ -79,8 +79,8 @@ export const COPY = {
   },
   submitCta: {
     title:    "Are you a yoga founder?",
-    subtitle: "Join thousands of studios, teachers, and schools already in our directory.",
-    cta:      "Submit Your Listing",
+    subtitle: "Join the community of verified studios, teachers, and schools already in our directory.",
+    cta:      "Submit Your Listing — It's Free!",
   },
   footer: {
     tagline: "Help Yoga grow its Impact in Society",

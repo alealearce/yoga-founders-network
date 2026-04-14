@@ -56,14 +56,14 @@ export async function POST(req: NextRequest) {
       subject: `Claim request for "${listing.name}" — Yoga Founders Network`,
       html: `
         <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:24px;">
-          <h2 style="color:#536046;">New Listing Claim Request</h2>
+          <h2 style="color:#111111;">New Listing Claim Request</h2>
           <p><strong>Listing:</strong> ${listing.name}</p>
           <p><strong>Slug:</strong> ${slug}</p>
           <p><strong>Listing ID:</strong> ${listing.id}</p>
           <p><strong>Claimant Email:</strong> <a href="mailto:${email}">${email}</a></p>
           <p><strong>Message:</strong></p>
-          <blockquote style="border-left:3px solid #536046;padding-left:16px;margin:0 0 16px;">${message}</blockquote>
-          <a href="${SITE.url}/admin" style="display:inline-block;background:#536046;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;">
+          <blockquote style="border-left:3px solid #111111;padding-left:16px;margin:0 0 16px;">${message}</blockquote>
+          <a href="${SITE.url}/admin" style="display:inline-block;background:#111111;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;">
             Review in Admin
           </a>
         </div>

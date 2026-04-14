@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { SITE } from '@/lib/config/site';
 
-const SAGE = '#536046';
-const BG   = '#fafaf5';
+const SAGE = '#111111';
+const BG   = '#ffffff';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

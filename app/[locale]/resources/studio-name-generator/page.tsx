@@ -269,9 +269,9 @@ export default function StudioNameGeneratorPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fafaf5]">
+    <div className="min-h-screen bg-[#ffffff]">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#fafaf5]">
+      <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-3xl mx-auto px-6">
           <Link
             href="/resources"
@@ -411,7 +411,7 @@ export default function StudioNameGeneratorPage() {
             disabled={!canGenerate}
             className="w-full rounded-full py-4 text-white font-semibold font-sans text-base transition-opacity disabled:opacity-40"
             style={{
-              background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
+              background: "#111111",
             }}
           >
             Generate Studio Names
@@ -445,7 +445,7 @@ export default function StudioNameGeneratorPage() {
                   onClick={handleGenerate}
                   className="shrink-0 rounded-full px-5 py-2.5 font-sans text-sm font-semibold text-white"
                   style={{
-                    background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
+                    background: "#111111",
                   }}
                 >
                   Generate More
@@ -527,7 +527,7 @@ export default function StudioNameGeneratorPage() {
                 href="/list-your-studio"
                 className="inline-block rounded-full px-8 py-3 text-white font-semibold font-sans text-sm"
                 style={{
-                  background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)",
+                  background: "#111111",
                 }}
               >
                 List Your Studio

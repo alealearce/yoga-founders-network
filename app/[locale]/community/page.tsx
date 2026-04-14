@@ -2,19 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/supabase/types";
-import { SITE } from "@/lib/config/site";
-import NewsletterSignup from "@/components/newsletter/NewsletterSignup";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
-const RESOURCES = [
-  { href: "/resources/email-generator",         title: "Re-Engagement Email Generator",   desc: "Win back dormant students with a 7-email sequence tailored to your studio's tone and offer." },
-  { href: "/resources/retreat-checklist",        title: "Retreat Planning Checklist",      desc: "Generate a personalized step-by-step checklist for planning your next yoga retreat." },
-  { href: "/resources/class-theme-generator",   title: "Class Theme Generator",            desc: "Never run out of class ideas — get intentions, peak poses, playlist vibes, and more." },
-  { href: "/resources/wellness-planner",         title: "Yoga & Wellness Planner",         desc: "Build a personalized morning yoga routine and meal plan based on your lifestyle." },
-  { href: "/resources/teacher-finder",           title: "Find Your Perfect Teacher",       desc: "Answer a few questions and get matched with the right yoga teacher for your goals." },
-  { href: "/resources/studio-name-generator",    title: "Studio Name Generator",          desc: "Discover the perfect name for your studio with domain suggestions and taglines." },
-  { href: "/resources/profitability-calculator", title: "Profitability Calculator",        desc: "Understand your studio's true financial health and get actionable improvement tips." },
-];
 
 export const metadata: Metadata = {
   title: "The Journal",
@@ -38,7 +27,7 @@ export default async function CommunityPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#fafaf5]">
+      <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
             Stories &amp; Wisdom
@@ -52,64 +41,13 @@ export default async function CommunityPage() {
         </div>
       </section>
 
-      {/* Resources Section */}
-      <section className="pb-16 bg-[#fafaf5]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-2">
-                Tools &amp; Guides
-              </p>
-              <h2 className="font-serif text-display-sm text-on-surface">
-                Resources
-              </h2>
-            </div>
-            <Link
-              href="/resources"
-              className="hidden sm:flex font-sans text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-            >
-              View all →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {RESOURCES.map(resource => (
-              <Link
-                key={resource.href}
-                href={resource.href}
-                className="group flex flex-col bg-surface-card rounded-2xl p-6 hover:shadow-card transition-all duration-400 hover:-translate-y-1 border border-outline-variant/10"
-              >
-                <h3 className="font-serif text-base font-bold text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">
-                  {resource.title}
-                </h3>
-                <p className="font-sans text-sm text-on-surface-variant leading-relaxed flex-1">
-                  {resource.desc}
-                </p>
-                <div className="mt-4 flex items-center gap-1 font-sans text-xs font-semibold text-primary">
-                  Try it free
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
-                </div>
-              </Link>
-            ))}
-            {/* Coming Soon slot */}
-            <div className="flex flex-col bg-surface-low rounded-2xl p-6 border border-outline-variant/10 border-dashed">
-              <h3 className="font-serif text-base font-bold text-on-surface-variant leading-snug mb-2">
-                More Coming Soon
-              </h3>
-              <p className="font-sans text-sm text-on-surface-variant/60 leading-relaxed">
-                New tools and guides are added regularly.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Featured Post */}
       {featured ? (
-        <section className="pb-16 bg-[#fafaf5]">
+        <section className="pb-16 bg-[#ffffff]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <Link
               href={`/community/${featured.slug}`}
-              className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400"
+              className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 border border-outline-variant/10"
             >
               <div className="grid lg:grid-cols-2">
                 {/* Image */}
@@ -169,9 +107,9 @@ export default async function CommunityPage() {
           </div>
         </section>
       ) : (
-        <section className="pb-16 bg-[#fafaf5]">
+        <section className="pb-16 bg-[#ffffff]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-surface-card rounded-2xl p-16 text-center">
+            <div className="bg-surface-card rounded-2xl p-16 text-center border border-outline-variant/10">
               <div className="flex justify-center mb-4"><YogaSilhouette pose="seated" size={48} /></div>
               <h2 className="font-serif text-xl text-on-surface mb-2">
                 Stories coming soon
@@ -186,7 +124,7 @@ export default async function CommunityPage() {
 
       {/* Post Grid */}
       {rest.length > 0 && (
-        <section className="pb-20 lg:pb-28 bg-[#fafaf5]">
+        <section className="pb-20 lg:pb-24 bg-[#ffffff]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {rest.map(post => (
@@ -197,21 +135,6 @@ export default async function CommunityPage() {
         </section>
       )}
 
-      {/* Newsletter */}
-      <section className="py-20 bg-surface-low">
-        <div className="max-w-2xl mx-auto px-6 lg:px-8 text-center">
-          <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-3">
-            Weekly Dispatches
-          </p>
-          <h2 className="font-serif text-display-sm text-on-surface mb-3">
-            The Sanctuary Newsletter
-          </h2>
-          <p className="font-sans text-base text-on-surface-variant mb-8 leading-relaxed">
-            Curated yoga wisdom, studio spotlights, and community stories — delivered to your inbox every week.
-          </p>
-          <NewsletterSignup variant="inline" />
-        </div>
-      </section>
     </>
   );
 }

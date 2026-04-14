@@ -8,10 +8,10 @@ import { SITE } from "@/lib/config/site";
 import { cn } from "@/lib/utils/cn";
 
 const SERVICES_ITEMS = [
-  { label: "Teacher Training & Schools", href: "/services/schools",   icon: "Sc", desc: "Certifications & teacher training programs" },
-  { label: "Retreat Centers",            href: "/services/retreats",   icon: "R",  desc: "Yoga retreats around the world" },
-  { label: "Products",                   href: "/services/products",   icon: "P",  desc: "Mats, props, apparel & more" },
-  { label: "Workshops & Events",         href: "/services/workshops",  icon: "W",  desc: "Intensives, workshops & special events" },
+  { label: "Teacher Training & Schools", href: "/yogaschool",    icon: "Sc", desc: "Certifications & teacher training programs" },
+  { label: "Retreat Centers",            href: "/retreatcenter", icon: "R",  desc: "Yoga retreats around the world" },
+  { label: "Products",                   href: "/yogaproducts",  icon: "P",  desc: "Mats, props, apparel & more" },
+  { label: "Workshops & Events",         href: "/yogaworkshops", icon: "W",  desc: "Intensives, workshops & special events" },
 ];
 
 export default function Navbar() {
@@ -43,7 +43,7 @@ export default function Navbar() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-400",
           scrolled
-            ? "bg-[#fafaf5]/90 backdrop-blur-[16px] shadow-[0_2px_20px_rgba(26,28,25,0.06)]"
+            ? "bg-[#ffffff]/90 backdrop-blur-[16px] shadow-[0_2px_20px_rgba(26,28,25,0.06)]"
             : "bg-transparent"
         )}
       >
@@ -65,13 +65,13 @@ export default function Navbar() {
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-8">
               <Link
-                href="/studios"
+                href="/yogastudio"
                 className="font-sans text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors duration-300"
               >
                 Studios
               </Link>
               <Link
-                href="/teachers"
+                href="/yogateacher"
                 className="font-sans text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors duration-300"
               >
                 Teachers
@@ -148,9 +148,9 @@ export default function Navbar() {
               <Link
                 href="/submit"
                 className="px-5 py-2 rounded-full font-sans text-sm font-semibold text-white transition-all duration-300 hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+                style={{ background: "#111111" }}
               >
-                List Your Space
+                List Your Business — It&apos;s Free!
               </Link>
             </div>
 
@@ -185,15 +185,15 @@ export default function Navbar() {
         {/* Panel */}
         <div
           className={cn(
-            "absolute top-0 right-0 h-full w-80 max-w-full bg-[#fafaf5] shadow-float",
+            "absolute top-0 right-0 h-full w-80 max-w-full bg-[#ffffff] shadow-float",
             "transition-transform duration-400",
             mobileOpen ? "translate-x-0" : "translate-x-full"
           )}
         >
           <div className="flex flex-col h-full pt-20 pb-8 px-6 overflow-y-auto">
             <nav className="flex flex-col gap-1">
-              <MobileNavLink href="/studios" onClick={() => setMobileOpen(false)}>Studios</MobileNavLink>
-              <MobileNavLink href="/teachers" onClick={() => setMobileOpen(false)}>Teachers</MobileNavLink>
+              <MobileNavLink href="/yogastudio" onClick={() => setMobileOpen(false)}>Studios</MobileNavLink>
+              <MobileNavLink href="/yogateacher" onClick={() => setMobileOpen(false)}>Teachers</MobileNavLink>
 
               {/* Services Group */}
               <div className="pt-2 pb-1">
@@ -228,7 +228,7 @@ export default function Navbar() {
                 href="/submit"
                 onClick={() => setMobileOpen(false)}
                 className="text-center py-3 rounded-full font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+                style={{ background: "#111111" }}
               >
                 List Your Space
               </Link>

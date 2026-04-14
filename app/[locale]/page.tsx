@@ -40,7 +40,7 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* ── Featured Listings ── */}
-      <section className="py-20 lg:py-28 bg-[#fafaf5]">
+      <section className="py-20 lg:py-28 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Section header */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
@@ -56,7 +56,7 @@ export default async function HomePage() {
               </p>
             </div>
             <Link
-              href="/studios"
+              href="/yogastudio"
               className="flex-shrink-0 px-6 py-3 rounded-full font-sans text-sm font-semibold text-primary bg-secondary-container hover:bg-secondary-container/80 transition-all duration-400"
             >
               {COPY.featuredSection.cta}
@@ -88,7 +88,7 @@ export default async function HomePage() {
             </div>
           ) : (
             <EmptyState
-              icon={<YogaSilhouette pose="lotus" size={64} color="#c5c8bd" />}
+              icon={<YogaSilhouette pose="lotus" size={64} color="#d0d0d0" />}
               title="Our community is growing"
               description="Be among the first to list your studio, school, or practice in our global directory."
               cta={{ label: "List Your Space", href: "/submit" }}
@@ -128,7 +128,7 @@ export default async function HomePage() {
             </div>
           ) : (
             <EmptyState
-              icon={<YogaSilhouette pose="seated" size={64} color="#c5c8bd" />}
+              icon={<YogaSilhouette pose="seated" size={64} color="#d0d0d0" />}
               title="Stories coming soon"
               description="Insights, studio spotlights, and wisdom from the global yoga community."
               cta={{ label: "Read the Journal", href: "/community" }}
@@ -140,7 +140,7 @@ export default async function HomePage() {
       {/* ── Submit CTA Strip ── */}
       <section
         className="py-20 lg:py-28"
-        style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+        style={{ background: "#111111" }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
           <p className="font-sans text-xs font-bold tracking-widest text-white/60 uppercase mb-4">
@@ -154,7 +154,7 @@ export default async function HomePage() {
           </p>
           <Link
             href="/submit"
-            className="inline-flex items-center px-8 py-4 rounded-full font-sans text-base font-semibold bg-white text-[#536046] hover:bg-white/90 transition-all duration-400"
+            className="inline-flex items-center px-8 py-4 rounded-full font-sans text-base font-semibold bg-white text-[#111111] hover:bg-white/90 transition-all duration-400"
           >
             {COPY.submitCta.cta}
           </Link>
@@ -242,7 +242,7 @@ function EmptyState({
       <Link
         href={cta.href}
         className="inline-flex px-6 py-3 rounded-full font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90"
-        style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+        style={{ background: "#111111" }}
       >
         {cta.label}
       </Link>

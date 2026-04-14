@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
 import Badge from "@/components/ui/Badge";
+import { getListingUrl } from "@/lib/utils/listingUrl";
 
 export const metadata = {
   title: "My Dashboard — Yoga Founders Network",
@@ -46,7 +47,7 @@ export default async function DashboardPage({
   >[];
 
   return (
-    <div className="min-h-screen bg-[#fafaf5] px-6 py-16">
+    <div className="min-h-screen bg-[#ffffff] px-6 py-16">
       <div className="max-w-4xl mx-auto">
 
         {/* Page header */}
@@ -62,7 +63,7 @@ export default async function DashboardPage({
           <Link
             href={`/${locale}/submit`}
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90 whitespace-nowrap"
-            style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+            style={{ background: "#111111" }}
           >
             + Submit New Listing
           </Link>
@@ -82,7 +83,7 @@ export default async function DashboardPage({
             <Link
               href={`/${locale}/submit`}
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
-              style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+              style={{ background: "#111111" }}
             >
               Submit Your Listing
             </Link>
@@ -136,7 +137,7 @@ export default async function DashboardPage({
                 <div className="flex items-center gap-3 flex-shrink-0">
                   {listing.status === "approved" && (
                     <Link
-                      href={`/listing/${listing.slug}`}
+                      href={getListingUrl(listing.type, listing.slug)}
                       className="font-sans text-sm font-semibold text-primary hover:underline"
                     >
                       View

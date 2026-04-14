@@ -41,6 +41,10 @@ export const metadata: Metadata = {
     title: SITE.name,
     description: SITE.description,
   },
+  icons: {
+    icon: "/images/favicon.png",
+    apple: "/images/favicon.png",
+  },
 };
 
 export default async function LocaleLayout({
@@ -63,7 +67,7 @@ export default async function LocaleLayout({
       lang={locale}
       className={`${notoSerif.variable} ${manrope.variable}`}
     >
-      <body className="font-sans bg-[#fafaf5] text-on-surface antialiased">
+      <body className="font-sans bg-white text-on-surface antialiased">
         <NextIntlClientProvider messages={messages}>
           <Navbar />
           <main>{children}</main>

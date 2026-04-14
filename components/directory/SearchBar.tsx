@@ -80,7 +80,7 @@ export default function SearchBar({
               "transition-all duration-400 hover:opacity-90",
               compact ? "px-4 py-1.5 text-xs" : "px-6 py-2.5 text-sm"
             )}
-            style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+            style={{ background: "#111111" }}
           >
             Search
           </button>

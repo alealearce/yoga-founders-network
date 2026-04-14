@@ -211,17 +211,17 @@ export default function EmailGeneratorPage() {
   <meta charset="UTF-8" />
   <title>Re-Engagement Email Sequence — ${formData.studioName}</title>
   <style>
-    body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 32px; color: #1a1c19; }
+    body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 32px; color: #111111; }
     h1 { font-size: 24px; margin-bottom: 4px; }
-    .meta { color: #43483e; font-size: 14px; margin-bottom: 32px; }
-    .email-card { border: 1px solid #c5c8bd; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-    .day-badge { display: inline-block; background: #dde5d4; color: #536046; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; margin-bottom: 8px; }
+    .meta { color: #555555; font-size: 14px; margin-bottom: 32px; }
+    .email-card { border: 1px solid #d0d0d0; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .day-badge { display: inline-block; background: #e8e8e8; color: #111111; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; margin-bottom: 8px; }
     h2 { font-size: 18px; margin: 0 0 6px; }
-    .goal { color: #43483e; font-size: 13px; margin-bottom: 16px; }
-    .section-label { font-family: sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #536046; margin: 12px 0 4px; }
-    .subject { background: #f4f4ef; border-radius: 6px; padding: 8px 12px; font-size: 14px; margin-bottom: 4px; }
-    .body-text { white-space: pre-wrap; font-size: 14px; line-height: 1.7; background: #f4f4ef; border-radius: 8px; padding: 16px; }
-    .cta { display: inline-block; background: #536046; color: white; padding: 10px 20px; border-radius: 999px; font-size: 13px; font-family: sans-serif; margin-top: 12px; }
+    .goal { color: #555555; font-size: 13px; margin-bottom: 16px; }
+    .section-label { font-family: sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #111111; margin: 12px 0 4px; }
+    .subject { background: #f5f5f5; border-radius: 6px; padding: 8px 12px; font-size: 14px; margin-bottom: 4px; }
+    .body-text { white-space: pre-wrap; font-size: 14px; line-height: 1.7; background: #f5f5f5; border-radius: 8px; padding: 16px; }
+    .cta { display: inline-block; background: #111111; color: white; padding: 10px 20px; border-radius: 999px; font-size: 13px; font-family: sans-serif; margin-top: 12px; }
     @media print { .email-card { break-inside: avoid; } }
   </style>
 </head>
@@ -241,7 +241,7 @@ export default function EmailGeneratorPage() {
     <div class="body-text">${e.body}</div>
     <div class="section-label">CTA &amp; Timing</div>
     <span class="cta">${e.ctaText}</span>
-    <p style="font-size:13px; color:#43483e; margin-top:8px;">Best send time: ${e.bestSendTime}</p>
+    <p style="font-size:13px; color:#555555; margin-top:8px;">Best send time: ${e.bestSendTime}</p>
   </div>
   `).join("")}
 </body>
@@ -257,9 +257,9 @@ export default function EmailGeneratorPage() {
   const isFormValid = formData.studioName.trim() && formData.studentName.trim();
 
   return (
-    <div className="min-h-screen bg-[#fafaf5]">
+    <div className="min-h-screen bg-[#ffffff]">
       {/* Hero */}
-      <section className="pt-32 pb-12 bg-[#fafaf5]">
+      <section className="pt-32 pb-12 bg-[#ffffff]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Link
             href="/resources"
@@ -396,7 +396,7 @@ export default function EmailGeneratorPage() {
             onClick={handleGenerate}
             disabled={!isFormValid}
             className="w-full py-4 rounded-full font-sans font-semibold text-white text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.99]"
-            style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+            style={{ background: "#111111" }}
           >
             Generate My 7-Email Sequence
           </button>
@@ -538,7 +538,7 @@ export default function EmailGeneratorPage() {
                             <p className="font-sans text-xs font-bold text-primary uppercase tracking-widest mb-1">
                               CTA Button Text
                             </p>
-                            <span className="inline-block font-sans text-sm font-semibold text-white px-5 py-2 rounded-full" style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}>
+                            <span className="inline-block font-sans text-sm font-semibold text-white px-5 py-2 rounded-full" style={{ background: "#111111" }}>
                               {email.ctaText}
                             </span>
                           </div>

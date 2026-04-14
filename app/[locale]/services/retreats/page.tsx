@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
-import { RETREAT_DURATIONS } from "@/lib/config/categories";
-import ListingCard from "@/components/directory/ListingCard";
+import { YOGA_CATEGORIES } from "@/lib/config/categories";
 import SearchBar from "@/components/directory/SearchBar";
-import YogaSilhouette from "@/components/ui/YogaSilhouette";
+import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
 
 export const metadata: Metadata = {
   title: "Yoga Retreats",
@@ -29,7 +28,7 @@ export default async function RetreatsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#fafaf5]">
+      <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-2xl">
             <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
@@ -55,74 +54,15 @@ export default async function RetreatsPage() {
         </div>
       </section>
 
-      {/* Duration Filters */}
-      <section className="py-4 bg-[#fafaf5] border-b border-outline-variant/20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2">
-            <span className="font-sans text-xs text-on-surface-variant self-center mr-2">
-              Duration:
-            </span>
-            <span className="px-4 py-1.5 rounded-full bg-primary text-white font-sans text-sm font-medium">
-              Any Length
-            </span>
-            {RETREAT_DURATIONS.map(d => (
-              <span
-                key={d}
-                className="px-4 py-1.5 rounded-full bg-surface-low text-on-surface-variant font-sans text-sm font-medium hover:bg-secondary-container hover:text-primary transition-all duration-300 cursor-pointer"
-              >
-                {d}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Grid */}
-      <section className="py-16 lg:py-20 bg-[#fafaf5]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {retreats.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {retreats.map(retreat => (
-                <ListingCard
-                  key={retreat.id}
-                  id={retreat.id}
-                  slug={retreat.slug}
-                  name={retreat.name}
-                  type={retreat.type}
-                  tagline={retreat.tagline ?? undefined}
-                  city={retreat.city ?? undefined}
-                  country={retreat.country ?? undefined}
-                  logo_url={retreat.logo_url}
-                  images={retreat.images}
-                  yoga_styles={retreat.yoga_styles}
-                  rating_avg={retreat.rating_avg}
-                  rating_count={retreat.rating_count}
-                  is_verified={retreat.is_verified}
-                  is_featured={retreat.is_featured}
-                  price_range={retreat.price_range}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20">
-              <div className="flex justify-center mb-4"><YogaSilhouette pose="tree" size={64} color="#c5c8bd" /></div>
-              <h3 className="font-serif text-xl text-on-surface mb-2">
-                Retreats coming soon
-              </h3>
-              <p className="font-sans text-sm text-on-surface-variant max-w-sm mx-auto mb-6">
-                Host a yoga retreat? Get it in front of thousands of seekers worldwide.
-              </p>
-              <a
-                href="/submit"
-                className="inline-flex px-6 py-3 rounded-full font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
-              >
-                List Your Retreat
-              </a>
-            </div>
-          )}
-        </div>
-      </section>
+      <FilteredListingGrid
+        listings={retreats}
+        filterGroups={[
+          { field: "yoga_styles", options: YOGA_CATEGORIES.map(c => c.label) },
+        ]}
+        emptyTitle="Retreats coming soon"
+        emptyDescription="Host a yoga retreat? Get it in front of thousands of seekers worldwide."
+        emptyCta="List Your Retreat"
+      />
     </>
   );
 }

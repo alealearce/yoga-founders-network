@@ -10,9 +10,9 @@ const LAST_UPDATED = "April 2025";
 
 export default function TermsPage() {
   return (
-    <div className="bg-[#fafaf5] min-h-screen">
+    <div className="bg-[#ffffff] min-h-screen">
       {/* Header */}
-      <section className="pt-32 pb-12 bg-[#fafaf5]">
+      <section className="pt-32 pb-12 bg-[#ffffff]">
         <div className="max-w-3xl mx-auto px-6 lg:px-8">
           <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
             Legal

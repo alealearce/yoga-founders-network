@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
@@ -7,6 +6,8 @@ import type { Listing, Review } from "@/lib/supabase/types";
 import { MapPin, Globe, Mail, Phone, BadgeCheck, Star, Instagram, Facebook, Youtube } from "lucide-react";
 import { SITE } from "@/lib/config/site";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
+import CoverImage from "@/components/ui/CoverImage";
+import ReviewForm from "@/components/reviews/ReviewForm";
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
@@ -74,7 +75,7 @@ export default async function ListingPage({ params }: Props) {
   return (
     <>
       {/* Hero — Aperture shape */}
-      <div className="pt-16 bg-[#fafaf5]">
+      <div className="pt-16 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 pb-0">
           <div
             className="relative w-full overflow-hidden"
@@ -84,17 +85,10 @@ export default async function ListingPage({ params }: Props) {
             }}
           >
             {coverImage ? (
-              <Image
-                src={coverImage}
-                alt={listing.name}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 768px) 100vw, 90vw"
-              />
+              <CoverImage src={coverImage} alt={listing.name} />
             ) : (
               <div className="w-full h-full bg-surface-low flex items-center justify-center">
-                <YogaSilhouette pose="tree" size={80} color="#c5c8bd" />
+                <YogaSilhouette pose="tree" size={80} color="#d0d0d0" />
               </div>
             )}
             {/* Gradient overlay */}
@@ -144,26 +138,6 @@ export default async function ListingPage({ params }: Props) {
                 </p>
               )}
 
-              {listing.rating_avg > 0 && (
-                <div className="flex items-center gap-2 mt-3">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={16}
-                      className={i < Math.round(listing.rating_avg)
-                        ? "text-amber-500 fill-amber-500"
-                        : "text-outline-variant"
-                      }
-                    />
-                  ))}
-                  <span className="font-sans text-sm font-semibold text-on-surface">
-                    {listing.rating_avg.toFixed(1)}
-                  </span>
-                  <span className="font-sans text-sm text-on-surface-variant">
-                    ({listing.rating_count} review{listing.rating_count !== 1 ? "s" : ""})
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Yoga Styles */}
@@ -248,6 +222,9 @@ export default async function ListingPage({ params }: Props) {
                 </div>
               </div>
             )}
+
+            {/* Review Form */}
+            <ReviewForm listingId={listing.id} listingName={listing.name} />
           </div>
 
           {/* Sidebar */}
@@ -264,7 +241,7 @@ export default async function ListingPage({ params }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 w-full px-5 py-3 rounded-full font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90"
-                  style={{ background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }}
+                  style={{ background: "#111111" }}
                 >
                   <Globe size={14} />
                   Visit Website
@@ -363,7 +340,7 @@ export default async function ListingPage({ params }: Props) {
 
             {/* Back link */}
             <Link
-              href="/studios"
+              href={`/${({ studio: "studios", teacher: "teachers", school: "schools", retreat: "retreats", product: "products", workshop: "workshops" } as Record<string, string>)[listing.type] ?? "studios"}`}
               className="flex items-center justify-center gap-2 w-full py-3 rounded-full font-sans text-sm text-on-surface-variant hover:text-on-surface bg-surface-low hover:bg-secondary-container transition-all duration-300"
             >
               ← Back to Directory

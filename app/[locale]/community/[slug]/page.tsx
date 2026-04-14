@@ -63,7 +63,7 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <>
       {/* Back nav */}
-      <div className="pt-24 pb-4 bg-[#fafaf5]">
+      <div className="pt-24 pb-4 bg-[#ffffff]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Link
             href="/community"
@@ -76,7 +76,7 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* Article */}
-      <article className="bg-[#fafaf5]">
+      <article className="bg-[#ffffff]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8">
 
           {/* Tags */}

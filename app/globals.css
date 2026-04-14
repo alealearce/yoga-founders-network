@@ -14,8 +14,8 @@
 
   body {
     font-family: var(--font-sans);
-    background-color: #fafaf5;
-    color: #1a1c19;
+    background-color: #ffffff;
+    color: #111111;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

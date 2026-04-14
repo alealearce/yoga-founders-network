@@ -107,7 +107,7 @@ export default function AdminClient({ pending: initialPending, all: initialAll }
             }`}
             style={
               tab === t
-                ? { background: "linear-gradient(135deg, #536046 0%, #6b795d 100%)" }
+                ? { background: "#111111" }
                 : undefined
             }
           >
