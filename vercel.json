@@ -11,6 +11,10 @@
     {
       "path": "/api/admin/expiry-check",
       "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/admin/daily-blog",
+      "schedule": "7 18 * * *"
     }
   ]
 }
