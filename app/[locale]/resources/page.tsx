@@ -3,8 +3,8 @@ import Link from "next/link";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
-  title: "Resources",
-  description: "Free tools and guides for yoga studio owners, teachers, and practitioners. Generate email sequences, plan retreats, discover class themes, and more.",
+  title: "Free Yoga Tools for Teachers & Studio Owners",
+  description: "Free generators, planners, and guides built for yoga professionals. Create class themes, plan retreats, generate email sequences, calculate studio profitability, and more.",
 };
 
 const RESOURCES = [

@@ -2,23 +2,52 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/supabase/types";
+import { SITE } from "@/lib/config/site";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
+const BLOG_CATEGORIES = [
+  { id: "finding_yoga",      label: "Finding Yoga" },
+  { id: "studio_guides",     label: "Studio Guides" },
+  { id: "teacher_guides",    label: "Teacher Guides" },
+  { id: "wellness",          label: "Wellness" },
+  { id: "yoga_lifestyle",    label: "Yoga Lifestyle" },
+];
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "The Journal",
-  description: "Insights, stories, and wisdom from the global yoga community. Studio spotlights, founder interviews, practice guides, and more.",
+  title: `The Journal — ${SITE.name}`,
+  description: "Insights, guides, and wisdom for yoga students — how to find the right studio, choose a teacher, deepen your practice, and more.",
+  alternates: { canonical: `${SITE.url}/community` },
+  openGraph: {
+    title: `The Journal — ${SITE.name}`,
+    description: "Insights, guides, and wisdom for yoga students — how to find the right studio, choose a teacher, deepen your practice, and more.",
+    url: `${SITE.url}/community`,
+    siteName: SITE.name,
+    locale: "en_US",
+    type: "website",
+  },
 };
 
-export default async function CommunityPage() {
+export default async function CommunityPage({
+  searchParams,
+}: {
+  searchParams: { category?: string };
+}) {
   const supabase = await createClient();
 
-  const { data } = await supabase
+  let query = supabase
     .from("blog_posts")
     .select("*")
     .eq("is_published", true)
-    .order("created_at", { ascending: false })
-    .limit(13);
+    .order("published_at", { ascending: false })
+    .limit(25);
+
+  if (searchParams.category) {
+    query = query.eq("category", searchParams.category);
+  }
+
+  const { data } = await query;
 
   const posts: BlogPost[] = data ?? [];
   const featured = posts[0] ?? null;
@@ -36,8 +65,39 @@ export default async function CommunityPage() {
             The Journal
           </h1>
           <p className="font-sans text-lg text-on-surface-variant max-w-xl leading-relaxed">
-            Insights, studio spotlights, and wisdom from the global yoga community — curated for founders and practitioners alike.
+            Insights, studio spotlights, and wisdom from the global yoga community — curated for practitioners and founders alike.
           </p>
+        </div>
+      </section>
+
+      {/* Category filter */}
+      <section className="pb-8 bg-[#ffffff]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/community"
+              className={`px-4 py-1.5 rounded-full font-sans text-sm font-medium border transition-colors ${
+                !searchParams.category
+                  ? "bg-primary text-white border-primary"
+                  : "border-outline-variant/40 text-on-surface-variant hover:border-primary hover:text-primary"
+              }`}
+            >
+              All
+            </Link>
+            {BLOG_CATEGORIES.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/community?category=${cat.id}`}
+                className={`px-4 py-1.5 rounded-full font-sans text-sm font-medium border transition-colors ${
+                  searchParams.category === cat.id
+                    ? "bg-primary text-white border-primary"
+                    : "border-outline-variant/40 text-on-surface-variant hover:border-primary hover:text-primary"
+                }`}
+              >
+                {cat.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -64,10 +124,10 @@ export default async function CommunityPage() {
                       🪷
                     </div>
                   )}
-                  {featured.tags?.[0] && (
+                  {featured.category && (
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1.5 rounded-full bg-primary text-white font-sans text-xs font-bold">
-                        {featured.tags[0]}
+                        {featured.category.replace(/_/g, " ")}
                       </span>
                     </div>
                   )}
@@ -94,12 +154,16 @@ export default async function CommunityPage() {
                         <span>{featured.reading_time_minutes} min read</span>
                       </>
                     )}
-                    <span>·</span>
-                    <span>
-                      {new Date(featured.created_at).toLocaleDateString("en-US", {
-                        month: "long", day: "numeric", year: "numeric",
-                      })}
-                    </span>
+                    {featured.published_at && (
+                      <>
+                        <span>·</span>
+                        <span>
+                          {new Date(featured.published_at).toLocaleDateString("en-US", {
+                            month: "long", day: "numeric", year: "numeric",
+                          })}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -134,12 +198,17 @@ export default async function CommunityPage() {
           </div>
         </section>
       )}
-
     </>
   );
 }
 
 function BlogPostCard({ post }: { post: BlogPost }) {
+  const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+        month: "long", day: "numeric", year: "numeric",
+      })
+    : "";
+
   return (
     <Link
       href={`/community/${post.slug}`}
@@ -158,10 +227,10 @@ function BlogPostCard({ post }: { post: BlogPost }) {
             🪷
           </div>
         )}
-        {post.tags?.[0] && (
+        {post.category && (
           <div className="absolute top-3 left-3">
             <span className="px-2.5 py-1 rounded-full bg-primary text-white font-sans text-xs font-bold">
-              {post.tags[0]}
+              {post.category.replace(/_/g, " ")}
             </span>
           </div>
         )}
@@ -181,6 +250,12 @@ function BlogPostCard({ post }: { post: BlogPost }) {
             <>
               <span>·</span>
               <span>{post.reading_time_minutes} min read</span>
+            </>
+          )}
+          {date && (
+            <>
+              <span>·</span>
+              <span>{date}</span>
             </>
           )}
         </div>

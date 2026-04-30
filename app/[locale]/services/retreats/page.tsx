@@ -6,8 +6,8 @@ import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
 
 export const metadata: Metadata = {
-  title: "Yoga Retreats",
-  description: "Discover transformative yoga retreats around the world. From weekend escapes to month-long immersions — find your sanctuary.",
+  title: "Yoga Retreats Worldwide",
+  description: "Discover transformative yoga retreats around the world. From weekend escapes to month-long immersions — find your perfect sanctuary and book with confidence.",
 };
 
 export default async function RetreatsPage() {

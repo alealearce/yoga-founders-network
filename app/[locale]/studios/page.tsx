@@ -6,8 +6,8 @@ import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
 
 export const metadata: Metadata = {
-  title: "Yoga Studios",
-  description: "Find yoga studios near you and around the world. Browse hundreds of studios offering all styles — from Hatha and Vinyasa to Yin and Kundalini.",
+  title: "Yoga Studios Worldwide",
+  description: "Find yoga studios near you and around the world. Browse studios offering every style — Hatha, Vinyasa, Yin, Kundalini, and more. Compare locations, read reviews, and find the perfect studio for your practice.",
 };
 
 export default async function StudiosPage() {

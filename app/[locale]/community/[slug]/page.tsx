@@ -10,27 +10,43 @@ interface Props {
   params: Promise<{ locale: string; slug: string }>;
 }
 
+const CATEGORY_TO_LISTING: Record<string, { slug: string; label: string }> = {
+  finding_yoga:   { slug: "yogastudio",   label: "Yoga Studios" },
+  studio_guides:  { slug: "yogastudio",   label: "Yoga Studios" },
+  teacher_guides: { slug: "yogateacher",  label: "Yoga Teachers" },
+  wellness:       { slug: "retreatcenter", label: "Retreat Centers" },
+  yoga_lifestyle: { slug: "yogaproducts", label: "Yoga Products" },
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const supabase  = await createClient();
 
   const { data } = await supabase
     .from("blog_posts")
-    .select("title, excerpt, cover_image, author")
+    .select("title, excerpt, cover_image, author, meta_title, meta_description, published_at")
     .eq("slug", slug)
     .eq("is_published", true)
     .single();
 
   if (!data) return { title: "Post Not Found" };
 
+  const metaTitle = data.meta_title ?? data.title;
+  const metaDesc = data.meta_description ?? data.excerpt ?? `Read "${data.title}" on ${SITE.name}`;
+
   return {
-    title: data.title,
-    description: data.excerpt ?? `Read "${data.title}" on ${SITE.name}`,
+    title: metaTitle,
+    description: metaDesc,
+    alternates: { canonical: `${SITE.url}/community/${slug}` },
     openGraph: {
-      title: data.title,
-      description: data.excerpt ?? "",
-      images: data.cover_image ? [{ url: data.cover_image }] : [],
+      title: metaTitle,
+      description: metaDesc,
+      url: `${SITE.url}/community/${slug}`,
+      siteName: SITE.name,
+      locale: "en_US",
       type: "article",
+      publishedTime: data.published_at ?? undefined,
+      images: data.cover_image ? [{ url: data.cover_image }] : [],
     },
   };
 }
@@ -51,7 +67,7 @@ export default async function BlogPostPage({ params }: Props) {
       .select("*")
       .eq("is_published", true)
       .neq("slug", slug)
-      .order("created_at", { ascending: false })
+      .order("published_at", { ascending: false })
       .limit(3),
   ]);
 
@@ -60,8 +76,58 @@ export default async function BlogPostPage({ params }: Props) {
 
   const related: BlogPost[] = relatedRes.data ?? [];
 
+  const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+        year: "numeric", month: "long", day: "numeric",
+      })
+    : new Date(post.created_at).toLocaleDateString("en-US", {
+        year: "numeric", month: "long", day: "numeric",
+      });
+
+  // JSON-LD structured data
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    datePublished: post.published_at ?? post.created_at,
+    url: `${SITE.url}/community/${slug}`,
+    inLanguage: "en",
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      url: SITE.url,
+      logo: { "@type": "ImageObject", url: `${SITE.url}/images/logo.png` },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE.url}/community/${slug}`,
+    },
+    ...(post.cover_image ? { image: post.cover_image } : {}),
+    ...(post.author ? { author: { "@type": "Person", name: post.author } } : {}),
+  };
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
+      { "@type": "ListItem", position: 2, name: "The Journal", item: `${SITE.url}/community` },
+      { "@type": "ListItem", position: 3, name: post.title },
+    ],
+  };
+
   return (
     <>
+      {/* JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+
       {/* Back nav */}
       <div className="pt-24 pb-4 bg-[#ffffff]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
@@ -79,19 +145,27 @@ export default async function BlogPostPage({ params }: Props) {
       <article className="bg-[#ffffff]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8">
 
-          {/* Tags */}
-          {post.tags?.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {post.tags.map(tag => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 rounded-full bg-secondary-container text-primary font-sans text-xs font-bold"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
+          {/* Category + city tags */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {post.category && (
+              <span className="px-3 py-1 rounded-full bg-secondary-container text-primary font-sans text-xs font-bold">
+                {post.category.replace(/_/g, " ")}
+              </span>
+            )}
+            {post.city && (
+              <span className="px-3 py-1 rounded-full bg-secondary-container text-primary font-sans text-xs font-bold">
+                {post.city}
+              </span>
+            )}
+            {post.tags?.length > 0 && post.tags.map(tag => (
+              <span
+                key={tag}
+                className="px-3 py-1 rounded-full bg-secondary-container text-primary font-sans text-xs font-bold"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
 
           {/* Title */}
           <h1 className="font-serif text-display-md text-on-surface leading-tight mb-6">
@@ -110,9 +184,7 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
             <div className="flex items-center gap-1.5 font-sans text-sm text-on-surface-variant">
               <Calendar size={13} />
-              {new Date(post.created_at).toLocaleDateString("en-US", {
-                year: "numeric", month: "long", day: "numeric",
-              })}
+              {date}
             </div>
             {post.reading_time_minutes && (
               <div className="flex items-center gap-1.5 font-sans text-sm text-on-surface-variant">
@@ -140,30 +212,41 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           )}
 
-          {/* Body */}
-          <div className="prose prose-lg max-w-none font-sans text-on-surface-variant prose-headings:font-serif prose-headings:text-on-surface prose-a:text-primary prose-strong:text-on-surface">
-            {post.content.split("\n\n").map((block, i) => {
-              if (block.startsWith("## ")) {
-                return (
-                  <h2 key={i} className="font-serif text-2xl font-bold text-on-surface mt-10 mb-4">
-                    {block.replace("## ", "")}
-                  </h2>
-                );
-              }
-              if (block.startsWith("### ")) {
-                return (
-                  <h3 key={i} className="font-serif text-xl font-bold text-on-surface mt-8 mb-3">
-                    {block.replace("### ", "")}
-                  </h3>
-                );
-              }
-              return (
-                <p key={i} className="font-sans text-base text-on-surface-variant leading-relaxed mb-5">
-                  {block}
+          {/* Body — proper markdown rendering */}
+          <div
+            className="prose prose-lg max-w-none font-sans text-on-surface-variant
+              prose-headings:font-serif prose-headings:text-on-surface
+              prose-h2:mt-10 prose-h2:mb-4 prose-h2:pb-3 prose-h2:border-b prose-h2:border-outline-variant/20
+              prose-h3:mt-8 prose-h3:mb-3
+              prose-p:leading-relaxed prose-p:mb-5
+              prose-ul:my-6 prose-ul:pl-6 prose-ol:my-6 prose-ol:pl-6 prose-li:my-2 prose-li:leading-relaxed
+              prose-hr:border-outline-variant/20 prose-hr:my-8
+              prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+              prose-strong:text-on-surface prose-strong:font-semibold"
+            dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }}
+          />
+
+          {/* Directory CTA */}
+          {(() => {
+            const dir = CATEGORY_TO_LISTING[post.category ?? ""];
+            if (!dir) return null;
+            return (
+              <div className="mt-10 p-6 bg-surface-low rounded-2xl border border-outline-variant/10">
+                <p className="font-serif text-lg font-bold text-on-surface mb-1">
+                  Looking for {dir.label}?
                 </p>
-              );
-            })}
-          </div>
+                <p className="font-sans text-sm text-on-surface-variant mb-4">
+                  Browse verified {dir.label.toLowerCase()} from around the world on {SITE.name}.
+                </p>
+                <Link
+                  href={`/${dir.slug}`}
+                  className="inline-flex items-center gap-1.5 bg-primary text-white font-sans text-sm font-semibold px-5 py-2.5 rounded-full hover:opacity-90 transition-opacity"
+                >
+                  Browse {dir.label} &rarr;
+                </Link>
+              </div>
+            );
+          })()}
         </div>
       </article>
 
@@ -209,4 +292,78 @@ export default async function BlogPostPage({ params }: Props) {
       )}
     </>
   );
+}
+
+// Lightweight markdown → HTML converter (XSS-safe)
+function markdownToHtml(md: string): string {
+  if (!md) return "";
+
+  // Strip raw HTML tags for XSS prevention
+  let text = md.replace(/<[^>]*>/g, "");
+
+  // Inline formatting — safe patterns only
+  const inline = (s: string): string =>
+    s
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+      .replace(
+        /\[(.+?)\]\((https?:\/\/[^)\s]+)\)/g,
+        '<a href="$2" rel="noopener noreferrer" target="_blank">$1</a>',
+      )
+      .replace(
+        /\[(.+?)\]\(\/([^)\s]+)\)/g,
+        '<a href="/$2">$1</a>',
+      );
+
+  const lines = text.split("\n");
+  const output: string[] = [];
+  let listType = "";
+  const paraLines: string[] = [];
+
+  const flushPara = () => {
+    if (paraLines.length > 0) {
+      output.push(`<p>${paraLines.join(" ")}</p>`);
+      paraLines.length = 0;
+    }
+  };
+
+  const closeList = () => {
+    if (listType) {
+      output.push(`</${listType}>`);
+      listType = "";
+    }
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (/^---+$/.test(trimmed)) { flushPara(); closeList(); output.push("<hr>"); continue; }
+    if (/^### /.test(trimmed)) { flushPara(); closeList(); output.push(`<h3>${inline(trimmed.slice(4))}</h3>`); continue; }
+    if (/^## /.test(trimmed))  { flushPara(); closeList(); output.push(`<h2>${inline(trimmed.slice(3))}</h2>`); continue; }
+    if (/^# /.test(trimmed))   { flushPara(); closeList(); output.push(`<h1>${inline(trimmed.slice(2))}</h1>`); continue; }
+
+    if (/^[-*] /.test(trimmed)) {
+      flushPara();
+      if (listType !== "ul") { closeList(); output.push("<ul>"); listType = "ul"; }
+      output.push(`<li>${inline(trimmed.slice(2))}</li>`);
+      continue;
+    }
+
+    if (/^\d+\. /.test(trimmed)) {
+      flushPara();
+      if (listType !== "ol") { closeList(); output.push("<ol>"); listType = "ol"; }
+      output.push(`<li>${inline(trimmed.replace(/^\d+\. /, ""))}</li>`);
+      continue;
+    }
+
+    if (trimmed === "") { flushPara(); closeList(); continue; }
+
+    if (listType) closeList();
+    paraLines.push(inline(trimmed));
+  }
+
+  flushPara();
+  closeList();
+
+  return output.join("\n");
 }

@@ -30,6 +30,12 @@ export const metadata: Metadata = {
   },
   description: SITE.description,
   metadataBase: new URL(SITE.url),
+  alternates: {
+    languages: {
+      "en": SITE.url,
+      "x-default": SITE.url,
+    },
+  },
   openGraph: {
     type: "website",
     siteName: SITE.name,
@@ -45,6 +51,20 @@ export const metadata: Metadata = {
     icon: "/images/favicon.png",
     apple: "/images/favicon.png",
   },
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE.name,
+  url: SITE.url,
+  email: SITE.email,
+  logo: `${SITE.url}${SITE.logo}`,
+  sameAs: [
+    SITE.social.instagram,
+    SITE.social.linkedin,
+    SITE.social.facebook,
+  ],
 };
 
 export default async function LocaleLayout({
@@ -68,6 +88,10 @@ export default async function LocaleLayout({
       className={`${notoSerif.variable} ${manrope.variable}`}
     >
       <body className="font-sans bg-white text-on-surface antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
         <NextIntlClientProvider messages={messages}>
           <Navbar />
           <main>{children}</main>

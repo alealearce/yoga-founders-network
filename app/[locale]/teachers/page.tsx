@@ -6,8 +6,8 @@ import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
 
 export const metadata: Metadata = {
-  title: "Yoga Teachers",
-  description: "Find experienced yoga teachers worldwide. Browse teachers by style, experience level, and location — from local guides to internationally renowned instructors.",
+  title: "Find Yoga Teachers Worldwide",
+  description: "Discover experienced yoga teachers near you and around the globe. Browse by teaching style, experience level, and location — from local guides to internationally renowned instructors.",
 };
 
 export default async function TeachersPage() {

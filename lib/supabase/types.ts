@@ -67,6 +67,12 @@ export interface BlogPost {
   tags: string[];
   is_published: boolean;
   reading_time_minutes: number | null;
+  category: string | null;
+  city: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  published_at: string | null;
+  generated_by: string | null;
 }
 
 export interface NewsletterSubscriber {

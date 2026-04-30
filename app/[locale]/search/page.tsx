@@ -7,7 +7,8 @@ import YogaSilhouette from "@/components/ui/YogaSilhouette";
 import { getListingUrl } from "@/lib/utils/listingUrl";
 
 export const metadata = {
-  title: "Search — Yoga Founders Network",
+  title: "Search",
+  description: "Search for yoga studios, teachers, schools, retreats, and products in the Yoga Founders Network global directory.",
 };
 
 interface SearchPageProps {
