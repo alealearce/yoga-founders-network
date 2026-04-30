@@ -11,6 +11,10 @@ import YogaSilhouette from "@/components/ui/YogaSilhouette";
 export const metadata: Metadata = {
   title: `${SITE.name} — ${SITE.tagline}`,
   description: SITE.description,
+  alternates: { canonical: SITE.url },
+  openGraph: {
+    url: SITE.url,
+  },
 };
 
 export default async function HomePage() {
