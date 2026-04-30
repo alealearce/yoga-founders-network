@@ -107,64 +107,45 @@ export default async function CommunityPage({
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <Link
               href={`/community/${featured.slug}`}
-              className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 border border-outline-variant/10"
+              className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 border border-outline-variant/10 p-8 lg:p-12"
             >
-              <div className="grid lg:grid-cols-2">
-                {/* Image */}
-                <div className="relative h-72 lg:h-auto bg-surface-low overflow-hidden">
-                  {featured.cover_image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={featured.cover_image}
-                      alt={featured.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[600ms]"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-7xl">
-                      🪷
-                    </div>
-                  )}
-                  {featured.category && (
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1.5 rounded-full bg-primary text-white font-sans text-xs font-bold">
-                        {featured.category.replace(/_/g, " ")}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="p-8 lg:p-12 flex flex-col justify-center">
-                  <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
+              <div className="max-w-3xl">
+                <div className="flex flex-wrap items-center gap-3 mb-6">
+                  <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase">
                     Featured Story
                   </p>
-                  <h2 className="font-serif text-display-sm text-on-surface group-hover:text-primary transition-colors duration-300 leading-tight mb-4">
-                    {featured.title}
-                  </h2>
-                  {featured.excerpt && (
-                    <p className="font-sans text-base text-on-surface-variant leading-relaxed mb-6 line-clamp-3">
-                      {featured.excerpt}
-                    </p>
+                  {featured.category && (
+                    <span className="px-3 py-1 rounded-full bg-secondary-container font-sans text-xs font-bold text-primary">
+                      {featured.category.replace(/_/g, " ")}
+                    </span>
                   )}
-                  <div className="flex items-center gap-3 font-sans text-sm text-on-surface-variant">
-                    <span className="font-medium">{featured.author}</span>
-                    {featured.reading_time_minutes && (
-                      <>
-                        <span>·</span>
-                        <span>{featured.reading_time_minutes} min read</span>
-                      </>
-                    )}
-                    {featured.published_at && (
-                      <>
-                        <span>·</span>
-                        <span>
-                          {new Date(featured.published_at).toLocaleDateString("en-US", {
-                            month: "long", day: "numeric", year: "numeric",
-                          })}
-                        </span>
-                      </>
-                    )}
-                  </div>
+                </div>
+                <h2 className="font-serif text-display-sm text-on-surface group-hover:text-primary transition-colors duration-300 leading-tight mb-4">
+                  {featured.title}
+                </h2>
+                {featured.excerpt && (
+                  <p className="font-sans text-base text-on-surface-variant leading-relaxed mb-6 line-clamp-3">
+                    {featured.excerpt}
+                  </p>
+                )}
+                <div className="flex items-center gap-3 font-sans text-sm text-on-surface-variant">
+                  <span className="font-medium">{featured.author}</span>
+                  {featured.reading_time_minutes && (
+                    <>
+                      <span>·</span>
+                      <span>{featured.reading_time_minutes} min read</span>
+                    </>
+                  )}
+                  {featured.published_at && (
+                    <>
+                      <span>·</span>
+                      <span>
+                        {new Date(featured.published_at).toLocaleDateString("en-US", {
+                          month: "long", day: "numeric", year: "numeric",
+                        })}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </Link>
@@ -214,28 +195,12 @@ function BlogPostCard({ post }: { post: BlogPost }) {
       href={`/community/${post.slug}`}
       className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 hover:-translate-y-1"
     >
-      <div className="relative h-52 bg-surface-low overflow-hidden">
-        {post.cover_image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={post.cover_image}
-            alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[600ms]"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-5xl">
-            🪷
-          </div>
-        )}
+      <div className="p-5 pt-6">
         {post.category && (
-          <div className="absolute top-3 left-3">
-            <span className="px-2.5 py-1 rounded-full bg-primary text-white font-sans text-xs font-bold">
-              {post.category.replace(/_/g, " ")}
-            </span>
-          </div>
+          <span className="inline-block mb-3 px-2.5 py-1 rounded-full bg-secondary-container font-sans text-xs font-bold text-primary">
+            {post.category.replace(/_/g, " ")}
+          </span>
         )}
-      </div>
-      <div className="p-5">
         <h3 className="font-serif text-lg font-bold text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">
           {post.title}
         </h3>
