@@ -1,18 +1,19 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/config/site";
 import { createAdminClient } from "@/lib/supabase/server";
+import { getListingUrl } from "@/lib/utils/listingUrl";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE.url;
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: base,                                        changeFrequency: "weekly",  priority: 1.0 },
-    { url: `${base}/studios`,                           changeFrequency: "daily",   priority: 0.9 },
-    { url: `${base}/teachers`,                          changeFrequency: "daily",   priority: 0.9 },
-    { url: `${base}/services/schools`,                  changeFrequency: "daily",   priority: 0.9 },
-    { url: `${base}/services/retreats`,                 changeFrequency: "daily",   priority: 0.9 },
-    { url: `${base}/services/products`,                 changeFrequency: "daily",   priority: 0.8 },
-    { url: `${base}/services/workshops`,                changeFrequency: "daily",   priority: 0.8 },
+    { url: `${base}/yogastudio`,                        changeFrequency: "daily",   priority: 0.9 },
+    { url: `${base}/yogateacher`,                       changeFrequency: "daily",   priority: 0.9 },
+    { url: `${base}/yogaschool`,                        changeFrequency: "daily",   priority: 0.9 },
+    { url: `${base}/retreatcenter`,                     changeFrequency: "daily",   priority: 0.9 },
+    { url: `${base}/yogaproducts`,                      changeFrequency: "daily",   priority: 0.8 },
+    { url: `${base}/yogaworkshops`,                     changeFrequency: "daily",   priority: 0.8 },
     { url: `${base}/community`,                         changeFrequency: "daily",   priority: 0.8 },
     { url: `${base}/submit`,                            changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/resources`,                         changeFrequency: "weekly",  priority: 0.7 },
@@ -33,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [listingsRes, postsRes] = await Promise.all([
     supabase
       .from("listings")
-      .select("slug, updated_at")
+      .select("slug, type, updated_at")
       .eq("status", "approved"),
     supabase
       .from("blog_posts")
@@ -42,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   const listingRoutes: MetadataRoute.Sitemap = (listingsRes.data ?? []).map((l) => ({
-    url: `${base}/listing/${l.slug}`,
+    url: `${base}${getListingUrl(l.type, l.slug)}`,
     lastModified: new Date(l.updated_at),
     changeFrequency: "monthly",
     priority: 0.7,

@@ -11,11 +11,11 @@ import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
 export const metadata: Metadata = {
   title: "Yoga Retreats Near You — Weekend & Immersive Escapes",
   description: "Find yoga retreats near your location, ranked by distance. Weekend escapes, week-long immersions, and month-long programs from Bali to Costa Rica to your nearest mountain.",
-  alternates: { canonical: `${SITE.url}/services/retreats` },
+  alternates: { canonical: `${SITE.url}/retreatcenter` },
   openGraph: {
     title: "Yoga Retreats Near You",
     description: "Yoga retreats nearest to you — weekend, weeklong, and immersive.",
-    url: `${SITE.url}/services/retreats`,
+    url: `${SITE.url}/retreatcenter`,
   },
 };
 
@@ -42,7 +42,7 @@ export default async function RetreatsPage() {
       <CategoryJsonLd
         name="Yoga Retreats Near You"
         description="Yoga retreats indexed in the Yoga Founders Network directory, ranked by distance to the visitor."
-        url={`${SITE.url}/services/retreats`}
+        url={`${SITE.url}/retreatcenter`}
         listings={retreats}
         total={total}
       />

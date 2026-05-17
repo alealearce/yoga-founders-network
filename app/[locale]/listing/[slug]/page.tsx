@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Listing, Review } from "@/lib/supabase/types";
 import { MapPin, Globe, Mail, Phone, BadgeCheck, Star, Instagram, Facebook, Youtube } from "lucide-react";
 import { SITE } from "@/lib/config/site";
+import { getListingUrl } from "@/lib/utils/listingUrl";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 import CoverImage from "@/components/ui/CoverImage";
 import ReviewForm from "@/components/reviews/ReviewForm";
@@ -19,22 +20,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const { data } = await supabase
     .from("listings")
-    .select("name, description, tagline, images, city, country")
+    .select("name, description, tagline, images, city, country, type")
     .eq("slug", slug)
     .single();
 
   if (!data) return { title: "Listing Not Found" };
 
   const location = [data.city, data.country].filter(Boolean).join(", ");
+  const canonical = `${SITE.url}${getListingUrl(data.type, slug)}`;
 
   return {
     title: data.name,
     description: data.tagline ?? data.description ?? `${data.name} — ${SITE.name}`,
-    alternates: { canonical: `${SITE.url}/listing/${slug}` },
+    alternates: { canonical },
     openGraph: {
       title: `${data.name}${location ? ` — ${location}` : ""}`,
       description: data.tagline ?? data.description ?? "",
-      url: `${SITE.url}/listing/${slug}`,
+      url: canonical,
       images: data.images?.[0] ? [{ url: data.images[0] }] : [],
     },
   };
