@@ -4,6 +4,7 @@ import type { Listing } from "@/lib/supabase/types";
 import { LISTING_TYPES } from "@/lib/config/site";
 import Badge from "@/components/ui/Badge";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
+import SearchBar from "@/components/directory/SearchBar";
 import { getListingUrl } from "@/lib/utils/listingUrl";
 
 export const metadata = {
@@ -48,7 +49,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <div className="max-w-5xl mx-auto">
 
         {/* Header */}
-        <div className="mb-10">
+        <div className="mb-6">
           <h1 className="font-serif text-display-sm text-on-surface mb-2">
             {query ? `Results for "${query}"` : typeFilter ? `Browse ${typeFilter}` : "Search"}
           </h1>
@@ -57,7 +58,25 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             {typeFilter && (
               <> in <span className="font-semibold capitalize">{typeFilter}</span></>
             )}
+            {(query || typeFilter) && (
+              <>
+                {" · "}
+                <Link href="/" className="text-primary hover:underline">
+                  Back to home
+                </Link>
+              </>
+            )}
           </p>
+        </div>
+
+        {/* Search bar (stays active so users can edit, clear, or search again) */}
+        <div className="mb-8">
+          <SearchBar
+            initialQuery={query}
+            initialType={typeFilter}
+            showFilters={false}
+            placeholder="Search studios, teachers, retreats..."
+          />
         </div>
 
         {/* Filter pills */}

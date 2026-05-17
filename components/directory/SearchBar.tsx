@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 const FILTER_CHIPS = [
@@ -68,11 +68,29 @@ export default function SearchBar({
             onChange={e => setQuery(e.target.value)}
             placeholder={placeholder}
             className={cn(
-              "flex-1 bg-transparent font-sans text-on-surface outline-none",
+              "flex-1 min-w-0 bg-transparent font-sans text-on-surface outline-none",
               "placeholder:text-on-surface-variant/50",
               compact ? "text-sm" : "text-base"
             )}
           />
+          {query && (
+            <button
+              type="button"
+              onClick={() => {
+                setQuery("");
+                if (onSearch) onSearch("", type);
+                else {
+                  const params = new URLSearchParams();
+                  if (type) params.set("type", type);
+                  router.push(params.toString() ? `/search?${params.toString()}` : "/search");
+                }
+              }}
+              aria-label="Clear search"
+              className="flex-shrink-0 p-1 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-card transition-colors"
+            >
+              <X size={compact ? 14 : 16} />
+            </button>
+          )}
           <button
             type="submit"
             className={cn(
