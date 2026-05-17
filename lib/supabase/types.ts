@@ -40,6 +40,7 @@ export interface Listing {
   stripe_subscription_id: string | null;
   plan: ListingPlan;
   plan_expires_at: string | null;
+  yoga_alliance_id: string | null;
 }
 
 export interface Review {

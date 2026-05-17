@@ -216,3 +216,45 @@ export async function sendAdminNewListing(
     html: baseTemplate('New Listing Submission', body),
   });
 }
+
+// ── Admin: Listing Claim Request ──────────────────────────────────────────
+
+export async function sendAdminClaimRequest(opts: {
+  listingId: string;
+  listingName: string;
+  listingSlug: string;
+  listingType: string;
+  claimerEmail: string;
+  claimerUserId: string;
+  yogaAllianceId: string | null;
+  relationship: string;
+}) {
+  const { listingId, listingName, listingSlug, listingType, claimerEmail, claimerUserId, yogaAllianceId, relationship } = opts;
+  const subject = `Claim request: ${listingName}`;
+  const body = `
+    <p style="margin:0 0 16px;">A signed-in user has requested to claim a listing on Yoga Founders Network.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;border:1px solid ${BORDER};border-radius:4px;overflow:hidden;">
+      <tr><td style="padding:16px;background-color:${BG};">
+        <p style="margin:0 0 8px;font-size:14px;font-family:Arial,sans-serif;"><strong>Listing:</strong> ${listingName} (${listingType})</p>
+        <p style="margin:0 0 8px;font-size:14px;font-family:Arial,sans-serif;"><strong>Listing ID:</strong> ${listingId}</p>
+        <p style="margin:0 0 8px;font-size:14px;font-family:Arial,sans-serif;"><strong>Slug:</strong> ${listingSlug}</p>
+        <p style="margin:0 0 8px;font-size:14px;font-family:Arial,sans-serif;"><strong>Claimer:</strong> <a href="mailto:${claimerEmail}" style="color:${SAGE};">${claimerEmail}</a></p>
+        <p style="margin:0 0 8px;font-size:14px;font-family:Arial,sans-serif;"><strong>User ID:</strong> ${claimerUserId}</p>
+        <p style="margin:0 0 8px;font-size:14px;font-family:Arial,sans-serif;"><strong>Yoga Alliance ID:</strong> ${yogaAllianceId ?? '—'}</p>
+        <p style="margin:0;font-size:14px;font-family:Arial,sans-serif;"><strong>Relationship:</strong><br/>${relationship.replace(/\n/g, '<br/>')}</p>
+      </td></tr>
+    </table>
+    <p style="margin:0 0 24px;text-align:center;">
+      <a href="https://yogafoundersnetwork.com/admin" style="display:inline-block;background-color:${SAGE};color:#ffffff;padding:14px 32px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;letter-spacing:0.5px;">Review in Admin</a>
+    </p>
+    <p style="margin:0;font-size:12px;color:#888;font-family:Arial,sans-serif;">To approve: set listings.owner_id = '${claimerUserId}' (and listings.yoga_alliance_id if provided) in Supabase.</p>
+  `;
+
+  return getResend().emails.send({
+    from: FROM_EMAIL,
+    to: ADMIN_EMAIL,
+    subject,
+    html: baseTemplate('Listing Claim Request', body),
+    replyTo: claimerEmail,
+  });
+}
