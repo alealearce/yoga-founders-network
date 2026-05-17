@@ -3,12 +3,20 @@ import { createClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
 import { YOGA_CATEGORIES } from "@/lib/config/categories";
 import { getIpLocation } from "@/lib/utils/ipLocation";
+import { SITE } from "@/lib/config/site";
 import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
+import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
 
 export const metadata: Metadata = {
-  title: "Yoga Studios Worldwide",
-  description: "Find yoga studios near you and around the world. Browse studios offering every style — Hatha, Vinyasa, Yin, Kundalini, and more. Compare locations, read reviews, and find the perfect studio for your practice.",
+  title: "Yoga Studios Near You — Global Directory",
+  description: "Find yoga studios near your location, ranked by distance. Browse 700+ verified studios across the US, Canada, and worldwide — every style, every level. Hot yoga, Vinyasa, Hatha, Yin, Kundalini.",
+  alternates: { canonical: `${SITE.url}/studios` },
+  openGraph: {
+    title: "Yoga Studios Near You",
+    description: "Find yoga studios near your location, ranked by distance.",
+    url: `${SITE.url}/studios`,
+  },
 };
 
 export default async function StudiosPage() {
@@ -31,6 +39,13 @@ export default async function StudiosPage() {
 
   return (
     <>
+      <CategoryJsonLd
+        name="Yoga Studios Near You"
+        description="Yoga studios indexed in the Yoga Founders Network global directory, ranked by distance to the visitor."
+        url={`${SITE.url}/studios`}
+        listings={studios}
+        total={total}
+      />
       {/* Hero */}
       <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -39,10 +54,10 @@ export default async function StudiosPage() {
               The Directory
             </p>
             <h1 className="font-serif text-display-md text-on-surface mb-4">
-              Find Your Studio
+              Find Yoga Studios Near You
             </h1>
             <p className="font-sans text-lg text-on-surface-variant leading-relaxed mb-8">
-              Discover yoga studios in your city and around the globe. Filter by style, location, and vibe.
+              Discover yoga studios near your location, ranked by distance — then filter by style, level, or vibe.
             </p>
             {total > 0 && (
               <p className="font-sans text-sm text-on-surface-variant/70 mb-6">

@@ -3,12 +3,20 @@ import { createClient } from "@/lib/supabase/server";
 import { getIpLocation } from "@/lib/utils/ipLocation";
 import type { Listing } from "@/lib/supabase/types";
 import { YOGA_CATEGORIES } from "@/lib/config/categories";
+import { SITE } from "@/lib/config/site";
 import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
+import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
 
 export const metadata: Metadata = {
-  title: "Yoga Retreats Worldwide",
-  description: "Discover transformative yoga retreats around the world. From weekend escapes to month-long immersions — find your perfect sanctuary and book with confidence.",
+  title: "Yoga Retreats Near You — Weekend & Immersive Escapes",
+  description: "Find yoga retreats near your location, ranked by distance. Weekend escapes, week-long immersions, and month-long programs from Bali to Costa Rica to your nearest mountain.",
+  alternates: { canonical: `${SITE.url}/services/retreats` },
+  openGraph: {
+    title: "Yoga Retreats Near You",
+    description: "Yoga retreats nearest to you — weekend, weeklong, and immersive.",
+    url: `${SITE.url}/services/retreats`,
+  },
 };
 
 export default async function RetreatsPage() {
@@ -31,6 +39,13 @@ export default async function RetreatsPage() {
 
   return (
     <>
+      <CategoryJsonLd
+        name="Yoga Retreats Near You"
+        description="Yoga retreats indexed in the Yoga Founders Network directory, ranked by distance to the visitor."
+        url={`${SITE.url}/services/retreats`}
+        listings={retreats}
+        total={total}
+      />
       {/* Hero */}
       <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -39,10 +54,10 @@ export default async function RetreatsPage() {
               Services — Retreats
             </p>
             <h1 className="font-serif text-display-md text-on-surface mb-4">
-              Yoga Retreats
+              Yoga Retreats Near You
             </h1>
             <p className="font-sans text-lg text-on-surface-variant leading-relaxed mb-8">
-              Step away from the everyday. Discover yoga retreats in Bali, Costa Rica, Italy, and beyond — choose your duration, your style, your sanctuary.
+              Step away from the everyday — discover yoga retreats nearest to you, plus iconic destinations from Bali to Costa Rica. Choose your duration, style, and sanctuary.
             </p>
             {total > 0 && (
               <p className="font-sans text-sm text-on-surface-variant/70 mb-6">
