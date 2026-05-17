@@ -20,7 +20,7 @@ export default async function StudiosPage() {
     .eq("type", "studio")
     .order("is_featured", { ascending: false })
     .order("rating_avg", { ascending: false })
-    .limit(24);
+    .limit(500);
 
   const studios: Listing[] = data ?? [];
   const total = count ?? 0;

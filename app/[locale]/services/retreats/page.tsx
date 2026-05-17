@@ -20,7 +20,7 @@ export default async function RetreatsPage() {
     .eq("type", "retreat")
     .order("is_featured", { ascending: false })
     .order("rating_avg", { ascending: false })
-    .limit(24);
+    .limit(500);
 
   const retreats: Listing[] = data ?? [];
   const total = count ?? 0;
