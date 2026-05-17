@@ -83,7 +83,7 @@ export const COPY = {
     cta:      "Submit Your Listing — It's Free!",
   },
   footer: {
-    tagline: "Help Yoga grow its Impact in Society",
+    tagline: "Helping Yoga grow its Impact in Society",
   },
 } as const;
 
