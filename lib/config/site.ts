@@ -98,4 +98,10 @@ export const NEWSLETTER = {
 // ── Admin ────────────────────────────────────────────────────────────────────
 export const ADMIN = {
   secret: process.env.ADMIN_SECRET ?? "",
+  emails: ["hi@arce.ca"] as readonly string[],
 } as const;
+
+export function isAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  return ADMIN.emails.includes(email.toLowerCase());
+}

@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 import { sendApprovalEmail, sendRejectionEmail } from '@/lib/email/resend';
-import { SITE } from '@/lib/config/site';
+import { SITE, isAdminEmail } from '@/lib/config/site';
 
 const VALID_ACTIONS = ['approve', 'reject', 'feature', 'verify'] as const;
 type AdminAction = typeof VALID_ACTIONS[number];
 
 export async function POST(req: NextRequest) {
-  // Verify admin secret
-  const secret = req.headers.get('x-admin-secret');
-  if (!secret || secret !== process.env.ADMIN_SECRET) {
+  const userClient = await createClient();
+  const { data: { user } } = await userClient.auth.getUser();
+  if (!user || !isAdminEmail(user.email)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

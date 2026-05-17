@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
-import { createAdminClient } from "@/lib/supabase/server";
-import { ADMIN } from "@/lib/config/site";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { isAdminEmail } from "@/lib/config/site";
 import type { Listing } from "@/lib/supabase/types";
 import AdminClient from "./AdminClient";
 
@@ -27,22 +26,16 @@ type AdminListing = Pick<
 
 export default async function AdminPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ secret?: string }>;
 }) {
   const { locale } = await params;
-  const { secret: secretParam } = await searchParams;
 
-  // Check secret from URL param or cookie
-  const cookieStore = await cookies();
-  const cookieSecret = cookieStore.get("admin_secret")?.value;
-  const secret = secretParam ?? cookieSecret ?? "";
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  if (!ADMIN.secret || secret !== ADMIN.secret) {
-    redirect(`/${locale}/`);
-  }
+  if (!user) redirect(`/${locale}/login?next=/admin`);
+  if (!isAdminEmail(user.email)) redirect(`/${locale}/`);
 
   const adminSupabase = createAdminClient();
 

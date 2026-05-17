@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createAdminClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
+import { isAdminEmail } from '@/lib/config/site';
 
 // ── Zod schemas ───────────────────────────────────────────────────────────────
 
@@ -27,15 +28,16 @@ const DeleteSchema = z.object({
 
 // ── Auth helper ───────────────────────────────────────────────────────────────
 
-function verifyAdmin(req: NextRequest): boolean {
-  const secret = req.headers.get('x-admin-secret');
-  return !!secret && secret === process.env.ADMIN_SECRET;
+async function verifyAdmin(_req: NextRequest): Promise<boolean> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  return !!user && isAdminEmail(user.email);
 }
 
 // ── POST — create blog post ───────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
-  if (!verifyAdmin(req)) {
+  if (!(await verifyAdmin(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -89,7 +91,7 @@ export async function POST(req: NextRequest) {
 // ── PUT — update blog post ────────────────────────────────────────────────────
 
 export async function PUT(req: NextRequest) {
-  if (!verifyAdmin(req)) {
+  if (!(await verifyAdmin(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -130,7 +132,7 @@ export async function PUT(req: NextRequest) {
 // ── DELETE — delete blog post ─────────────────────────────────────────────────
 
 export async function DELETE(req: NextRequest) {
-  if (!verifyAdmin(req)) {
+  if (!(await verifyAdmin(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
