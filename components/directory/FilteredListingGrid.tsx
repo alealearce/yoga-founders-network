@@ -181,6 +181,12 @@ export default function FilteredListingGrid({
       {/* Grid */}
       <section className="py-16 lg:py-20 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          {userCoords && (
+            <p className="flex items-center gap-2 font-sans text-sm text-on-surface-variant mb-6">
+              <MapPin size={14} className="text-primary" />
+              Filtered by nearest to your location
+            </p>
+          )}
           {filtered.length > 0 ? (
             <div className={`grid ${gridCols} gap-6`}>
               {filtered.map(listing => (

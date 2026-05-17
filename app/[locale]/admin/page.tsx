@@ -33,7 +33,11 @@ export default async function AdminPage() {
 
   const adminSupabase = createAdminClient();
 
-  const [{ data: pendingData }, { data: allData }] = await Promise.all([
+  const [
+    { data: pendingData },
+    { data: allData, count: allCount },
+    { count: approvedCount },
+  ] = await Promise.all([
     adminSupabase
       .from("listings")
       .select("id, name, slug, type, status, is_featured, is_verified, city, country, plan, created_at")
@@ -43,13 +47,23 @@ export default async function AdminPage() {
 
     adminSupabase
       .from("listings")
-      .select("id, name, slug, type, status, is_featured, is_verified, city, country, plan, created_at")
+      .select(
+        "id, name, slug, type, status, is_featured, is_verified, city, country, plan, created_at",
+        { count: "exact" },
+      )
       .order("created_at", { ascending: false })
-      .limit(200),
+      .limit(1000),
+
+    adminSupabase
+      .from("listings")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "approved"),
   ]);
 
   const pending = (pendingData ?? []) as AdminListing[];
   const all = (allData ?? []) as AdminListing[];
+  const totalListings = allCount ?? all.length;
+  const totalApproved = approvedCount ?? all.filter((l) => l.status === "approved").length;
 
   return (
     <div className="min-h-screen bg-[#ffffff] px-6 py-16">
@@ -71,8 +85,8 @@ export default async function AdminPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
           {[
             { label: "Pending Review", value: pending.length, color: "text-amber-600" },
-            { label: "Total Listings", value: all.length, color: "text-on-surface" },
-            { label: "Approved", value: all.filter((l) => l.status === "approved").length, color: "text-green-600" },
+            { label: "Total Listings", value: totalListings, color: "text-on-surface" },
+            { label: "Approved", value: totalApproved, color: "text-green-600" },
             { label: "Featured", value: all.filter((l) => l.is_featured).length, color: "text-primary" },
           ].map((stat) => (
             <div key={stat.label} className="bg-surface-card rounded-2xl shadow-card p-5 text-center">
