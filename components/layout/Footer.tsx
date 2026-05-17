@@ -35,18 +35,20 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="lg:max-w-xs">
-            <Link href="/" className="inline-block mb-4">
-              <Image
-                src={SITE.logo}
-                alt={SITE.name}
-                width={120}
-                height={48}
-                className="h-9 w-auto object-contain opacity-80"
-              />
-            </Link>
-            <p className="font-sans text-sm font-bold text-on-surface leading-relaxed mb-6">
-              {COPY.footer.tagline}
-            </p>
+            <div className="flex items-center gap-3 mb-6">
+              <Link href="/" className="flex-shrink-0">
+                <Image
+                  src={SITE.logo}
+                  alt={SITE.name}
+                  width={120}
+                  height={48}
+                  className="h-9 w-auto object-contain opacity-80"
+                />
+              </Link>
+              <p className="font-sans text-sm font-bold text-on-surface leading-snug">
+                {COPY.footer.tagline}
+              </p>
+            </div>
             {/* Newsletter */}
             <NewsletterSignup variant="compact" />
             <a
