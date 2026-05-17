@@ -116,6 +116,14 @@ export default async function ListingPage({ params }: Props) {
                     <BadgeCheck size={12} /> Verified
                   </span>
                 )}
+                {listing.yoga_alliance_id && (
+                  <span
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 font-sans text-xs font-bold text-amber-800"
+                    title={`Yoga Alliance: ${listing.yoga_alliance_id}`}
+                  >
+                    <BadgeCheck size={12} /> Yoga Alliance · {listing.yoga_alliance_id}
+                  </span>
+                )}
                 {listing.is_featured && (
                   <span className="px-3 py-1 rounded-full bg-primary text-white font-sans text-xs font-bold">
                     Featured
@@ -298,6 +306,24 @@ export default async function ListingPage({ params }: Props) {
                 </div>
               )}
             </div>
+
+            {/* Claim — only when the listing is unowned */}
+            {!listing.owner_id && (
+              <div className="bg-surface-low rounded-2xl p-6 space-y-3">
+                <h3 className="font-serif text-sm font-bold text-on-surface">
+                  Is this your listing?
+                </h3>
+                <p className="font-sans text-xs text-on-surface-variant leading-relaxed">
+                  Claim it to manage details, add photos, and (optionally) display a Yoga Alliance credential.
+                </p>
+                <Link
+                  href={`/claim/${listing.slug}`}
+                  className="inline-flex items-center justify-center w-full px-5 py-2.5 rounded-full font-sans text-xs font-semibold text-on-surface border border-outline-variant/40 hover:bg-surface-card transition-all duration-300"
+                >
+                  Claim this listing
+                </Link>
+              </div>
+            )}
 
             {/* Social */}
             {(listing.social_instagram || listing.social_facebook || listing.social_youtube) && (

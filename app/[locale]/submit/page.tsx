@@ -17,6 +17,7 @@ const INITIAL = {
   description:       "",
   yoga_styles:       [] as string[],
   experience_levels: [] as string[],
+  yoga_alliance_id:  "",
   notes:             "",
 };
 
@@ -199,6 +200,22 @@ export default function SubmitPage() {
                     className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                  Yoga Alliance ID <span className="text-on-surface-variant/60 font-normal">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  value={form.yoga_alliance_id}
+                  onChange={e => setForm(f => ({ ...f, yoga_alliance_id: e.target.value }))}
+                  placeholder="RYS 200, E-RYT 500, etc."
+                  className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                />
+                <p className="font-sans text-xs text-on-surface-variant/60 mt-2">
+                  If you&apos;re registered with Yoga Alliance (RYS / RYT / E-RYT), include your designation — we&apos;ll add a verified badge to your listing.
+                </p>
               </div>
             </div>
 

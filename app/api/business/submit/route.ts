@@ -14,6 +14,7 @@ const SubmitSchema = z.object({
   description: z.string().max(2000).optional(),
   yoga_styles: z.array(z.string().max(60)).max(20).optional(),
   tagline:     z.string().max(200).optional(),
+  yoga_alliance_id: z.string().max(60).optional().or(z.literal('')),
 });
 
 function slugify(name: string, city: string): string {
@@ -44,6 +45,7 @@ export async function POST(req: NextRequest) {
     const {
       name, type, email, website, phone,
       city, country, description, yoga_styles, tagline,
+      yoga_alliance_id,
     } = parsed.data;
 
     const supabase = createAdminClient();
@@ -69,6 +71,7 @@ export async function POST(req: NextRequest) {
       experience_levels: [],
       languages:     [],
       plan:          'free',
+      yoga_alliance_id: yoga_alliance_id || null,
     });
 
     if (insertError) {
