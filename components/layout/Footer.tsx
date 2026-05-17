@@ -67,6 +67,13 @@ export default function Footer() {
               Curated yoga wisdom, Community Stories &amp; Resources
             </p>
             <NewsletterSignup variant="compact" />
+            <a
+              href={`mailto:${SITE.email}`}
+              className="mt-4 inline-flex items-center gap-2 font-sans text-xs text-on-surface-variant/70 hover:text-on-surface transition-colors duration-300"
+            >
+              <Mail size={12} />
+              {SITE.email}
+            </a>
           </div>
 
           {/* Link columns — right side */}
