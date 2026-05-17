@@ -24,18 +24,12 @@ type AdminListing = Pick<
   | "created_at"
 >;
 
-export default async function AdminPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-
+export default async function AdminPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) redirect(`/${locale}/login?next=/admin`);
-  if (!isAdminEmail(user.email)) redirect(`/${locale}/`);
+  if (!user) redirect("/login?next=/admin");
+  if (!isAdminEmail(user.email)) redirect("/");
 
   const adminSupabase = createAdminClient();
 
