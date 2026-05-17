@@ -20,6 +20,20 @@ const nextConfig = {
         destination: 'https://yogafoundersnetwork.com/:path*',
         permanent: true,
       },
+
+      // Canonical category paths are /yogastudio, /yogateacher, /yogaschool,
+      // /retreatcenter, /yogaproducts, /yogaworkshops. Permanent-redirect
+      // every alias so search engines consolidate authority.
+      { source: '/studios',           destination: '/yogastudio',    permanent: true },
+      { source: '/teachers',          destination: '/yogateacher',   permanent: true },
+      { source: '/schools',           destination: '/yogaschool',    permanent: true },
+      { source: '/retreats',          destination: '/retreatcenter', permanent: true },
+      { source: '/products',          destination: '/yogaproducts',  permanent: true },
+      { source: '/workshops',         destination: '/yogaworkshops', permanent: true },
+      { source: '/services/schools',  destination: '/yogaschool',    permanent: true },
+      { source: '/services/retreats', destination: '/retreatcenter', permanent: true },
+      { source: '/services/products', destination: '/yogaproducts',  permanent: true },
+      { source: '/services/workshops',destination: '/yogaworkshops', permanent: true },
     ];
   },
 

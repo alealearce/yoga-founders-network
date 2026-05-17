@@ -11,11 +11,11 @@ import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
 export const metadata: Metadata = {
   title: "Yoga Teacher Training Near You — Schools & Programs",
   description: "Find Yoga Alliance-accredited teacher training programs near your location, ranked by distance. RYS 200, RYS 300, RYS 500 certifications across every tradition.",
-  alternates: { canonical: `${SITE.url}/services/schools` },
+  alternates: { canonical: `${SITE.url}/yogaschool` },
   openGraph: {
     title: "Yoga Teacher Training Near You",
     description: "Accredited yoga schools nearest to you, with 200/300/500-hour programs.",
-    url: `${SITE.url}/services/schools`,
+    url: `${SITE.url}/yogaschool`,
   },
 };
 
@@ -42,7 +42,7 @@ export default async function SchoolsPage() {
       <CategoryJsonLd
         name="Yoga Teacher Training Near You"
         description="Accredited yoga schools and teacher training programs in the Yoga Founders Network directory, ranked by distance to the visitor."
-        url={`${SITE.url}/services/schools`}
+        url={`${SITE.url}/yogaschool`}
         listings={schools}
         total={total}
       />

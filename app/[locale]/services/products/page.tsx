@@ -11,11 +11,11 @@ import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
 export const metadata: Metadata = {
   title: "Yoga Products & Brands — Mats, Props, Apparel",
   description: "Browse yoga products from trusted brands and independent creators — mats, props, apparel, books, courses. Local makers near you ranked first.",
-  alternates: { canonical: `${SITE.url}/services/products` },
+  alternates: { canonical: `${SITE.url}/yogaproducts` },
   openGraph: {
     title: "Yoga Products & Brands",
     description: "Yoga mats, props, apparel, books, and courses — from local makers and trusted brands.",
-    url: `${SITE.url}/services/products`,
+    url: `${SITE.url}/yogaproducts`,
   },
 };
 
@@ -42,7 +42,7 @@ export default async function ProductsPage() {
       <CategoryJsonLd
         name="Yoga Products & Brands"
         description="Yoga products and brands indexed in the Yoga Founders Network directory."
-        url={`${SITE.url}/services/products`}
+        url={`${SITE.url}/yogaproducts`}
         listings={products}
         total={total}
       />
