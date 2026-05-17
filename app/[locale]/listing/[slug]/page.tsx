@@ -76,28 +76,31 @@ export default async function ListingPage({ params }: Props) {
 
   return (
     <>
-      {/* Hero — Aperture shape */}
-      <div className="pt-16 bg-[#ffffff]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 pb-0">
-          <div
-            className="relative w-full overflow-hidden"
-            style={{
-              height: "clamp(240px, 40vw, 480px)",
-              borderRadius: "1.5rem 1.5rem 1.5rem 0",
-            }}
-          >
-            {coverImage ? (
+      {/* Hero — only when there's a real image; otherwise a slim brand band */}
+      {coverImage ? (
+        <div className="pt-16 bg-[#ffffff]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 pb-0">
+            <div
+              className="relative w-full overflow-hidden"
+              style={{
+                height: "clamp(240px, 40vw, 480px)",
+                borderRadius: "1.5rem 1.5rem 1.5rem 0",
+              }}
+            >
               <CoverImage src={coverImage} alt={listing.name} />
-            ) : (
-              <div className="w-full h-full bg-surface-low flex items-center justify-center">
-                <YogaSilhouette pose="tree" size={80} color="#d0d0d0" />
-              </div>
-            )}
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="pt-16 bg-[#ffffff]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 pb-0">
+            <div className="relative w-full overflow-hidden bg-secondary-container/40 flex items-center justify-center" style={{ height: "140px", borderRadius: "1.5rem 1.5rem 1.5rem 0" }}>
+              <YogaSilhouette pose="tree" size={64} color="#1118" />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
@@ -141,10 +144,18 @@ export default async function ListingPage({ params }: Props) {
                 </p>
               )}
 
-              {location && (
-                <p className="flex items-center gap-2 font-sans text-sm text-on-surface-variant">
-                  <MapPin size={14} className="text-primary" />
-                  {location}
+              {(location || listing.address) && (
+                <p className="flex items-start gap-2 font-sans text-sm text-on-surface-variant">
+                  <MapPin size={14} className="text-primary mt-0.5 flex-shrink-0" />
+                  <span>
+                    {listing.address && (
+                      <>
+                        {listing.address}
+                        {location && <span className="text-on-surface-variant/50"> · </span>}
+                      </>
+                    )}
+                    {location}
+                  </span>
                 </p>
               )}
 
