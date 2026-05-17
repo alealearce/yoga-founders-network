@@ -31,6 +31,9 @@ interface FilteredListingGridProps {
   emptyTitle?: string;
   emptyDescription?: string;
   emptyCta?: string;
+  /** Approximate location from edge headers (Vercel / Cloudflare). Used as
+   * a fallback when the browser denies precise geolocation. */
+  ipLocation?: { lat: number; lon: number; city: string | null } | null;
 }
 
 export default function FilteredListingGrid({
@@ -40,12 +43,21 @@ export default function FilteredListingGrid({
   emptyTitle = "Coming soon",
   emptyDescription = "Be the first to list here.",
   emptyCta = "List Your Space",
+  ipLocation = null,
 }: FilteredListingGridProps) {
   // One active filter per group; null = "All"
   const [activeFilters, setActiveFilters] = useState<Record<string, string | null>>(
     Object.fromEntries(filterGroups.map(g => [g.field, null]))
   );
-  const [userCoords, setUserCoords] = useState<{ lat: number; lon: number } | null>(null);
+  // Seed coordinates with the edge-provided IP location so the first paint
+  // is already sorted to roughly the right region. Precise browser geo
+  // overrides this when granted.
+  const [userCoords, setUserCoords] = useState<{ lat: number; lon: number } | null>(
+    ipLocation ? { lat: ipLocation.lat, lon: ipLocation.lon } : null,
+  );
+  const [coordSource, setCoordSource] = useState<"ip" | "precise" | null>(
+    ipLocation ? "ip" : null,
+  );
   const [geoState, setGeoState] = useState<"idle" | "requesting" | "denied" | "timeout" | "unavailable" | "unsupported">("idle");
   const [optedOut, setOptedOut] = useState(false);
 
@@ -58,6 +70,7 @@ export default function FilteredListingGrid({
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setUserCoords({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+        setCoordSource("precise");
         setGeoState("idle");
       },
       (err) => {
@@ -69,10 +82,12 @@ export default function FilteredListingGrid({
     );
   };
 
-  // Auto-request location on mount unless the user has opted out this session
-  // or has previously denied permission in this browser.
+  // Auto-request precise browser geolocation on mount unless the user has
+  // opted out this session or has already denied permission. The IP-based
+  // coords from `ipLocation` provide the initial near-me ordering until
+  // (or unless) the precise location is granted.
   useEffect(() => {
-    if (optedOut || userCoords) return;
+    if (optedOut) return;
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       setGeoState("unsupported");
       return;
@@ -144,8 +159,10 @@ export default function FilteredListingGrid({
               } disabled:opacity-60 disabled:cursor-not-allowed`}
             >
               <MapPin size={13} />
-              {userCoords
+              {coordSource === "precise"
                 ? "Showing nearest to you"
+                : userCoords && coordSource === "ip"
+                ? `Near ${ipLocation?.city ?? "you"} — use precise location`
                 : geoState === "requesting"
                 ? "Locating…"
                 : geoState === "denied"
@@ -158,6 +175,7 @@ export default function FilteredListingGrid({
               <button
                 onClick={() => {
                   setUserCoords(null);
+                  setCoordSource(null);
                   setOptedOut(true);
                 }}
                 className="font-sans text-xs text-on-surface-variant hover:text-primary transition-colors"
@@ -223,7 +241,9 @@ export default function FilteredListingGrid({
           {userCoords && (
             <p className="flex items-center gap-2 font-sans text-sm text-on-surface-variant mb-6">
               <MapPin size={14} className="text-primary" />
-              Filtered by nearest to your location
+              {coordSource === "precise"
+                ? "Filtered by nearest to your location"
+                : `Filtered by nearest to ${ipLocation?.city ?? "your area"} (from your IP) — click the pill above to share precise location`}
             </p>
           )}
           {filtered.length > 0 ? (

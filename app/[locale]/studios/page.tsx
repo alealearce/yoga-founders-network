@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
 import { YOGA_CATEGORIES } from "@/lib/config/categories";
+import { getIpLocation } from "@/lib/utils/ipLocation";
 import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
 
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default async function StudiosPage() {
-  const supabase = await createClient();
+  const [supabase, ipLocation] = await Promise.all([
+    createClient(),
+    getIpLocation(),
+  ]);
 
   const { data, count } = await supabase
     .from("listings")
@@ -60,6 +64,7 @@ export default async function StudiosPage() {
         filterGroups={[
           { field: "yoga_styles", options: YOGA_CATEGORIES.map(c => c.label) },
         ]}
+        ipLocation={ipLocation}
         emptyTitle="Studios coming soon"
         emptyDescription="We are growing our global directory. Be the first studio in your city."
         emptyCta="List Your Studio"
