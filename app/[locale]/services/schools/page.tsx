@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { getIpLocation } from "@/lib/utils/ipLocation";
 import type { Listing } from "@/lib/supabase/types";
 import { SCHOOL_CERTIFICATIONS } from "@/lib/config/categories";
 import SearchBar from "@/components/directory/SearchBar";
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default async function SchoolsPage() {
-  const supabase = await createClient();
+  const [supabase, ipLocation] = await Promise.all([
+    createClient(),
+    getIpLocation(),
+  ]);
 
   const { data, count } = await supabase
     .from("listings")
@@ -59,6 +63,7 @@ export default async function SchoolsPage() {
         filterGroups={[
           { label: "Certification:", field: "experience_levels", options: [...SCHOOL_CERTIFICATIONS] },
         ]}
+        ipLocation={ipLocation}
         emptyTitle="Teacher training programs coming soon"
         emptyDescription="We are building a curated directory of the world's best yoga teacher training schools. Know a great one? Submit it."
         emptyCta="List Your School"

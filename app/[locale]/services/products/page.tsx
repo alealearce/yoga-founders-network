@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { getIpLocation } from "@/lib/utils/ipLocation";
 import type { Listing } from "@/lib/supabase/types";
 import { PRODUCT_CATEGORIES } from "@/lib/config/categories";
 import SearchBar from "@/components/directory/SearchBar";
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ProductsPage() {
-  const supabase = await createClient();
+  const [supabase, ipLocation] = await Promise.all([
+    createClient(),
+    getIpLocation(),
+  ]);
 
   const { data, count } = await supabase
     .from("listings")
@@ -60,6 +64,7 @@ export default async function ProductsPage() {
         filterGroups={[
           { label: "Category:", field: "experience_levels", options: [...PRODUCT_CATEGORIES] },
         ]}
+        ipLocation={ipLocation}
         emptyTitle="Products coming soon"
         emptyDescription="Sell yoga products? List them in our community marketplace."
         emptyCta="List Your Product"

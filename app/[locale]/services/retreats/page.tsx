@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { getIpLocation } from "@/lib/utils/ipLocation";
 import type { Listing } from "@/lib/supabase/types";
 import { YOGA_CATEGORIES } from "@/lib/config/categories";
 import SearchBar from "@/components/directory/SearchBar";
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default async function RetreatsPage() {
-  const supabase = await createClient();
+  const [supabase, ipLocation] = await Promise.all([
+    createClient(),
+    getIpLocation(),
+  ]);
 
   const { data, count } = await supabase
     .from("listings")
@@ -59,6 +63,7 @@ export default async function RetreatsPage() {
         filterGroups={[
           { field: "yoga_styles", options: YOGA_CATEGORIES.map(c => c.label) },
         ]}
+        ipLocation={ipLocation}
         emptyTitle="Retreats coming soon"
         emptyDescription="Host a yoga retreat? Get it in front of thousands of seekers worldwide."
         emptyCta="List Your Retreat"
