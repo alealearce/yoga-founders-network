@@ -25,9 +25,9 @@ export const SITE = {
   description: "The global directory for yoga studios, teachers, schools, retreats, and products. Discover and connect with the yoga community worldwide.",
   domain:      "yogafoundersnetwork.com",
   url:         "https://yogafoundersnetwork.com",
-  email:       "info@yogafoundersnetwork.com",
-  supportEmail:"info@yogafoundersnetwork.com",
-  fromEmail:   "Yoga Founders Network <info@yogafoundersnetwork.com>",
+  email:       "hello@yogafoundersnetwork.com",
+  supportEmail:"hello@yogafoundersnetwork.com",
+  fromEmail:   "Yoga Founders Network <hello@yogafoundersnetwork.com>",
   social: {
     instagram: "https://instagram.com/yogafoundersnetwork/",
     linkedin:  "https://linkedin.com/company/the-yoga-founders-network/",
