@@ -54,10 +54,10 @@ export default async function UnsubscribePage({
             <p className="font-sans text-sm text-on-surface-variant mb-10">
               Please contact us at{" "}
               <a
-                href="mailto:info@yogafoundersnetwork.com"
+                href="mailto:hello@yogafoundersnetwork.com"
                 className="text-primary hover:underline"
               >
-                info@yogafoundersnetwork.com
+                hello@yogafoundersnetwork.com
               </a>{" "}
               and we&apos;ll take care of it.
             </p>

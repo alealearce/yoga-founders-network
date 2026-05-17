@@ -5,7 +5,7 @@ function getResend() {
 }
 
 const FROM_EMAIL = 'Yoga Founders Network <hello@yogafoundersnetwork.com>';
-const ADMIN_EMAIL = 'info@yogafoundersnetwork.com';
+const ADMIN_EMAIL = 'hello@yogafoundersnetwork.com';
 
 // ── Brand styles (inline, for email client compatibility) ──────────────────
 const SAGE = '#111111';
