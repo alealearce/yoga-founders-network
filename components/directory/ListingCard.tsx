@@ -1,8 +1,18 @@
 import Link from "next/link";
 import { MapPin, BadgeCheck } from "lucide-react";
 import CoverImage from "@/components/ui/CoverImage";
+import YogaSilhouette from "@/components/ui/YogaSilhouette";
 import { cn } from "@/lib/utils/cn";
 import { getListingUrl } from "@/lib/utils/listingUrl";
+
+const POSES = ["seated", "tree", "warrior", "lotus", "child", "mountain"] as const;
+type Pose = (typeof POSES)[number];
+
+function poseForId(id: string): Pose {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return POSES[h % POSES.length];
+}
 
 interface ListingCardProps {
   id:           string;
@@ -31,11 +41,12 @@ function formatDistance(km: number): string {
 }
 
 export default function ListingCard({
-  slug, name, type, tagline, city, country,
+  id, slug, name, type, tagline, city, country,
   logo_url, images, yoga_styles,
   is_verified, is_featured, variant = "card",
   distance_km,
 }: ListingCardProps) {
+  const pose = poseForId(id);
   const coverImage = images?.[0] ?? logo_url ?? null;
   const location   = [city, country].filter(Boolean).join(", ");
 
@@ -50,7 +61,9 @@ export default function ListingCard({
           {coverImage ? (
             <CoverImage src={coverImage} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-400" />
           ) : (
-            <div className="w-full h-full bg-secondary-container/40 rounded-xl" />
+            <div className="w-full h-full bg-secondary-container/40 rounded-xl flex items-center justify-center">
+              <YogaSilhouette pose={pose} size={48} color="#1118" />
+            </div>
           )}
           {is_verified && (
             <div className="absolute top-1.5 left-1.5 bg-primary text-white rounded-full p-0.5">
@@ -97,7 +110,9 @@ export default function ListingCard({
         {coverImage ? (
           <CoverImage src={coverImage} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[600ms]" />
         ) : (
-          <div className="w-full h-full bg-secondary-container/30" />
+          <div className="w-full h-full bg-secondary-container/40 flex items-center justify-center">
+            <YogaSilhouette pose={pose} size={96} color="#11181a" />
+          </div>
         )}
         {/* Badges */}
         <div className="absolute top-3 left-3 flex gap-2">
