@@ -47,21 +47,6 @@ export default function Footer() {
             <p className="font-sans text-sm text-on-surface-variant leading-relaxed mb-6">
               {COPY.footer.tagline}
             </p>
-            {/* Social Links */}
-            <div className="flex items-center gap-3 mb-6">
-              <SocialLink href={SITE.social.instagram} aria="Instagram">
-                <Instagram size={16} />
-              </SocialLink>
-              <SocialLink href={SITE.social.linkedin} aria="LinkedIn">
-                <Linkedin size={16} />
-              </SocialLink>
-              <SocialLink href={SITE.social.facebook} aria="Facebook">
-                <Facebook size={16} />
-              </SocialLink>
-              <SocialLink href={`mailto:${SITE.email}`} aria="Email">
-                <Mail size={16} />
-              </SocialLink>
-            </div>
             {/* Newsletter */}
             <p className="font-sans text-xs text-on-surface-variant/60 mb-3 leading-relaxed">
               Curated yoga wisdom, Community Stories &amp; Resources
@@ -74,6 +59,18 @@ export default function Footer() {
               <Mail size={12} />
               {SITE.email}
             </a>
+            {/* Social Links */}
+            <div className="flex items-center gap-3 mt-6">
+              <SocialLink href={SITE.social.instagram} aria="Instagram">
+                <Instagram size={16} />
+              </SocialLink>
+              <SocialLink href={SITE.social.linkedin} aria="LinkedIn">
+                <Linkedin size={16} />
+              </SocialLink>
+              <SocialLink href={SITE.social.facebook} aria="Facebook">
+                <Facebook size={16} />
+              </SocialLink>
+            </div>
           </div>
 
           {/* Link columns — right side */}
