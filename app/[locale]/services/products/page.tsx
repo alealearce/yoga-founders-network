@@ -20,7 +20,7 @@ export default async function ProductsPage() {
     .eq("type", "product")
     .order("is_featured", { ascending: false })
     .order("rating_avg", { ascending: false })
-    .limit(24);
+    .limit(500);
 
   const products: Listing[] = data ?? [];
   const total = count ?? 0;

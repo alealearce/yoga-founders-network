@@ -21,12 +21,20 @@ interface ListingCardProps {
   is_featured?: boolean;
   price_range?: string | null;
   variant?:     "card" | "row";
+  distance_km?: number | null;
+}
+
+function formatDistance(km: number): string {
+  if (km < 1) return `${Math.round(km * 1000)} m away`;
+  if (km < 10) return `${km.toFixed(1)} km away`;
+  return `${Math.round(km)} km away`;
 }
 
 export default function ListingCard({
   slug, name, type, tagline, city, country,
   logo_url, images, yoga_styles,
   is_verified, is_featured, variant = "card",
+  distance_km,
 }: ListingCardProps) {
   const coverImage = images?.[0] ?? logo_url ?? null;
   const location   = [city, country].filter(Boolean).join(", ");
@@ -122,6 +130,11 @@ export default function ListingCard({
         {location && (
           <p className="flex items-center gap-1.5 font-sans text-xs text-on-surface-variant mb-3">
             <MapPin size={12} /> {location}
+            {typeof distance_km === "number" && (
+              <span className="ml-1.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
+                {formatDistance(distance_km)}
+              </span>
+            )}
           </p>
         )}
         {yoga_styles && yoga_styles.length > 0 && (

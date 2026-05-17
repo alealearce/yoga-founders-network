@@ -20,7 +20,7 @@ export default async function SchoolsPage() {
     .eq("type", "school")
     .order("is_featured", { ascending: false })
     .order("rating_avg", { ascending: false })
-    .limit(24);
+    .limit(500);
 
   const schools: Listing[] = data ?? [];
   const total = count ?? 0;

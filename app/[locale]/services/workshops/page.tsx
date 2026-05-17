@@ -20,7 +20,7 @@ export default async function WorkshopsPage() {
     .eq("type", "workshop")
     .order("is_featured", { ascending: false })
     .order("created_at", { ascending: false })
-    .limit(24);
+    .limit(500);
 
   const workshops: Listing[] = data ?? [];
   const total = count ?? 0;

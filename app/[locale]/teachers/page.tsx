@@ -20,7 +20,7 @@ export default async function TeachersPage() {
     .eq("type", "teacher")
     .order("is_featured", { ascending: false })
     .order("rating_avg", { ascending: false })
-    .limit(24);
+    .limit(500);
 
   const teachers: Listing[] = data ?? [];
   const total = count ?? 0;
