@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MapPin } from "lucide-react";
 import type { Listing } from "@/lib/supabase/types";
 import ListingCard from "@/components/directory/ListingCard";
@@ -46,7 +46,8 @@ export default function FilteredListingGrid({
     Object.fromEntries(filterGroups.map(g => [g.field, null]))
   );
   const [userCoords, setUserCoords] = useState<{ lat: number; lon: number } | null>(null);
-  const [geoState, setGeoState] = useState<"idle" | "requesting" | "denied" | "unsupported">("idle");
+  const [geoState, setGeoState] = useState<"idle" | "requesting" | "denied" | "timeout" | "unavailable" | "unsupported">("idle");
+  const [optedOut, setOptedOut] = useState(false);
 
   const requestNearMe = () => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
@@ -59,10 +60,36 @@ export default function FilteredListingGrid({
         setUserCoords({ lat: pos.coords.latitude, lon: pos.coords.longitude });
         setGeoState("idle");
       },
-      () => setGeoState("denied"),
-      { enableHighAccuracy: false, timeout: 8000, maximumAge: 5 * 60 * 1000 },
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) setGeoState("denied");
+        else if (err.code === err.TIMEOUT) setGeoState("timeout");
+        else setGeoState("unavailable");
+      },
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 10 * 60 * 1000 },
     );
   };
+
+  // Auto-request location on mount unless the user has opted out this session
+  // or has previously denied permission in this browser.
+  useEffect(() => {
+    if (optedOut || userCoords) return;
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setGeoState("unsupported");
+      return;
+    }
+    if ("permissions" in navigator && navigator.permissions?.query) {
+      navigator.permissions
+        .query({ name: "geolocation" as PermissionName })
+        .then((p) => {
+          if (p.state === "denied") setGeoState("denied");
+          else requestNearMe();
+        })
+        .catch(() => requestNearMe());
+    } else {
+      requestNearMe();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggle = (field: string, value: string) => {
     setActiveFilters(prev => ({ ...prev, [field]: prev[field] === value ? null : value }));
@@ -105,35 +132,47 @@ export default function FilteredListingGrid({
       {/* Filter bars */}
       <section className="py-4 bg-[#ffffff] border-b border-outline-variant/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 space-y-3">
-          {/* Near me toggle */}
+          {/* Near me control */}
           <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={requestNearMe}
-              disabled={geoState === "requesting" || !!userCoords}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-sans text-sm font-medium transition-all duration-300 ${
+              disabled={geoState === "requesting"}
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-sans text-sm font-semibold transition-all duration-300 ${
                 userCoords
                   ? "bg-primary text-white"
-                  : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
+                  : "bg-primary/10 text-primary hover:bg-primary hover:text-white"
               } disabled:opacity-60 disabled:cursor-not-allowed`}
             >
               <MapPin size={13} />
               {userCoords
-                ? "Sorted by distance"
+                ? "Showing nearest to you"
                 : geoState === "requesting"
                 ? "Locating…"
-                : "Sort by distance"}
+                : geoState === "denied"
+                ? "Use my location"
+                : geoState === "timeout"
+                ? "Try location again"
+                : "Use my location"}
             </button>
             {userCoords && (
               <button
-                onClick={() => setUserCoords(null)}
+                onClick={() => {
+                  setUserCoords(null);
+                  setOptedOut(true);
+                }}
                 className="font-sans text-xs text-on-surface-variant hover:text-primary transition-colors"
               >
-                Reset
+                Default order
               </button>
             )}
-            {geoState === "denied" && (
+            {geoState === "denied" && !userCoords && (
               <span className="font-sans text-xs text-on-surface-variant/70">
-                Location denied — enable it in your browser to sort by distance.
+                Location blocked for this site — enable it in your browser&apos;s site settings.
+              </span>
+            )}
+            {geoState === "unavailable" && !userCoords && (
+              <span className="font-sans text-xs text-on-surface-variant/70">
+                Couldn&apos;t determine your location — try again.
               </span>
             )}
             {geoState === "unsupported" && (
