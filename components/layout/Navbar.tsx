@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, ChevronDown, User } from "lucide-react";
+import { Menu, X, ChevronDown, User, LayoutDashboard } from "lucide-react";
 import { SITE } from "@/lib/config/site";
 import { cn } from "@/lib/utils/cn";
+import { createClient } from "@/lib/supabase/client";
 
 const SERVICES_ITEMS = [
   { label: "Teacher Training & Schools", href: "/yogaschool",    icon: "Sc", desc: "Certifications & teacher training programs" },
@@ -18,12 +19,22 @@ export default function Navbar() {
   const [scrolled,      setScrolled]      = useState(false);
   const [mobileOpen,    setMobileOpen]    = useState(false);
   const [servicesOpen,  setServicesOpen]  = useState(false);
+  const [isAuthed,      setIsAuthed]      = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setIsAuthed(!!data.user));
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthed(!!session?.user);
+    });
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   // Close dropdown on outside click
@@ -138,13 +149,23 @@ export default function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-3">
-              <Link
-                href="/login"
-                className="flex items-center gap-1.5 font-sans text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors duration-300"
-              >
-                <User size={15} />
-                Sign In
-              </Link>
+              {isAuthed ? (
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-1.5 font-sans text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors duration-300"
+                >
+                  <LayoutDashboard size={15} />
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="flex items-center gap-1.5 font-sans text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors duration-300"
+                >
+                  <User size={15} />
+                  Sign In
+                </Link>
+              )}
               <Link
                 href="/submit"
                 className="px-5 py-2 rounded-full font-sans text-sm font-semibold text-white transition-all duration-300 hover:opacity-90"
@@ -218,11 +239,11 @@ export default function Navbar() {
 
             <div className="mt-auto flex flex-col gap-3 pt-6 border-t border-outline-variant/30">
               <Link
-                href="/login"
+                href={isAuthed ? "/dashboard" : "/login"}
                 onClick={() => setMobileOpen(false)}
                 className="text-center py-3 rounded-full font-sans text-sm font-semibold text-on-surface border border-outline-variant/40 hover:bg-surface-low transition-colors"
               >
-                Sign In
+                {isAuthed ? "Dashboard" : "Sign In"}
               </Link>
               <Link
                 href="/submit"
