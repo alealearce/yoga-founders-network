@@ -48,9 +48,6 @@ export default function Footer() {
               {COPY.footer.tagline}
             </p>
             {/* Newsletter */}
-            <p className="font-sans text-xs text-on-surface-variant/60 mb-3 leading-relaxed">
-              Curated yoga wisdom, Community Stories &amp; Resources
-            </p>
             <NewsletterSignup variant="compact" />
             <a
               href={`mailto:${SITE.email}`}

@@ -61,9 +61,9 @@ export default function NewsletterSignup({ variant = "inline" }: Props) {
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder="Add your email"
+          placeholder="Curated yoga wisdom, Community Stories & Resources"
           required
-          className="flex-1 px-4 py-2.5 font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none bg-transparent"
+          className="flex-1 min-w-0 px-4 py-2.5 font-sans text-xs text-on-surface placeholder:text-on-surface-variant/50 outline-none bg-transparent"
         />
         <button
           type="submit"
