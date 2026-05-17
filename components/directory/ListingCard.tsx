@@ -127,6 +127,12 @@ export default function ListingCard({
             </span>
           )}
         </div>
+        {/* Distance pill — top right of the image */}
+        {typeof distance_km === "number" && (
+          <span className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 text-primary font-sans text-xs font-bold shadow-sm">
+            <MapPin size={11} /> {formatDistance(distance_km)}
+          </span>
+        )}
       </div>
 
       {/* Content */}
@@ -145,11 +151,6 @@ export default function ListingCard({
         {location && (
           <p className="flex items-center gap-1.5 font-sans text-xs text-on-surface-variant mb-3">
             <MapPin size={12} /> {location}
-            {typeof distance_km === "number" && (
-              <span className="ml-1.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
-                {formatDistance(distance_km)}
-              </span>
-            )}
           </p>
         )}
         {yoga_styles && yoga_styles.length > 0 && (
