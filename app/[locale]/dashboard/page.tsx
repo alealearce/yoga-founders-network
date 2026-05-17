@@ -22,18 +22,13 @@ function statusLabel(status: Listing["status"]) {
   return "Pending Review";
 }
 
-export default async function DashboardPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
+export default async function DashboardPage() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect(`/${locale}/login`);
+  if (!user) redirect("/login?next=/dashboard");
 
   const { data: listings } = await supabase
     .from("listings")
@@ -61,7 +56,7 @@ export default async function DashboardPage({
             </p>
           </div>
           <Link
-            href={`/${locale}/submit`}
+            href="/submit"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90 whitespace-nowrap"
             style={{ background: "#111111" }}
           >
@@ -81,7 +76,7 @@ export default async function DashboardPage({
               global yoga community.
             </p>
             <Link
-              href={`/${locale}/submit`}
+              href="/submit"
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
               style={{ background: "#111111" }}
             >
@@ -144,7 +139,7 @@ export default async function DashboardPage({
                     </Link>
                   )}
                   <Link
-                    href={`/${locale}/dashboard/edit/${listing.slug}`}
+                    href={`/dashboard/edit/${listing.slug}`}
                     className="inline-flex items-center justify-center px-5 py-2 rounded-full font-sans text-sm font-semibold bg-secondary-container text-primary hover:bg-secondary-container/80 transition-all duration-300"
                   >
                     Edit
