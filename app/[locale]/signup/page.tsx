@@ -6,23 +6,42 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Eye, EyeOff } from "lucide-react";
 
-type FormState = "idle" | "loading" | "error";
+type FormState = "idle" | "loading" | "error" | "success";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
   const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
+  const [confirm,  setConfirm]  = useState("");
   const [showPw,   setShowPw]   = useState(false);
   const [status,   setStatus]   = useState<FormState>("idle");
   const [message,  setMessage]  = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("loading");
     setMessage("");
 
+    if (password.length < 8) {
+      setStatus("error");
+      setMessage("Password must be at least 8 characters.");
+      return;
+    }
+    if (password !== confirm) {
+      setStatus("error");
+      setMessage("Passwords don't match.");
+      return;
+    }
+
+    setStatus("loading");
+
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
+      },
+    });
 
     if (error) {
       setStatus("error");
@@ -30,7 +49,13 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
+    if (data.session) {
+      router.push("/dashboard");
+      return;
+    }
+
+    setStatus("success");
+    setMessage("Check your email to confirm your account.");
   };
 
   return (
@@ -41,17 +66,17 @@ export default function LoginPage() {
         <div className="text-center mb-10">
           <div className="text-4xl mb-3">🪷</div>
           <h1 className="font-serif text-display-sm text-on-surface mb-2">
-            Welcome back
+            Create your account
           </h1>
           <p className="font-sans text-sm text-on-surface-variant">
-            Sign in to manage your listing
+            Sign up to list and manage your space
           </p>
         </div>
 
         {/* Form Card */}
         <div className="bg-surface-card rounded-2xl shadow-card p-8 space-y-5">
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-4">
             {/* Email */}
             <div>
               <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
@@ -69,24 +94,16 @@ export default function LoginPage() {
 
             {/* Password */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="font-sans text-sm font-semibold text-on-surface">
-                  Password
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="font-sans text-xs text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                Password
+              </label>
               <div className="relative">
                 <input
                   type={showPw ? "text" : "password"}
                   required
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="Your password"
+                  placeholder="At least 8 characters"
                   className="w-full px-4 py-3 pr-12 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                 />
                 <button
@@ -99,9 +116,29 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Error */}
+            {/* Confirm */}
+            <div>
+              <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                Confirm password
+              </label>
+              <input
+                type={showPw ? "text" : "password"}
+                required
+                value={confirm}
+                onChange={e => setConfirm(e.target.value)}
+                placeholder="Re-enter your password"
+                className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+              />
+            </div>
+
+            {/* Error / Success */}
             {status === "error" && (
               <p className="font-sans text-sm text-red-600 bg-red-50 rounded-xl px-4 py-3">
+                {message}
+              </p>
+            )}
+            {status === "success" && (
+              <p className="font-sans text-sm text-green-700 bg-green-50 rounded-xl px-4 py-3">
                 {message}
               </p>
             )}
@@ -109,26 +146,26 @@ export default function LoginPage() {
             {/* Submit */}
             <button
               type="submit"
-              disabled={status === "loading"}
+              disabled={status === "loading" || status === "success"}
               className="w-full py-3.5 rounded-full font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
               style={{ background: "#111111" }}
             >
               {status === "loading" ? (
                 <span className="flex items-center justify-center gap-3">
                   <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Signing in...
+                  Creating account...
                 </span>
               ) : (
-                "Sign In"
+                "Create Account"
               )}
             </button>
           </form>
         </div>
 
         <p className="text-center font-sans text-sm text-on-surface-variant mt-6">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-primary font-semibold hover:underline">
-            Create one
+          Already have an account?{" "}
+          <Link href="/login" className="text-primary font-semibold hover:underline">
+            Sign in
           </Link>
         </p>
       </div>
