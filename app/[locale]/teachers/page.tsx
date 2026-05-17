@@ -3,12 +3,20 @@ import { createClient } from "@/lib/supabase/server";
 import { getIpLocation } from "@/lib/utils/ipLocation";
 import type { Listing } from "@/lib/supabase/types";
 import { YOGA_CATEGORIES, EXPERIENCE_LEVELS } from "@/lib/config/categories";
+import { SITE } from "@/lib/config/site";
 import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
+import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
 
 export const metadata: Metadata = {
-  title: "Find Yoga Teachers Worldwide",
-  description: "Discover experienced yoga teachers near you and around the globe. Browse by teaching style, experience level, and location — from local guides to internationally renowned instructors.",
+  title: "Yoga Teachers Near You — Find Your Teacher",
+  description: "Find yoga teachers near your location, ranked by distance. Browse by style, experience level (RYT 200, E-RYT 500), and location — local instructors and internationally renowned guides.",
+  alternates: { canonical: `${SITE.url}/teachers` },
+  openGraph: {
+    title: "Yoga Teachers Near You",
+    description: "Find yoga teachers near your location, ranked by distance.",
+    url: `${SITE.url}/teachers`,
+  },
 };
 
 export default async function TeachersPage() {
@@ -31,6 +39,13 @@ export default async function TeachersPage() {
 
   return (
     <>
+      <CategoryJsonLd
+        name="Yoga Teachers Near You"
+        description="Yoga teachers indexed in the Yoga Founders Network global directory, ranked by distance to the visitor."
+        url={`${SITE.url}/teachers`}
+        listings={teachers}
+        total={total}
+      />
       {/* Hero */}
       <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -39,10 +54,10 @@ export default async function TeachersPage() {
               The Directory
             </p>
             <h1 className="font-serif text-display-md text-on-surface mb-4">
-              Find Your Teacher
+              Find Yoga Teachers Near You
             </h1>
             <p className="font-sans text-lg text-on-surface-variant leading-relaxed mb-8">
-              Connect with yoga teachers who inspire. From beginners&apos; guides to advanced practitioners — find the right teacher for your journey.
+              Connect with yoga teachers nearest to you — from beginners&apos; guides to advanced practitioners. Filter by style and experience level.
             </p>
             {total > 0 && (
               <p className="font-sans text-sm text-on-surface-variant/70 mb-6">

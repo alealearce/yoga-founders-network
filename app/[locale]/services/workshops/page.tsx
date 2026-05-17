@@ -3,12 +3,20 @@ import { createClient } from "@/lib/supabase/server";
 import { getIpLocation } from "@/lib/utils/ipLocation";
 import type { Listing } from "@/lib/supabase/types";
 import { YOGA_CATEGORIES } from "@/lib/config/categories";
+import { SITE } from "@/lib/config/site";
 import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
+import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
 
 export const metadata: Metadata = {
-  title: "Yoga Workshops & Events",
-  description: "Find yoga workshops, intensives, and special events near you and worldwide. Deepen your practice with expert teachers.",
+  title: "Yoga Workshops & Events Near You",
+  description: "Find yoga workshops, intensives, and special events near your location, ranked by distance. Single-session deep dives, weekend immersions, and themed events.",
+  alternates: { canonical: `${SITE.url}/services/workshops` },
+  openGraph: {
+    title: "Yoga Workshops & Events Near You",
+    description: "Yoga workshops and events nearest to you.",
+    url: `${SITE.url}/services/workshops`,
+  },
 };
 
 export default async function WorkshopsPage() {
@@ -31,6 +39,13 @@ export default async function WorkshopsPage() {
 
   return (
     <>
+      <CategoryJsonLd
+        name="Yoga Workshops & Events Near You"
+        description="Yoga workshops and events in the Yoga Founders Network directory, ranked by distance to the visitor."
+        url={`${SITE.url}/services/workshops`}
+        listings={workshops}
+        total={total}
+      />
       {/* Hero */}
       <section className="pt-32 pb-16 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -39,10 +54,10 @@ export default async function WorkshopsPage() {
               Services — Events
             </p>
             <h1 className="font-serif text-display-md text-on-surface mb-4">
-              Workshops &amp; Events
+              Yoga Workshops &amp; Events Near You
             </h1>
             <p className="font-sans text-lg text-on-surface-variant leading-relaxed mb-8">
-              Deepen your practice, meet new teachers, and connect with the community. Browse upcoming yoga workshops and special events worldwide.
+              Deepen your practice and meet new teachers at workshops nearest to your location — single-session deep dives, weekend immersions, and themed events.
             </p>
             {total > 0 && (
               <p className="font-sans text-sm text-on-surface-variant/70 mb-6">
