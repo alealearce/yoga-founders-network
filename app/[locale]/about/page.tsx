@@ -164,13 +164,13 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 font-sans text-base text-on-surface-variant leading-relaxed">
                 <p>
-                  Our founder built an online yoga studio from scratch — creating content, managing students, handling marketing, payments, and tech.
+                  One of my past projects was an online yoga studio app, I wore all the hats — producing content, customer service, handling marketing, payments, and tech.
                 </p>
                 <p>
-                  Most yoga founders face the same invisible ceiling: deep expertise in their craft, but limited time and resources to build the business side. They deserve better tools, better visibility, and a community that has their back.
+                  Most business owners in yoga face the same invisible ceiling: deep expertise in the craft, but limited time and resources to build the business side. Yoga Founders is working on providing you with visibility and a community that supports you.
                 </p>
                 <p>
-                  Our vision is to amplify your visibility through automation tools and create a space where your students and community can easily find you and your magic.
+                  Our vision is to amplify your visibility through automation tools and create a space where the community can easily find you.
                 </p>
               </div>
             </div>
