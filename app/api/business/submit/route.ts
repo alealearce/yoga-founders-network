@@ -10,9 +10,10 @@ const SubmitSchema = z.object({
   website:     z.string().url().optional().or(z.literal('')),
   phone:       z.string().max(30).optional(),
   city:        z.string().min(2).max(100),
-  country:     z.string().min(2).max(100).optional(),
+  country:     z.string().min(2).max(100),
   description: z.string().max(2000).optional(),
   yoga_styles: z.array(z.string().max(60)).max(20).optional(),
+  languages:   z.array(z.string().max(40)).max(20).optional(),
   tagline:     z.string().max(200).optional(),
   yoga_alliance_id: z.string().max(60).optional().or(z.literal('')),
 });
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
 
     const {
       name, type, email, website, phone,
-      city, country, description, yoga_styles, tagline,
+      city, country, description, yoga_styles, languages, tagline,
       yoga_alliance_id,
     } = parsed.data;
 
@@ -69,7 +70,7 @@ export async function POST(req: NextRequest) {
       owner_id:      null,
       images:        [],
       experience_levels: [],
-      languages:     [],
+      languages:     languages ?? [],
       plan:          'free',
       yoga_alliance_id: yoga_alliance_id || null,
     });

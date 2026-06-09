@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { MapPin } from "lucide-react";
+import { MapPin, Globe } from "lucide-react";
+import { countryFlag } from "@/lib/config/countries";
 import type { Listing } from "@/lib/supabase/types";
 import ListingCard from "@/components/directory/ListingCard";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
@@ -34,6 +35,8 @@ interface FilteredListingGridProps {
   /** Approximate location from edge headers (Vercel / Cloudflare). Used as
    * a fallback when the browser denies precise geolocation. */
   ipLocation?: { lat: number; lon: number; city: string | null } | null;
+  /** Show a country dropdown built from the countries present in `listings`. */
+  enableCountryFilter?: boolean;
 }
 
 export default function FilteredListingGrid({
@@ -44,11 +47,22 @@ export default function FilteredListingGrid({
   emptyDescription = "Be the first to list here.",
   emptyCta = "List Your Space",
   ipLocation = null,
+  enableCountryFilter = false,
 }: FilteredListingGridProps) {
   // One active filter per group; null = "All"
   const [activeFilters, setActiveFilters] = useState<Record<string, string | null>>(
     Object.fromEntries(filterGroups.map(g => [g.field, null]))
   );
+  const [activeCountry, setActiveCountry] = useState<string | null>(null);
+
+  // Distinct countries present in the data, alphabetical.
+  const countries = useMemo(() => {
+    const set = new Set<string>();
+    for (const l of listings) {
+      if (l.country) set.add(l.country);
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [listings]);
   // Seed coordinates with the edge-provided IP location so the first paint
   // is already sorted to roughly the right region. Precise browser geo
   // overrides this when granted.
@@ -110,14 +124,15 @@ export default function FilteredListingGrid({
     setActiveFilters(prev => ({ ...prev, [field]: prev[field] === value ? null : value }));
   };
 
-  const baseFiltered = listings.filter(listing =>
-    filterGroups.every(group => {
+  const baseFiltered = listings.filter(listing => {
+    if (activeCountry && listing.country !== activeCountry) return false;
+    return filterGroups.every(group => {
       const active = activeFilters[group.field];
       if (!active) return true;
       const values: string[] = (listing[group.field] as string[] | null) ?? [];
       return values.includes(active);
-    })
-  );
+    });
+  });
 
   const filtered = useMemo(() => {
     if (!userCoords) return baseFiltered;
@@ -197,6 +212,28 @@ export default function FilteredListingGrid({
               <span className="font-sans text-xs text-on-surface-variant/70">
                 Geolocation isn&apos;t supported in this browser.
               </span>
+            )}
+
+            {enableCountryFilter && countries.length > 1 && (
+              <div className="relative flex items-center">
+                <Globe size={13} className="absolute left-3 text-on-surface-variant/60 pointer-events-none" />
+                <select
+                  value={activeCountry ?? ""}
+                  onChange={(e) => setActiveCountry(e.target.value || null)}
+                  className={`appearance-none pl-8 pr-8 py-1.5 rounded-full font-sans text-sm font-semibold cursor-pointer outline-none transition-all duration-300 ${
+                    activeCountry
+                      ? "bg-primary text-white"
+                      : "bg-surface-low text-on-surface-variant hover:bg-secondary-container"
+                  }`}
+                >
+                  <option value="">All countries</option>
+                  {countries.map((c) => (
+                    <option key={c} value={c}>
+                      {countryFlag(c)} {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
             )}
           </div>
 

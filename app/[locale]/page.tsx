@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import HeroSection from "@/components/home/HeroSection";
 import ListingCard from "@/components/directory/ListingCard";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
+import { countryFlag } from "@/lib/config/countries";
 
 export const metadata: Metadata = {
   title: `${SITE.name} — ${SITE.tagline}`,
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const supabase = await createClient();
 
-  const [listingsRes, postsRes] = await Promise.all([
+  const [listingsRes, postsRes, countryRes] = await Promise.all([
     supabase
       .from("listings")
       .select("*")
@@ -34,10 +35,24 @@ export default async function HomePage() {
       .eq("is_published", true)
       .order("created_at", { ascending: false })
       .limit(3),
+    supabase
+      .from("listings")
+      .select("country")
+      .eq("status", "approved")
+      .not("country", "is", null),
   ]);
 
   const listings: Listing[] = listingsRes.data ?? [];
   const posts: BlogPost[]   = postsRes.data ?? [];
+
+  // Countries with at least one approved listing, ranked by count.
+  const countryCounts = new Map<string, number>();
+  for (const row of (countryRes.data ?? []) as { country: string | null }[]) {
+    if (row.country) countryCounts.set(row.country, (countryCounts.get(row.country) ?? 0) + 1);
+  }
+  const countries = Array.from(countryCounts.entries())
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 
   return (
     <>
@@ -101,8 +116,46 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── Explore by Country ── */}
+      {countries.length > 0 && (
+        <section className="py-20 lg:py-28 bg-surface-low">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="max-w-2xl mb-12">
+              <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-2">
+                A Global Practice
+              </p>
+              <h2 className="font-serif text-display-sm text-on-surface">
+                Explore yoga by country
+              </h2>
+              <p className="font-sans text-base text-on-surface-variant mt-2">
+                From Bali to Barcelona, find studios, schools, and retreats across {countries.length}
+                {countries.length === 1 ? " country" : " countries"} — and growing.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              {countries.map(({ name, count }) => (
+                <Link
+                  key={name}
+                  href={`/search?country=${encodeURIComponent(name)}`}
+                  className="group inline-flex items-center gap-2.5 px-5 py-3 rounded-full bg-surface-card shadow-card hover:shadow-float hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  <span className="text-xl leading-none">{countryFlag(name)}</span>
+                  <span className="font-sans text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">
+                    {name}
+                  </span>
+                  <span className="font-sans text-xs text-on-surface-variant bg-surface-low rounded-full px-2 py-0.5">
+                    {count}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── The Journal ── */}
-      <section className="py-20 lg:py-28 bg-surface-low">
+      <section className="py-20 lg:py-28 bg-[#ffffff]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>

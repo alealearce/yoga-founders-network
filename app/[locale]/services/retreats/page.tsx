@@ -79,6 +79,7 @@ export default async function RetreatsPage() {
           { field: "yoga_styles", options: YOGA_CATEGORIES.map(c => c.label) },
         ]}
         ipLocation={ipLocation}
+        enableCountryFilter
         emptyTitle="Retreats coming soon"
         emptyDescription="Host a yoga retreat? Get it in front of thousands of seekers worldwide."
         emptyCta="List Your Retreat"

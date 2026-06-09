@@ -81,6 +81,7 @@ export default async function TeachersPage() {
           { label: "Level:", field: "experience_levels", options: EXPERIENCE_LEVELS },
         ]}
         ipLocation={ipLocation}
+        enableCountryFilter
         emptyTitle="Teachers coming soon"
         emptyDescription="Know an inspiring yoga teacher? Help them get discovered."
         emptyCta="List a Teacher"

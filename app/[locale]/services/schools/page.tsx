@@ -79,6 +79,7 @@ export default async function SchoolsPage() {
           { label: "Certification:", field: "experience_levels", options: [...SCHOOL_CERTIFICATIONS] },
         ]}
         ipLocation={ipLocation}
+        enableCountryFilter
         emptyTitle="Teacher training programs coming soon"
         emptyDescription="We are building a curated directory of the world's best yoga teacher training schools. Know a great one? Submit it."
         emptyCta="List Your School"

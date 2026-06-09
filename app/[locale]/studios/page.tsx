@@ -80,6 +80,7 @@ export default async function StudiosPage() {
           { field: "yoga_styles", options: YOGA_CATEGORIES.map(c => c.label) },
         ]}
         ipLocation={ipLocation}
+        enableCountryFilter
         emptyTitle="Studios coming soon"
         emptyDescription="We are growing our global directory. Be the first studio in your city."
         emptyCta="List Your Studio"

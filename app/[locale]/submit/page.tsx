@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { LISTING_TYPES } from "@/lib/config/site";
-import { YOGA_CATEGORIES, SCHOOL_CERTIFICATIONS, PRODUCT_CATEGORIES } from "@/lib/config/categories";
+import { YOGA_CATEGORIES, SCHOOL_CERTIFICATIONS, PRODUCT_CATEGORIES, LISTING_LANGUAGES } from "@/lib/config/categories";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
+import CountrySelect from "@/components/ui/CountrySelect";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
@@ -17,6 +18,7 @@ const INITIAL = {
   description:       "",
   yoga_styles:       [] as string[],
   experience_levels: [] as string[],
+  languages:         [] as string[],
   yoga_alliance_id:  "",
   notes:             "",
 };
@@ -32,6 +34,15 @@ export default function SubmitPage() {
       yoga_styles: f.yoga_styles.includes(style)
         ? f.yoga_styles.filter(s => s !== style)
         : [...f.yoga_styles, style],
+    }));
+  };
+
+  const toggleLanguage = (lang: string) => {
+    setForm(f => ({
+      ...f,
+      languages: f.languages.includes(lang)
+        ? f.languages.filter(l => l !== lang)
+        : [...f.languages, lang],
     }));
   };
 
@@ -177,10 +188,11 @@ export default function SubmitPage() {
               <div className="grid sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
-                    City
+                    City <span className="text-primary">*</span>
                   </label>
                   <input
                     type="text"
+                    required
                     value={form.city}
                     onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
                     placeholder="e.g. Bali"
@@ -190,14 +202,13 @@ export default function SubmitPage() {
 
                 <div>
                   <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
-                    Country
+                    Country <span className="text-primary">*</span>
                   </label>
-                  <input
-                    type="text"
+                  <CountrySelect
+                    required
                     value={form.country}
-                    onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
-                    placeholder="e.g. Indonesia"
-                    className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    onChange={country => setForm(f => ({ ...f, country }))}
+                    placeholder="Select a country…"
                   />
                 </div>
               </div>
@@ -261,6 +272,32 @@ export default function SubmitPage() {
                     }`}
                   >
                     {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Languages */}
+            <div className="bg-surface-card rounded-2xl p-8">
+              <h2 className="font-serif text-xl font-bold text-on-surface mb-2">
+                Languages
+              </h2>
+              <p className="font-sans text-sm text-on-surface-variant mb-6">
+                Which languages are classes taught in? Select all that apply — this helps international students find you.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {LISTING_LANGUAGES.map(lang => (
+                  <button
+                    key={lang}
+                    type="button"
+                    onClick={() => toggleLanguage(lang)}
+                    className={`px-4 py-2 rounded-full font-sans text-sm font-medium transition-all duration-300 ${
+                      form.languages.includes(lang)
+                        ? "bg-primary text-white"
+                        : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
+                    }`}
+                  >
+                    {lang}
                   </button>
                 ))}
               </div>

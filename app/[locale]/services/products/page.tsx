@@ -80,6 +80,7 @@ export default async function ProductsPage() {
           { label: "Category:", field: "experience_levels", options: [...PRODUCT_CATEGORIES] },
         ]}
         ipLocation={ipLocation}
+        enableCountryFilter
         emptyTitle="Products coming soon"
         emptyDescription="Sell yoga products? List them in our community marketplace."
         emptyCta="List Your Product"

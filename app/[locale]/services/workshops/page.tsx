@@ -79,6 +79,7 @@ export default async function WorkshopsPage() {
           { field: "yoga_styles", options: YOGA_CATEGORIES.map(c => c.label) },
         ]}
         ipLocation={ipLocation}
+        enableCountryFilter
         emptyTitle="Events coming soon"
         emptyDescription="Running a yoga workshop or event? Get it in front of the community."
         emptyCta="List Your Event"
