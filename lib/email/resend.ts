@@ -258,3 +258,45 @@ export async function sendAdminClaimRequest(opts: {
     replyTo: claimerEmail,
   });
 }
+
+// ── Chatbot escalation — sent when Lotus can't help or a password reset is requested ──
+
+export async function sendEscalationEmail({
+  sessionId,
+  messages,
+  userEmail,
+}: {
+  sessionId?: string;
+  messages: { role: string; content: string }[];
+  /** Account email the user shared in chat (e.g. password reset requests). */
+  userEmail?: string;
+}) {
+  const transcript = messages
+    .map(
+      (m) =>
+        `<p style="margin:8px 0;font-size:14px;font-family:Arial,sans-serif;"><strong>${m.role === 'user' ? '👤 User' : '🪷 Lotus'}:</strong> ${m.content}</p>`
+    )
+    .join('');
+
+  const body = `
+    <p style="margin:0 0 16px;">Lotus ${userEmail ? 'received a password reset request' : 'was unable to fully help a user and directed them to contact support'}.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;border:1px solid ${BORDER};border-radius:4px;overflow:hidden;">
+      <tr><td style="padding:16px;background-color:${BG};">
+        ${userEmail ? `<p style="margin:0 0 8px;font-size:15px;font-family:Arial,sans-serif;"><strong>🔑 User needs a password reset:</strong> <a href="mailto:${userEmail}" style="color:${SAGE};">${userEmail}</a></p>` : ''}
+        <p style="margin:0 0 8px;font-size:14px;font-family:Arial,sans-serif;"><strong>Session ID:</strong> ${sessionId ?? 'n/a'}</p>
+        <p style="margin:0;font-size:14px;font-family:Arial,sans-serif;"><strong>Time:</strong> ${new Date().toLocaleString('en-CA', { timeZone: 'America/Toronto' })} ET</p>
+      </td></tr>
+    </table>
+    <p style="margin:0 0 8px;font-size:14px;font-family:Arial,sans-serif;"><strong>Conversation transcript:</strong></p>
+    ${transcript}
+  `;
+
+  return getResend().emails.send({
+    from: FROM_EMAIL,
+    to: [ADMIN_EMAIL, 'hi@arce.ca'],
+    subject: userEmail
+      ? `🔑 Password help requested by ${userEmail} — Yoga Founders Network`
+      : `⚠️ Lotus escalated a conversation — Yoga Founders Network`,
+    html: baseTemplate('Conversation Needs Follow-Up', body),
+  });
+}
