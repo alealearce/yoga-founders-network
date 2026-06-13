@@ -102,7 +102,7 @@ export default async function ListingPage({ params }: Props) {
                 borderRadius: "1.5rem 1.5rem 1.5rem 0",
               }}
             >
-              <CoverImage src={coverImage} alt={listing.name} />
+              <CoverImage src={coverImage} alt={listing.name} priority />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
             </div>
           </div>

@@ -7,9 +7,12 @@ interface CoverImageProps {
   src: string;
   alt: string;
   className?: string;
+  /** Set on above-the-fold/LCP images (e.g. a detail-page hero) to load
+      eagerly. Defaults to false so off-screen card images lazy-load. */
+  priority?: boolean;
 }
 
-export default function CoverImage({ src, alt, className = "w-full h-full object-cover" }: CoverImageProps) {
+export default function CoverImage({ src, alt, className = "w-full h-full object-cover", priority = false }: CoverImageProps) {
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -26,6 +29,8 @@ export default function CoverImage({ src, alt, className = "w-full h-full object
       src={src}
       alt={alt}
       className={className}
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
       onError={() => setFailed(true)}
     />
   );

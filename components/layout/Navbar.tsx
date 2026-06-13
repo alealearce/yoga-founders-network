@@ -66,8 +66,9 @@ export default function Navbar() {
               <Image
                 src={SITE.logo}
                 alt={SITE.name}
-                width={140}
-                height={56}
+                width={150}
+                height={80}
+                sizes="80px"
                 className="h-10 w-auto object-contain"
                 priority
               />
