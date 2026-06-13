@@ -76,6 +76,19 @@ export default async function ListingPage({ params }: Props) {
     retreat: "Retreat", product: "Product", workshop: "Workshop",
   };
 
+  // Canonical category-hub URL + keyword-rich anchor text. Points at the
+  // canonical hub (e.g. /yogastudio), NOT the /studios alias, so link equity
+  // from every listing flows straight to the page we want to rank.
+  const HUBS: Record<string, { url: string; label: string }> = {
+    studio:   { url: "/yogastudio",    label: "Browse all Yoga Studios" },
+    teacher:  { url: "/yogateacher",   label: "Browse all Yoga Teachers" },
+    school:   { url: "/yogaschool",    label: "Browse Yoga Teacher Training" },
+    retreat:  { url: "/retreatcenter", label: "Browse all Yoga Retreats" },
+    product:  { url: "/yogaproducts",  label: "Browse all Yoga Products" },
+    workshop: { url: "/yogaworkshops", label: "Browse Yoga Workshops & Events" },
+  };
+  const hub = HUBS[listing.type] ?? HUBS.studio;
+
   return (
     <>
       {/* Hero — only when there's a real image; otherwise a slim brand band */}
@@ -379,12 +392,12 @@ export default async function ListingPage({ params }: Props) {
               </div>
             )}
 
-            {/* Back link */}
+            {/* Back link — canonical hub URL + keyword-rich anchor text */}
             <Link
-              href={`/${({ studio: "studios", teacher: "teachers", school: "schools", retreat: "retreats", product: "products", workshop: "workshops" } as Record<string, string>)[listing.type] ?? "studios"}`}
+              href={hub.url}
               className="flex items-center justify-center gap-2 w-full py-3 rounded-full font-sans text-sm text-on-surface-variant hover:text-on-surface bg-surface-low hover:bg-secondary-container transition-all duration-300"
             >
-              ← Back to Directory
+              ← {hub.label}
             </Link>
           </div>
         </div>

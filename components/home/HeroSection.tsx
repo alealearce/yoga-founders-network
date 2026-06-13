@@ -21,14 +21,17 @@ export default function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
 
           {/* LEFT — Text + Search */}
-          <div className="flex flex-col gap-8 z-10">
+          {/* min-w-0 lets this grid column shrink below its content's intrinsic
+              width, preventing the headline from forcing the column off-screen. */}
+          <div className="flex flex-col gap-8 z-10 min-w-0">
             {/* Eyebrow */}
             <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase">
               The Global Yoga Directory
             </p>
 
-            {/* Headline */}
-            <h1 className="font-serif text-display-lg text-on-surface leading-[1.08]">
+            {/* Headline — fluid size so the long line never overflows narrow
+                phones; caps at the display-lg 3.5rem on larger screens. */}
+            <h1 className="font-serif text-[clamp(2rem,8vw,3.5rem)] tracking-[-0.02em] text-on-surface leading-[1.08]">
               {lines.map((line, i) => (
                 <span key={i} className="block">
                   {line}

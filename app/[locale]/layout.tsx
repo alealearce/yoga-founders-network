@@ -67,6 +67,26 @@ const organizationSchema = {
   ],
 };
 
+// WebSite schema with SearchAction — signals the site's primary search box to
+// Google and feeds the branded sitelinks block (the multi-link snippet under
+// the brand result), surfacing our hub pages rather than individual listings.
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.description,
+  publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${SITE.url}/search?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
+
 export default async function LocaleLayout({
   children,
   params,
@@ -91,6 +111,10 @@ export default async function LocaleLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         <NextIntlClientProvider messages={messages}>
           <Navbar />

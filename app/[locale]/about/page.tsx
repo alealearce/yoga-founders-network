@@ -5,8 +5,35 @@ import { SITE } from "@/lib/config/site";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
-  title: "About Us",
-  description: `${SITE.tagline}. Learn about the mission behind Yoga Founders Network — a global directory and community built to help yoga studios and founders grow.`,
+  title: "About Yoga Founders Network — Global Yoga Directory & Community",
+  description: `${SITE.tagline}. Learn about the mission behind Yoga Founders Network — a global directory and community built to help yoga studios, teachers, schools, and founders grow.`,
+  alternates: { canonical: `${SITE.url}/about` },
+  openGraph: {
+    title: "About Yoga Founders Network",
+    description: `${SITE.tagline}. A global directory and community for yoga studios, teachers, schools, retreats, and founders.`,
+    url: `${SITE.url}/about`,
+    type: "website",
+  },
+};
+
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "About Yoga Founders Network",
+  url: `${SITE.url}/about`,
+  description: `${SITE.tagline}. A global directory and community for yoga studios, teachers, schools, retreats, and founders.`,
+  mainEntity: {
+    "@type": "Organization",
+    name: SITE.name,
+    url: SITE.url,
+    email: SITE.email,
+    logo: `${SITE.url}${SITE.logo}`,
+    sameAs: [
+      SITE.social.instagram,
+      SITE.social.linkedin,
+      SITE.social.facebook,
+    ],
+  },
 };
 
 const CORE_VALUES = [
@@ -35,6 +62,10 @@ const CORE_VALUES = [
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
       {/* Hero — Mission Statement */}
       <section className="pt-32 pb-20 bg-white border-b border-outline-variant/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">

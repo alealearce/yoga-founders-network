@@ -18,6 +18,17 @@ export const metadata: Metadata = {
   },
 };
 
+// Canonical category hubs — links the homepage (our highest-authority page)
+// directly to each hub's canonical URL, distributing link equity across all six.
+const CATEGORIES = [
+  { name: "Yoga Studios",       href: "/yogastudio",    desc: "Find studios near you — every style, every level." },
+  { name: "Yoga Teachers",      href: "/yogateacher",   desc: "Local instructors and world-renowned guides." },
+  { name: "Teacher Training",   href: "/yogaschool",    desc: "Yoga Alliance-accredited schools & certifications." },
+  { name: "Yoga Retreats",      href: "/retreatcenter", desc: "Weekend escapes and immersive journeys." },
+  { name: "Yoga Products",      href: "/yogaproducts",  desc: "Mats, props, apparel, books, and courses." },
+  { name: "Workshops & Events", href: "/yogaworkshops", desc: "Intensives, immersions, and special events." },
+];
+
 export default async function HomePage() {
   const supabase = await createClient();
 
@@ -57,6 +68,52 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection />
+
+      {/* ── Browse by Category ── */}
+      <section className="py-20 lg:py-28 bg-surface-low">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
+            <div className="max-w-2xl">
+              <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-2">
+                The Directory
+              </p>
+              <h2 className="font-serif text-display-sm text-on-surface">
+                Browse by category
+              </h2>
+              <p className="font-sans text-base text-on-surface-variant mt-2">
+                Explore the full network — studios, teachers, schools, retreats, products, and workshops from around the world.
+              </p>
+            </div>
+            <Link
+              href="/about"
+              className="flex-shrink-0 inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary hover:gap-2.5 transition-all duration-300"
+            >
+              Learn about our mission →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {CATEGORIES.map(cat => (
+              <Link
+                key={cat.href}
+                href={cat.href}
+                className="group block bg-surface-card rounded-2xl p-7 shadow-card hover:shadow-float hover:-translate-y-1 transition-all duration-400"
+              >
+                <h3 className="font-serif text-xl font-bold text-on-surface group-hover:text-primary transition-colors duration-300 mb-2">
+                  {cat.name}
+                </h3>
+                <p className="font-sans text-sm text-on-surface-variant leading-relaxed mb-4">
+                  {cat.desc}
+                </p>
+                <span className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary">
+                  Explore
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── Featured Listings ── */}
       <section className="py-20 lg:py-28 bg-[#ffffff]">

@@ -145,6 +145,12 @@ export default function Navbar() {
               >
                 Resources
               </Link>
+              <Link
+                href="/about"
+                className="font-sans text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors duration-300"
+              >
+                About
+              </Link>
             </nav>
 
             {/* Desktop Actions */}
@@ -235,6 +241,7 @@ export default function Navbar() {
 
               <MobileNavLink href="/community" onClick={() => setMobileOpen(false)}>Community</MobileNavLink>
               <MobileNavLink href="/resources" onClick={() => setMobileOpen(false)}>Resources</MobileNavLink>
+              <MobileNavLink href="/about" onClick={() => setMobileOpen(false)}>About</MobileNavLink>
             </nav>
 
             <div className="mt-auto flex flex-col gap-3 pt-6 border-t border-outline-variant/30">

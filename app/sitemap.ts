@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/resources/studio-name-generator`,   changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/resources/teacher-finder`,          changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/resources/wellness-planner`,        changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/about`,                             changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/about`,                             changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/privacy`,                           changeFrequency: "yearly",  priority: 0.3 },
     { url: `${base}/terms`,                             changeFrequency: "yearly",  priority: 0.3 },
   ];
@@ -46,7 +46,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${base}${getListingUrl(l.type, l.slug)}`,
     lastModified: new Date(l.updated_at),
     changeFrequency: "monthly",
-    priority: 0.7,
+    // Lower than the category/About hubs (0.9) so Google treats those as the
+    // primary entry points; individual listings remain indexable but secondary.
+    priority: 0.5,
   }));
 
   const blogRoutes: MetadataRoute.Sitemap = (postsRes.data ?? []).map((p) => ({
