@@ -122,8 +122,15 @@ export async function uploadAll(urls: string[]): Promise<{ ok: true; urls: strin
 type PublishResult = { ok: true; id: string } | { ok: false; error: string };
 
 function pickId(json: Record<string, unknown>): string {
-  const post = json.post as { id?: string } | undefined;
-  return String(json.submissionId ?? json.id ?? post?.id ?? '');
+  const get = (o: unknown, k: string) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[k] : undefined);
+  const candidates = [
+    json.submissionId, json.id, json.postId,
+    get(json.post, 'id'), get(json.post, 'submissionId'),
+    get(json.data, 'id'), get(json.data, 'submissionId'),
+    get(json.submission, 'id'), get(json.result, 'id'),
+  ];
+  for (const c of candidates) if (c !== undefined && c !== null && c !== '') return String(c);
+  return '';
 }
 
 function targetFor(platform: Platform): Record<string, unknown> {
