@@ -4,6 +4,14 @@ const withNextIntl = createNextIntlPlugin('./i18n.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Ensure the social-card logo PNGs are bundled into the serverless function
+  // (the image route reads them from public/social via fs at render time).
+  experimental: {
+    outputFileTracingIncludes: {
+      '/api/social/image': ['./public/social/**'],
+    },
+  },
+
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '*.supabase.co', pathname: '/storage/v1/object/public/**' },

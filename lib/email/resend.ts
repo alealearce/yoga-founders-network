@@ -75,6 +75,27 @@ export async function sendWelcomeEmail(to: string, name: string) {
   });
 }
 
+// ── "You're Featured" Email ────────────────────────────────────────────────
+
+export async function sendFeaturedEmail(to: string, name: string, listingUrl: string) {
+  const subject = `✨ ${name}, you're featured on Yoga Founders Network today`;
+  const body = `
+    <p style="margin:0 0 16px;">Dear ${name},</p>
+    <p style="margin:0 0 16px;">Wonderful news — <strong>${name}</strong> is today's featured spotlight on the Yoga Founders Network Instagram &amp; social channels. 🪷</p>
+    <p style="margin:0 0 16px;">We'd love for you to <strong>share the post to your own story or feed</strong> — your community would enjoy seeing it, and it helps more practitioners discover you. Head to <a href="https://instagram.com/yogafoundersnetwork" style="color:${SAGE};">@yogafoundersnetwork</a> to find today's post and reshare.</p>
+    <p style="margin:0 0 16px;">Your listing: <a href="${listingUrl}" style="color:${SAGE};">${listingUrl}</a></p>
+    <p style="margin:0 0 16px;">Thank you for being part of our global yoga community.</p>
+    <p style="margin:0;">With gratitude,<br/>The Yoga Founders Network Team</p>
+  `;
+
+  return getResend().emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject,
+    html: baseTemplate("You're Featured Today", body),
+  });
+}
+
 // ── Approval Email ─────────────────────────────────────────────────────────
 
 export async function sendApprovalEmail(
