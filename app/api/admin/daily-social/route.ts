@@ -3,7 +3,7 @@ import { createAdminClient } from '@/lib/supabase/server';
 import { SITE } from '@/lib/config/site';
 import { getListingUrl } from '@/lib/utils/listingUrl';
 import { buildBlogContent, buildShowcaseCaption, showcaseBlurb, igHandle } from '@/lib/social/caption';
-import { configuredPlatforms, isConfigured, uploadAll, publish, type Platform } from '@/lib/social/blotato';
+import { configuredPlatforms, isConfigured, uploadAll, publish, clampCaption, type Platform } from '@/lib/social/blotato';
 import { sendFeaturedEmail } from '@/lib/email/resend';
 import type { Listing } from '@/lib/supabase/types';
 
@@ -49,7 +49,7 @@ type PlatformOutcome = { status: string; id?: string; error?: string };
 
 async function publishCarousel(
   supabase: ReturnType<typeof createAdminClient>,
-  opts: { kind: 'blog' | 'showcase'; refId: string; refSlug: string; slideUrls: string[]; caption: string; skip: Set<Platform> }
+  opts: { kind: 'blog' | 'showcase'; refId: string; refSlug: string; slideUrls: string[]; caption: string; url: string; skip: Set<Platform> }
 ): Promise<Record<string, PlatformOutcome>> {
   const results: Record<string, PlatformOutcome> = {};
   const platforms = configuredPlatforms().filter((p) => !opts.skip.has(p));
@@ -70,11 +70,12 @@ async function publishCarousel(
   }
 
   for (const p of platforms) {
-    const outcome = await publish(p, uploaded.urls, opts.caption);
+    const cap = clampCaption(opts.caption, p, opts.url); // respect per-platform char limits (X, Bluesky…)
+    const outcome = await publish(p, uploaded.urls, cap);
     results[p] = outcome.ok ? { status: 'published', id: outcome.id } : { status: 'failed', error: outcome.error };
     await supabase.from('social_posts').insert({
       kind: opts.kind, ref_id: opts.refId, ref_slug: opts.refSlug, platform: p,
-      external_id: outcome.ok ? outcome.id : null, caption: opts.caption, image_urls: uploaded.urls,
+      external_id: outcome.ok ? outcome.id : null, caption: cap, image_urls: uploaded.urls,
       status: outcome.ok ? 'published' : 'failed', error_message: outcome.ok ? null : outcome.error,
     });
   }
@@ -105,7 +106,7 @@ async function runBlog(supabase: ReturnType<typeof createAdminClient>, slug: str
 
   if (dry) return { ok: true, dry: true, post: { slug: post.slug, title: post.title }, url, points, caption, slideUrls, alreadyDone: Array.from(skip) };
 
-  const results = await publishCarousel(supabase, { kind: 'blog', refId: post.id, refSlug: post.slug, slideUrls, caption, skip });
+  const results = await publishCarousel(supabase, { kind: 'blog', refId: post.id, refSlug: post.slug, slideUrls, caption, url, skip });
   return { ok: Object.values(results).some((r) => r.status === 'published'), post: { slug: post.slug, title: post.title }, url, results };
 }
 
@@ -177,7 +178,7 @@ async function runShowcase(supabase: ReturnType<typeof createAdminClient>, id: s
 
   if (dry) return { ok: true, dry: true, listing: { id: listing.id, name: listing.name, type: listing.type }, url, caption, slideUrls };
 
-  const results = await publishCarousel(supabase, { kind: 'showcase', refId: listing.id, refSlug: listing.slug, slideUrls, caption, skip: new Set() });
+  const results = await publishCarousel(supabase, { kind: 'showcase', refId: listing.id, refSlug: listing.slug, slideUrls, caption, url, skip: new Set() });
   const published = Object.values(results).some((r) => r.status === 'published');
 
   if (published) {

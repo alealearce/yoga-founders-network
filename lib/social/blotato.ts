@@ -1,25 +1,29 @@
 /**
  * blotato.ts — Posting client for Blotato (https://blotato.com).
  *
- * Blotato is a verified social publisher: connect Instagram / Facebook / LinkedIn
- * in its dashboard (normal login, no Meta business verification) and publish
- * through its API. This avoids the direct Meta Graph API path, which needs
- * business verification.
+ * Blotato is a verified social publisher: connect each account in its dashboard
+ * (normal login, no platform verification) and publish through its API. This
+ * avoids the direct Meta Graph API path, which needs business verification.
  *
  * Flow: upload each rendered slide → Blotato returns a hosted URL → publish the
- * set as a single carousel post to each configured platform.
+ * set as one carousel to every configured platform.
  *
- * Env (see .env.local):
- *   BLOTATO_API_KEY                — Settings → API in the Blotato dashboard.
- *   BLOTATO_INSTAGRAM_ACCOUNT_ID   — IG account id (Settings → Social Accounts).
- *   BLOTATO_FACEBOOK_ACCOUNT_ID    — optional, FB account id.
- *   BLOTATO_FACEBOOK_PAGE_ID       — optional, numeric FB Page id.
- *   BLOTATO_LINKEDIN_ACCOUNT_ID    — optional, LinkedIn account id.
+ * Supported here (each gated by its own env var — a platform only posts if its
+ * account id is set):
+ *   Instagram   BLOTATO_INSTAGRAM_ACCOUNT_ID                       (YFN)
+ *   Facebook    BLOTATO_FACEBOOK_ACCOUNT_ID + BLOTATO_FACEBOOK_PAGE_ID   (YFN page)
+ *   LinkedIn    BLOTATO_LINKEDIN_ACCOUNT_ID [+ BLOTATO_LINKEDIN_PAGE_ID] (YFN page)
+ *   X/Twitter   BLOTATO_TWITTER_ACCOUNT_ID                          (personal)
+ *   Threads     BLOTATO_THREADS_ACCOUNT_ID                          (personal)
+ *   Bluesky     BLOTATO_BLUESKY_ACCOUNT_ID                          (personal)
+ *   Pinterest   BLOTATO_PINTEREST_ACCOUNT_ID + BLOTATO_PINTEREST_BOARD_ID (personal)
+ *
+ * All need BLOTATO_API_KEY.
  */
 
 const BASE = 'https://backend.blotato.com';
 
-export type Platform = 'instagram' | 'facebook' | 'linkedin';
+export type Platform = 'instagram' | 'facebook' | 'linkedin' | 'twitter' | 'threads' | 'bluesky' | 'pinterest';
 
 export class BlotatoConfigError extends Error {}
 
@@ -28,17 +32,52 @@ function env(name: string): string | undefined {
   return v && v.trim() ? v.trim() : undefined;
 }
 
-/** Which platforms are wired up (have an account id configured). */
+// Per-platform config: the account-id env var, plus any extra required ids.
+const PLATFORM_ENV: Record<Platform, { account: string; requires?: string[] }> = {
+  instagram: { account: 'BLOTATO_INSTAGRAM_ACCOUNT_ID' },
+  facebook: { account: 'BLOTATO_FACEBOOK_ACCOUNT_ID', requires: ['BLOTATO_FACEBOOK_PAGE_ID'] },
+  linkedin: { account: 'BLOTATO_LINKEDIN_ACCOUNT_ID' },
+  twitter: { account: 'BLOTATO_TWITTER_ACCOUNT_ID' },
+  threads: { account: 'BLOTATO_THREADS_ACCOUNT_ID' },
+  bluesky: { account: 'BLOTATO_BLUESKY_ACCOUNT_ID' },
+  pinterest: { account: 'BLOTATO_PINTEREST_ACCOUNT_ID', requires: ['BLOTATO_PINTEREST_BOARD_ID'] },
+};
+
+const ORDER: Platform[] = ['instagram', 'facebook', 'linkedin', 'twitter', 'threads', 'bluesky', 'pinterest'];
+
+// Caption character ceilings. Longer platforms get a generous cap (no real clamp).
+export const PLATFORM_LIMITS: Record<Platform, number> = {
+  twitter: 280,
+  bluesky: 300,
+  threads: 500,
+  pinterest: 500,
+  instagram: 2200,
+  facebook: 5000,
+  linkedin: 3000,
+};
+
+/** Which platforms are fully wired up (account id + any extra ids present). */
 export function configuredPlatforms(): Platform[] {
-  const out: Platform[] = [];
-  if (env('BLOTATO_INSTAGRAM_ACCOUNT_ID')) out.push('instagram');
-  if (env('BLOTATO_FACEBOOK_ACCOUNT_ID') && env('BLOTATO_FACEBOOK_PAGE_ID')) out.push('facebook');
-  if (env('BLOTATO_LINKEDIN_ACCOUNT_ID')) out.push('linkedin');
-  return out;
+  return ORDER.filter((p) => {
+    const cfg = PLATFORM_ENV[p];
+    if (!env(cfg.account)) return false;
+    return (cfg.requires ?? []).every((r) => env(r));
+  });
 }
 
 export function isConfigured(): boolean {
   return Boolean(env('BLOTATO_API_KEY')) && configuredPlatforms().length > 0;
+}
+
+/** Trim a caption to a platform's limit, preserving the canonical link. */
+export function clampCaption(text: string, platform: Platform, url: string): string {
+  const limit = PLATFORM_LIMITS[platform];
+  if (text.length <= limit) return text;
+  const lead = text.split('\n').find((l) => l.trim() && !l.trim().startsWith('#') && !l.includes('http')) || text;
+  const tail = `\n\n${url}`;
+  const room = limit - tail.length;
+  const head = lead.length > room ? lead.slice(0, Math.max(0, room - 1)).trimEnd() + '…' : lead;
+  return (head + tail).slice(0, limit);
 }
 
 async function blotatoPost(path: string, body: unknown): Promise<Record<string, unknown>> {
@@ -94,17 +133,23 @@ function targetFor(platform: Platform): Record<string, unknown> {
     case 'facebook':
       return { targetType: 'facebook', pageId: env('BLOTATO_FACEBOOK_PAGE_ID') };
     case 'linkedin':
-      return { targetType: 'linkedin' };
+      // pageId only when posting as a company page; omitted = personal profile.
+      return env('BLOTATO_LINKEDIN_PAGE_ID')
+        ? { targetType: 'linkedin', pageId: env('BLOTATO_LINKEDIN_PAGE_ID') }
+        : { targetType: 'linkedin' };
+    case 'twitter':
+      return { targetType: 'twitter' };
+    case 'threads':
+      return { targetType: 'threads' };
+    case 'bluesky':
+      return { targetType: 'bluesky' };
+    case 'pinterest':
+      return { targetType: 'pinterest', boardId: env('BLOTATO_PINTEREST_BOARD_ID') };
   }
 }
 
 function accountIdFor(platform: Platform): string {
-  const map: Record<Platform, string> = {
-    instagram: 'BLOTATO_INSTAGRAM_ACCOUNT_ID',
-    facebook: 'BLOTATO_FACEBOOK_ACCOUNT_ID',
-    linkedin: 'BLOTATO_LINKEDIN_ACCOUNT_ID',
-  };
-  const id = env(map[platform]);
+  const id = env(PLATFORM_ENV[platform].account);
   if (!id) throw new BlotatoConfigError(`Missing account id for ${platform}`);
   return id;
 }
