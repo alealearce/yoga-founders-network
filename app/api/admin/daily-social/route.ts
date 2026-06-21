@@ -122,17 +122,23 @@ async function pickListing(supabase: ReturnType<typeof createAdminClient>, id: s
   // window, or image-less imported rows would crowd out the eligible ones.)
   const { data } = await supabase
     .from('listings')
-    .select('id, type, images, logo_url, last_featured_at, created_at')
+    .select('id, type, images, logo_url, owner_id, last_featured_at, created_at')
     .eq('status', 'approved')
     .order('last_featured_at', { ascending: true, nullsFirst: true })
     .order('created_at', { ascending: true });
-  type Lite = Pick<Listing, 'id' | 'type' | 'images' | 'logo_url'>;
+  type Lite = Pick<Listing, 'id' | 'type' | 'images' | 'logo_url' | 'owner_id' | 'last_featured_at'>;
   const eligible = ((data as Lite[]) ?? []).filter((l) => (l.images && l.images.length > 0) || l.logo_url);
   if (eligible.length === 0) return null;
 
-  // Weekday-preferred type first; fall through to the next eligible listing.
   const preferred = WEEKDAY_TYPE[new Date().getUTCDay()];
-  const chosen = (preferred && eligible.find((l) => l.type === preferred)) || eligible[0];
+  const firstOf = (pool: Lite[]) => (preferred && pool.find((l) => l.type === preferred)) || pool[0];
+
+  // Prioritize claimed members (owner_id set) that haven't been featured in the
+  // last 7 days — so a lone member doesn't repeat daily — else fall through to
+  // any eligible (seeded) listing. As members claim, they take over the rotation.
+  const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
+  const claimedFresh = eligible.filter((l) => l.owner_id && (!l.last_featured_at || new Date(l.last_featured_at).getTime() < weekAgo));
+  const chosen = claimedFresh.length ? firstOf(claimedFresh) : firstOf(eligible);
 
   const { data: full } = await supabase.from('listings').select('*').eq('id', chosen.id).maybeSingle();
   return (full as Listing) ?? null;
@@ -157,8 +163,10 @@ async function runShowcase(supabase: ReturnType<typeof createAdminClient>, id: s
   const url = `${SITE.url}${getListingUrl(listing.type, listing.slug)}`;
   const label = TYPE_LABEL[listing.type] ?? 'Member';
   const hero = listing.images?.[0] || listing.logo_url || '';
-  const handle = listing.social_instagram ? igHandle(listing.social_instagram) : '';
-  const caption = await buildShowcaseCaption(listing, url);
+  // Only opted-in members (claimed) get the @-tag + email; seeded listings don't.
+  const isMember = Boolean(listing.owner_id);
+  const handle = isMember && listing.social_instagram ? igHandle(listing.social_instagram) : '';
+  const caption = await buildShowcaseCaption(listing, url, { isMember });
 
   const slideUrls = [
     slideUrl({ type: 'showcase', slide: '0', kind: label, name: listing.name, city: listing.city ?? '', country: listing.country ?? '', img: hero }),
@@ -174,7 +182,8 @@ async function runShowcase(supabase: ReturnType<typeof createAdminClient>, id: s
 
   if (published) {
     await supabase.from('listings').update({ last_featured_at: new Date().toISOString() }).eq('id', listing.id);
-    if (listing.email) {
+    // Only email opted-in members — never the seeded listings.
+    if (isMember && listing.email) {
       try {
         await sendFeaturedEmail(listing.email, listing.name, url);
       } catch (e) {

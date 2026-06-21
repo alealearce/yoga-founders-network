@@ -41,6 +41,7 @@ export interface Listing {
   plan: ListingPlan;
   plan_expires_at: string | null;
   yoga_alliance_id: string | null;
+  last_featured_at: string | null;
 }
 
 export interface Review {

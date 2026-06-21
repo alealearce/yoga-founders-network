@@ -125,7 +125,8 @@ export function showcaseBlurb(listing: Pick<Listing, 'description' | 'long_descr
 
 export async function buildShowcaseCaption(
   listing: Pick<Listing, 'name' | 'type' | 'city' | 'country' | 'description' | 'long_description' | 'tagline' | 'social_instagram'>,
-  url: string
+  url: string,
+  opts: { isMember: boolean } = { isMember: false }
 ): Promise<string> {
   const label = TYPE_LABEL[listing.type] ?? 'Member';
   const loc = [listing.city, listing.country].filter(Boolean).join(', ');
@@ -137,7 +138,9 @@ export async function buildShowcaseCaption(
       `Featured ${label}: ${listing.name}\nLocation: ${loc || 'worldwide'}\nAbout: ${showcaseBlurb(listing)}`
     )) || `Meet ${listing.name} — ${showcaseBlurb(listing)}`;
 
-  const handle = listing.social_instagram ? igHandle(listing.social_instagram) : '';
+  // Only @-mention / collaborator-credit members who actually opted in. For
+  // seeded listings, turn the spotlight into a "claim your listing" signup hook.
+  const handle = opts.isMember && listing.social_instagram ? igHandle(listing.social_instagram) : '';
   return [
     `✨ Featured ${label}: ${listing.name}`,
     loc ? `📍 ${loc}` : '',
@@ -145,7 +148,8 @@ export async function buildShowcaseCaption(
     body,
     '',
     `🔗 Discover ${listing.name} on Yoga Founders Network → ${url}`,
-    handle ? `🤝 In collaboration with ${handle}` : '',
+    opts.isMember && handle ? `🤝 In collaboration with ${handle}` : '',
+    !opts.isMember ? `📣 Is this your space? Claim your free listing → yogafoundersnetwork.com` : '',
     '',
     hashtags,
   ]
