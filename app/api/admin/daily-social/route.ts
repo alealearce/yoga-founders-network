@@ -3,7 +3,7 @@ import { createAdminClient } from '@/lib/supabase/server';
 import { SITE } from '@/lib/config/site';
 import { getListingUrl } from '@/lib/utils/listingUrl';
 import { buildBlogContent, buildShowcaseCaption, showcaseBlurb, igHandle } from '@/lib/social/caption';
-import { configuredPlatforms, isConfigured, uploadAll, publish, clampCaption, type Platform } from '@/lib/social/blotato';
+import { configuredPlatforms, platformsForImages, isConfigured, uploadAll, publish, clampCaption, type Platform } from '@/lib/social/blotato';
 import { sendFeaturedEmail } from '@/lib/email/resend';
 import type { Listing } from '@/lib/supabase/types';
 
@@ -52,8 +52,13 @@ async function publishCarousel(
   opts: { kind: 'blog' | 'showcase'; refId: string; refSlug: string; slideUrls: string[]; caption: string; url: string; skip: Set<Platform> }
 ): Promise<Record<string, PlatformOutcome>> {
   const results: Record<string, PlatformOutcome> = {};
-  const platforms = configuredPlatforms().filter((p) => !opts.skip.has(p));
-  for (const p of configuredPlatforms()) if (opts.skip.has(p)) results[p] = { status: 'already_published' };
+  // Carousels (>1 image) skip single-image-only platforms like Threads.
+  const eligible = platformsForImages(opts.slideUrls.length);
+  const platforms = eligible.filter((p) => !opts.skip.has(p));
+  for (const p of configuredPlatforms()) {
+    if (opts.skip.has(p)) results[p] = { status: 'already_published' };
+    else if (!eligible.includes(p)) results[p] = { status: 'skipped_single_image_only' };
+  }
   if (platforms.length === 0) return results;
 
   // Upload the slides once, then reuse the hosted URLs for every platform.

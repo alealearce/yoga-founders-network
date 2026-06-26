@@ -45,6 +45,16 @@ const PLATFORM_ENV: Record<Platform, { account: string; requires?: string[] }> =
 
 const ORDER: Platform[] = ['instagram', 'facebook', 'linkedin', 'twitter', 'threads', 'bluesky', 'pinterest'];
 
+// Platforms that only accept a SINGLE image via Blotato — excluded from any
+// multi-image carousel post (Threads rejects the extra slides).
+export const SINGLE_IMAGE_ONLY: Platform[] = ['threads'];
+
+/** Platforms that should receive a post with `imageCount` images. */
+export function platformsForImages(imageCount: number): Platform[] {
+  const all = configuredPlatforms();
+  return imageCount > 1 ? all.filter((p) => !SINGLE_IMAGE_ONLY.includes(p)) : all;
+}
+
 // Caption character ceilings. Longer platforms get a generous cap (no real clamp).
 export const PLATFORM_LIMITS: Record<Platform, number> = {
   twitter: 280,
