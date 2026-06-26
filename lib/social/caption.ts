@@ -18,6 +18,7 @@ const MAX_HASHTAGS = 5; // Blotato/IG reject overly-tagged posts; keep it tight.
 
 const BASE_TAGS = ['#yoga', '#yogateacher', '#yogastudio', '#yogacommunity', '#yogaeveryday'];
 const CATEGORY_TAGS: Record<string, string[]> = {
+  mission: ['#yogaforall', '#yogaimpact', '#yogacommunity'],
   finding_yoga: ['#yogaforbeginners', '#findyourpractice'],
   studio_guides: ['#yogastudio', '#yogaclass'],
   teacher_guides: ['#yogateachertraining', '#ytt'],

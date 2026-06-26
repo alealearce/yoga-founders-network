@@ -6,6 +6,7 @@ import { SITE } from "@/lib/config/site";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 const BLOG_CATEGORIES = [
+  { id: "mission",           label: "Yoga's Impact" },
   { id: "finding_yoga",      label: "Finding Yoga" },
   { id: "studio_guides",     label: "Studio Guides" },
   { id: "teacher_guides",    label: "Teacher Guides" },

@@ -75,6 +75,105 @@ Cover image: pick one of these pre-vetted Unsplash URLs, rotating so you don't r
 - https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200&h=800&fit=crop&q=80
 - https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=1200&h=800&fit=crop&q=80`;
 
+// ── Mission content ──────────────────────────────────────────────────────────
+// Every second post advances YFN's mission: grow yoga's impact in society.
+const MISSION_TOPICS = [
+  'Funding scholarship programs that put yoga into underserved schools, prisons, and shelters',
+  'Training instructors in trauma-informed and adaptive yoga for disabled bodies',
+  'Subsidizing studio access in low-income neighborhoods',
+  'Building a sliding-scale / "pay-it-forward" class network across member studios',
+  "Developing culturally responsive curricula that honor yoga's South Asian roots",
+  'Partnering with hospitals and clinics to position yoga as complementary care for chronic pain, anxiety, and PTSD',
+  "Commissioning and publishing research that validates yoga's clinical outcomes",
+  'Creating referral pipelines between physicians and certified yoga therapists',
+  'Building yoga programs for cancer recovery, addiction recovery, and veterans',
+  'Pushing for insurance reimbursement of yoga therapy',
+  'Setting ethical and safety standards that raise public trust in the field',
+  'Creating fair-pay frameworks so teaching yoga becomes a sustainable career',
+  'Offering business and marketing training so studio founders survive financially',
+  'Building a shared insurance, benefits, or co-op model for independent teachers',
+  'Establishing a credentialing standard that signals quality to the public',
+  'Bringing yoga and mindfulness into K-12 curricula',
+  'Training non-yoga educators in classroom breathing and focus techniques',
+  'Creating youth leadership programs that use yoga as the vehicle',
+  'Developing digital curricula for at-home family practice',
+  'Designing corporate wellness programs that actually reduce burnout',
+  'Partnering with first-responder and frontline organizations for stress resilience',
+  'Bringing yoga into government and civic wellness initiatives',
+  'Hosting regional gatherings and a national conference to unite founders',
+  'Creating a mentorship program pairing established and emerging founders',
+  'Building a public-facing directory so people can find vetted local studios',
+  'Organizing community service days — free public classes in parks and at events',
+  "Running a content engine that reframes yoga's value beyond fitness",
+  'Producing free libraries of accessible online content',
+  'Advocating against cultural appropriation and for authentic representation',
+  'Tracking and publishing a collective impact report quantifying social outcomes',
+  'Creating a grant fund members contribute to, redistributed to high-impact community projects',
+  'Building measurement infrastructure so "impact" is defined and tracked, not just claimed',
+];
+
+const MISSION_SYSTEM_PROMPT = `You are the editorial voice of Yoga Founders Network (yogafoundersnetwork.com). Our mission: grow yoga's impact in society.
+
+A "Mission" post is a thought-leadership + advocacy piece that makes the case for — and gives a practical roadmap toward — one specific way the yoga community can expand yoga's positive impact. It rallies studio founders, teachers, and practitioners around a shared cause while staying genuinely useful and search-friendly.
+
+VOICE: warm, grounded, inspiring but never preachy or vague. Conviction backed by specifics. Honors yoga's South Asian roots. Inclusive of all levels and bodies. Visionary yet practical.
+
+EACH POST should:
+- Take ONE mission topic and explore it deeply: why it matters, the current gap, what's possible, and concrete steps studios/teachers/the network can take.
+- Be 1500–2500 words of substantive, non-fluffy content. Strong H1, clear H2s, bullet/numbered lists, a practical "Where to start" or "How you can help" section, and a final "Key Takeaways".
+- Target real search intent where natural (e.g. "yoga in schools", "trauma-informed yoga training", "yoga therapy insurance", "accessible yoga", "yoga for veterans").
+- Include 1–2 internal markdown links to YFN directory pages where relevant: /yogastudio, /yogateacher, /yogaschool, /retreatcenter, /yogaworkshops. e.g. [Find a studio near you](/yogastudio).
+- End by inviting the reader to be part of the movement (join the network, list their space, or share the message).
+
+OUTPUT FORMAT
+Return ONLY a JSON object (no code fences, no commentary) with these fields:
+{
+  "title": "compelling, mission-driven post title",
+  "slug": "lowercase-hyphenated-slug",
+  "category": "mission",
+  "city": null,
+  "content": "full markdown body (1500–2500 words)",
+  "excerpt": "1–2 sentence summary",
+  "meta_title": "under 60 chars",
+  "meta_description": "130–155 chars",
+  "tags": ["tag1", "tag2", "tag3"],
+  "reading_time_minutes": 8,
+  "cover_image": "pick ONE of these pre-vetted Unsplash URLs"
+}
+
+Cover image — pick one:
+- https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=1200&h=800&fit=crop&q=80
+- https://images.unsplash.com/photo-1588286840104-8957b019727f?w=1200&h=800&fit=crop&q=80
+- https://images.unsplash.com/photo-1545389336-cf090694435e?w=1200&h=800&fit=crop&q=80
+- https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=1200&h=800&fit=crop&q=80
+- https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200&h=800&fit=crop&q=80
+- https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=1200&h=800&fit=crop&q=80`;
+
+// Forced-tool schema — guarantees well-formed structured output (the model fills
+// typed fields instead of hand-writing a JSON string, which broke on long,
+// quote-heavy markdown bodies).
+const PUBLISH_TOOL = {
+  name: 'publish_post',
+  description: 'Publish the generated blog post with all required fields.',
+  input_schema: {
+    type: 'object' as const,
+    properties: {
+      title: { type: 'string' },
+      slug: { type: 'string', description: 'lowercase-hyphenated-slug' },
+      category: { type: 'string' },
+      city: { type: ['string', 'null'], description: 'City name, or null' },
+      content: { type: 'string', description: 'Full markdown body, 1500–2500 words' },
+      excerpt: { type: 'string' },
+      meta_title: { type: 'string' },
+      meta_description: { type: 'string' },
+      tags: { type: 'array', items: { type: 'string' } },
+      reading_time_minutes: { type: 'number' },
+      cover_image: { type: 'string' },
+    },
+    required: ['title', 'slug', 'category', 'content', 'excerpt', 'meta_title', 'meta_description', 'tags', 'reading_time_minutes', 'cover_image'],
+  },
+};
+
 export async function GET(req: NextRequest) {
   // Auth — Vercel Cron adds `Authorization: Bearer ${CRON_SECRET}` automatically when the secret is set in Vercel env.
   const authHeader = req.headers.get('authorization');
@@ -82,6 +181,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const dry = req.nextUrl.searchParams.get('dry') === '1';
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const supabase = createAdminClient();
 
@@ -101,40 +201,44 @@ export async function GET(req: NextRequest) {
     .map((p) => `- ${p.slug} (${p.category}${p.city ? ', ' + p.city : ''}): ${p.title}`)
     .join('\n') || '(no posts yet)';
 
-  // 2. Generate today's post via Claude.
-  const userPrompt = `Today is ${new Date().toISOString().slice(0, 10)}.
+  // 2. Decide today's mode — alternate SEO/directory posts with mission posts.
+  //    Strict alternation off the most recent post so schedule gaps don't drift.
+  const lastCategory = (existing ?? [])[0]?.category ?? null;
+  const mode: 'seo' | 'mission' = lastCategory === 'mission' ? 'seo' : 'mission';
+  const date = new Date().toISOString().slice(0, 10);
+
+  let systemPrompt: string;
+  let userPrompt: string;
+
+  if (mode === 'mission') {
+    const missionDone =
+      (existing ?? [])
+        .filter((p) => p.category === 'mission')
+        .map((p) => `- ${p.title}`)
+        .join('\n') || '(none yet)';
+    const menu = MISSION_TOPICS.map((t, i) => `${i + 1}. ${t}`).join('\n');
+    systemPrompt = MISSION_SYSTEM_PROMPT;
+    userPrompt = `Today is ${date}. Write today's MISSION post — a thought-leadership + advocacy piece on one way to grow yoga's impact in society.
+
+Mission posts ALREADY published (do NOT repeat these angles):
+${missionDone}
+
+Topic menu — choose ONE fresh angle not yet covered (or a closely related, more specific take on one):
+${menu}
+
+Submit the finished post by calling the publish_post tool, with category set to "mission" and city null.`;
+  } else {
+    systemPrompt = SYSTEM_PROMPT;
+    userPrompt = `Today is ${date}.
 
 Here are the ${existing?.length ?? 0} existing posts — DO NOT duplicate any of these slugs or cover the same angle:
 
 ${existingSummary}
 
-Pick a fresh keyword (rotate content types A–E; prefer types under-represented above) and generate today's post as JSON per the system spec. Return ONLY the JSON object.`;
-
-  let raw: string;
-  try {
-    const message = await anthropic.messages.create({
-      model: MODEL,
-      max_tokens: 8192,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userPrompt }],
-    });
-    const block = message.content[0];
-    if (block.type !== 'text') {
-      return NextResponse.json({ error: 'Unexpected model response' }, { status: 500 });
-    }
-    raw = block.text.trim();
-  } catch (err) {
-    console.error('[daily-blog] anthropic error:', err);
-    return NextResponse.json({ error: 'LLM call failed', detail: String(err) }, { status: 502 });
+Pick a fresh keyword (rotate content types A–E; prefer types under-represented above) and generate today's post per the system spec. Submit it by calling the publish_post tool.`;
   }
 
-  // Strip possible code fence wrapping.
-  const jsonText = raw
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/\s*```$/i, '')
-    .trim();
-
-  let post: {
+  type GeneratedPost = {
     title: string;
     slug: string;
     category: string;
@@ -147,11 +251,32 @@ Pick a fresh keyword (rotate content types A–E; prefer types under-represented
     reading_time_minutes: number;
     cover_image: string | null;
   };
+
+  let post: GeneratedPost;
   try {
-    post = JSON.parse(jsonText);
+    // Force the model to return structured data via the publish_post tool — the
+    // SDK hands back already-parsed `input`, so no fragile JSON.parse of the body.
+    const message = await anthropic.messages.create({
+      model: MODEL,
+      max_tokens: 8192,
+      system: systemPrompt,
+      tools: [PUBLISH_TOOL],
+      tool_choice: { type: 'tool', name: 'publish_post' },
+      messages: [{ role: 'user', content: userPrompt }],
+    });
+    const toolBlock = message.content.find((b) => b.type === 'tool_use');
+    if (!toolBlock || toolBlock.type !== 'tool_use') {
+      console.error('[daily-blog] no tool_use block; stop_reason:', message.stop_reason);
+      return NextResponse.json({ error: 'Model did not return a post' }, { status: 502 });
+    }
+    post = toolBlock.input as GeneratedPost;
   } catch (err) {
-    console.error('[daily-blog] JSON parse error:', err, 'raw:', raw.slice(0, 500));
-    return NextResponse.json({ error: 'Invalid JSON from model' }, { status: 500 });
+    console.error('[daily-blog] anthropic error:', err);
+    return NextResponse.json({ error: 'LLM call failed', detail: String(err) }, { status: 502 });
+  }
+
+  if (!post?.title || !post?.slug || !post?.content) {
+    return NextResponse.json({ error: 'Model returned an incomplete post' }, { status: 502 });
   }
 
   // 3. Defensive slug uniqueness check.
@@ -163,6 +288,16 @@ Pick a fresh keyword (rotate content types A–E; prefer types under-represented
 
   if (dup) {
     return NextResponse.json({ error: 'Generated slug already exists', slug: post.slug }, { status: 409 });
+  }
+
+  // Preview mode — return the generated post without inserting.
+  if (dry) {
+    return NextResponse.json({
+      ok: true,
+      dry: true,
+      mode,
+      post: { title: post.title, slug: post.slug, category: post.category, excerpt: post.excerpt, reading_time_minutes: post.reading_time_minutes },
+    });
   }
 
   // 4. Insert.
