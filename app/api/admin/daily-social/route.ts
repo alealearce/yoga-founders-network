@@ -118,6 +118,59 @@ async function runBlog(supabase: ReturnType<typeof createAdminClient>, slug: str
 
 // ──────────────────────────── listing showcase ──────────────────────────────
 
+const STOCK_FALLBACK = 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=1080&h=1350&fit=crop&q=80';
+
+function isStock(url: string): boolean {
+  return !url || url.includes('unsplash.com') || url.includes('pexels.com');
+}
+
+/** Confirm a URL is a reachable image (so a broken hero never kills the post). */
+async function isUsableImage(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, { method: 'GET', headers: { 'User-Agent': 'Mozilla/5.0 (compatible; YFNBot/1.0)' } });
+    if (!res.ok) return false;
+    return (res.headers.get('content-type') || '').toLowerCase().startsWith('image/');
+  } catch {
+    return false;
+  }
+}
+
+/** Pull the og:image / twitter:image a site publishes to represent itself. */
+async function fetchOgImage(siteUrl: string): Promise<string | null> {
+  try {
+    const res = await fetch(siteUrl, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; YFNBot/1.0)' }, redirect: 'follow' });
+    if (!res.ok) return null;
+    const html = (await res.text()).slice(0, 200_000);
+    const pick = (re: RegExp) => html.match(re)?.[1];
+    const raw =
+      pick(/<meta[^>]+property=["']og:image(?::secure_url)?["'][^>]+content=["']([^"']+)["']/i) ||
+      pick(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i) ||
+      pick(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i);
+    if (!raw) return null;
+    return new URL(raw, siteUrl).toString(); // resolve relative paths
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Best hero image for a showcase, in order of authenticity:
+ *   real listing photo → the business's own website og:image → logo → stock.
+ * Every candidate is validated as a reachable image before use.
+ */
+async function resolveHero(listing: Listing): Promise<string> {
+  const first = listing.images?.[0] || '';
+  if (first && !isStock(first) && (await isUsableImage(first))) return first;
+
+  if (listing.website) {
+    const og = await fetchOgImage(listing.website);
+    if (og && !isStock(og) && (await isUsableImage(og))) return og;
+  }
+  if (listing.logo_url && (await isUsableImage(listing.logo_url))) return listing.logo_url;
+  if (first && (await isUsableImage(first))) return first; // stock, but real
+  return STOCK_FALLBACK;
+}
+
 async function pickListing(supabase: ReturnType<typeof createAdminClient>, id: string | null): Promise<Listing | null> {
   if (id) {
     const { data } = await supabase.from('listings').select('*').eq('id', id).maybeSingle();
@@ -169,7 +222,7 @@ async function runShowcase(supabase: ReturnType<typeof createAdminClient>, id: s
 
   const url = `${SITE.url}${getListingUrl(listing.type, listing.slug)}`;
   const label = TYPE_LABEL[listing.type] ?? 'Member';
-  const hero = listing.images?.[0] || listing.logo_url || '';
+  const hero = await resolveHero(listing); // real photo → site og:image → logo → stock
   // Only opted-in members (claimed) get the @-tag + email; seeded listings don't.
   const isMember = Boolean(listing.owner_id);
   const handle = isMember && listing.social_instagram ? igHandle(listing.social_instagram) : '';
