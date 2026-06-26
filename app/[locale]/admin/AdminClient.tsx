@@ -92,6 +92,25 @@ export default function AdminClient({ pending: initialPending, all: initialAll }
     setBusy(null);
   };
 
+  const removeListing = async (id: string, name: string) => {
+    if (
+      !window.confirm(
+        `Delete "${name}"?\n\nThis permanently removes the listing from the directory and cannot be undone.`
+      )
+    ) {
+      return;
+    }
+    setBusy(id + "-delete");
+    const ok = await callAction("delete", id);
+    if (ok) {
+      setPending((prev) => prev.filter((l) => l.id !== id));
+      setAll((prev) => prev.filter((l) => l.id !== id));
+    } else {
+      window.alert("Delete failed. Please try again.");
+    }
+    setBusy(null);
+  };
+
   return (
     <div>
       {/* Tabs */}
@@ -188,6 +207,13 @@ export default function AdminClient({ pending: initialPending, all: initialAll }
                           >
                             {busy === listing.id ? "..." : "Reject"}
                           </button>
+                          <button
+                            onClick={() => removeListing(listing.id, listing.name)}
+                            disabled={busy === listing.id + "-delete"}
+                            className="px-4 py-1.5 rounded-full font-sans text-xs font-semibold bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100 transition-colors disabled:opacity-50"
+                          >
+                            {busy === listing.id + "-delete" ? "..." : "Delete"}
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -279,6 +305,13 @@ export default function AdminClient({ pending: initialPending, all: initialAll }
                         }`}
                       >
                         {listing.is_verified ? "✓ Verified" : "Verify"}
+                      </button>
+                      <button
+                        onClick={() => removeListing(listing.id, listing.name)}
+                        disabled={busy === listing.id + "-delete"}
+                        className="px-3 py-1 rounded-full font-sans text-xs font-semibold bg-red-50 text-red-600 ring-1 ring-red-200 hover:bg-red-100 transition-colors disabled:opacity-50"
+                      >
+                        {busy === listing.id + "-delete" ? "..." : "🗑 Delete"}
                       </button>
                     </div>
                   </td>

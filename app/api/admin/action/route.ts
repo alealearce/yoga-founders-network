@@ -3,7 +3,7 @@ import { createClient, createAdminClient } from '@/lib/supabase/server';
 import { sendApprovalEmail, sendRejectionEmail } from '@/lib/email/resend';
 import { SITE, isAdminEmail } from '@/lib/config/site';
 
-const VALID_ACTIONS = ['approve', 'reject', 'feature', 'verify'] as const;
+const VALID_ACTIONS = ['approve', 'reject', 'feature', 'verify', 'delete'] as const;
 type AdminAction = typeof VALID_ACTIONS[number];
 
 export async function POST(req: NextRequest) {
@@ -124,6 +124,20 @@ export async function POST(req: NextRequest) {
 
         if (toggleError) {
           return NextResponse.json({ error: toggleError.message }, { status: 500 });
+        }
+        break;
+      }
+
+      case 'delete': {
+        // Permanently remove the listing. Clean up dependent rows first so FK
+        // constraints don't block the delete (reviews + any social-post log rows).
+        await supabase.from('reviews').delete().eq('listing_id', id);
+        await supabase.from('social_posts').delete().eq('ref_id', id);
+
+        const { error: deleteError } = await supabase.from('listings').delete().eq('id', id);
+        if (deleteError) {
+          console.error('[admin/delete] delete error:', deleteError);
+          return NextResponse.json({ error: `Delete failed: ${deleteError.message}` }, { status: 500 });
         }
         break;
       }
