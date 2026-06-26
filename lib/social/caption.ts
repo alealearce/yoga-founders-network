@@ -123,8 +123,15 @@ export function showcaseBlurb(listing: Pick<Listing, 'description' | 'long_descr
   return text.length > 280 ? text.slice(0, 277).trim() + '…' : text;
 }
 
+/** Tidy a stored website value into a clean, clickable URL. */
+function cleanWebsite(raw: string): string {
+  const t = raw.trim().replace(/\/+$/, '');
+  if (!t) return '';
+  return /^https?:\/\//i.test(t) ? t : `https://${t}`;
+}
+
 export async function buildShowcaseCaption(
-  listing: Pick<Listing, 'name' | 'type' | 'city' | 'country' | 'description' | 'long_description' | 'tagline' | 'social_instagram'>,
+  listing: Pick<Listing, 'name' | 'type' | 'city' | 'country' | 'description' | 'long_description' | 'tagline' | 'social_instagram' | 'website'>,
   url: string,
   opts: { isMember: boolean } = { isMember: false }
 ): Promise<string> {
@@ -138,9 +145,11 @@ export async function buildShowcaseCaption(
       `Featured ${label}: ${listing.name}\nLocation: ${loc || 'worldwide'}\nAbout: ${showcaseBlurb(listing)}`
     )) || `Meet ${listing.name} — ${showcaseBlurb(listing)}`;
 
-  // Only @-mention / collaborator-credit members who actually opted in. For
-  // seeded listings, turn the spotlight into a "claim your listing" signup hook.
-  const handle = opts.isMember && listing.social_instagram ? igHandle(listing.social_instagram) : '';
+  // Tag the business's Instagram (@handle tags on IG; reads as text elsewhere)
+  // and link their website. Members get a collaboration credit; seeded listings
+  // get a softer "follow along" plus the "claim your listing" signup hook.
+  const handle = listing.social_instagram ? igHandle(listing.social_instagram) : '';
+  const website = listing.website ? cleanWebsite(listing.website) : '';
   return [
     `✨ Featured ${label}: ${listing.name}`,
     loc ? `📍 ${loc}` : '',
@@ -148,7 +157,8 @@ export async function buildShowcaseCaption(
     body,
     '',
     `🔗 Discover ${listing.name} on Yoga Founders Network → ${url}`,
-    opts.isMember && handle ? `🤝 In collaboration with ${handle}` : '',
+    website ? `🌐 ${website}` : '',
+    handle ? (opts.isMember ? `🤝 In collaboration with ${handle}` : `📸 Follow along → ${handle}`) : '',
     !opts.isMember ? `📣 Is this your space? Claim your free listing → yogafoundersnetwork.com` : '',
     '',
     hashtags,
