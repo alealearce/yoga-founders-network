@@ -47,7 +47,15 @@ async function checkResend(): Promise<Status> {
       headers: { Authorization: `Bearer ${key}` },
       signal: AbortSignal.timeout(6000),
     });
-    return res.ok ? 'ok' : 'fail';
+    if (res.ok) return 'ok';
+    // A restricted send-only key (name: restricted_api_key) can't read /domains
+    // but CAN send email — that's healthy. Only a genuinely invalid key
+    // (validation_error / "API key is invalid") is a real failure.
+    if (res.status === 401) {
+      const body = await res.text();
+      if (body.includes('restricted_api_key')) return 'ok';
+    }
+    return 'fail';
   } catch {
     return 'fail';
   }
