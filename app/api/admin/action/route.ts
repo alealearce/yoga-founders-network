@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient, createAdminClient } from '@/lib/supabase/server';
 import { sendApprovalEmail, sendRejectionEmail } from '@/lib/email/resend';
 import { SITE, isAdminEmail } from '@/lib/config/site';
+import { getListingUrl } from '@/lib/utils/listingUrl';
 
 const VALID_ACTIONS = ['approve', 'reject', 'feature', 'verify', 'delete'] as const;
 type AdminAction = typeof VALID_ACTIONS[number];
@@ -43,10 +44,11 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // Send approval email to listing owner
+        // Send approval email to listing owner. Awaited — un-awaited promises
+        // die when Vercel freezes the function after the response is sent.
         if (listing?.email && listing?.name && listing?.slug) {
-          const listingUrl = `${SITE.url}/${listing.type}/${listing.slug}`;
-          sendApprovalEmail(listing.email, listing.name, listing.name, listingUrl).catch((err) =>
+          const listingUrl = `${SITE.url}${getListingUrl(listing.type, listing.slug)}`;
+          await sendApprovalEmail(listing.email, listing.name, listing.name, listingUrl).catch((err) =>
             console.error('[admin/approve] approval email error:', err)
           );
         }
@@ -73,9 +75,9 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // Send rejection email
+        // Send rejection email. Awaited — see note on the approval email above.
         if (listing?.email && listing?.name) {
-          sendRejectionEmail(listing.email, listing.name, listing.name, reason).catch((err) =>
+          await sendRejectionEmail(listing.email, listing.name, listing.name, reason).catch((err) =>
             console.error('[admin/reject] rejection email error:', err)
           );
         }

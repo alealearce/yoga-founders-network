@@ -4,6 +4,7 @@ import { SITE } from "@/lib/config/site";
 export const metadata: Metadata = {
   title: "Terms of Use",
   description: `Terms of Use for ${SITE.name}. Please read these terms carefully before using our services.`,
+  alternates: { canonical: `${SITE.url}/terms` },
 };
 
 const LAST_UPDATED = "April 2025";

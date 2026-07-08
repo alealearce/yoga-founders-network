@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
-import { LISTING_TYPES } from "@/lib/config/site";
+import { LISTING_TYPES, SITE } from "@/lib/config/site";
 import Badge from "@/components/ui/Badge";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 import SearchBar from "@/components/directory/SearchBar";
@@ -11,6 +11,9 @@ import { getListingUrl } from "@/lib/utils/listingUrl";
 export const metadata = {
   title: "Search",
   description: "Search for yoga studios, teachers, schools, retreats, and products in the Yoga Founders Network global directory.",
+  // All ?q=/type=/country= variants consolidate to the bare /search URL so
+  // parameterized result pages never compete as thin duplicates.
+  alternates: { canonical: `${SITE.url}/search` },
 };
 
 interface SearchPageProps {

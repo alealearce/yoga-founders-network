@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
+import { SITE } from "@/lib/config/site";
 
 export const metadata: Metadata = {
   title: "Free Yoga Tools for Teachers & Studio Owners",
   description: "Free generators, planners, and guides built for yoga professionals. Create class themes, plan retreats, generate email sequences, calculate studio profitability, and more.",
+  alternates: { canonical: `${SITE.url}/resources` },
 };
 
 const RESOURCES = [

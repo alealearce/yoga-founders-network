@@ -4,12 +4,12 @@ import { SITE, LISTING_TYPES } from "@/lib/config/site";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 const TYPE_PREFIXES: Record<string, string> = {
-  studio:   "/studios",
-  teacher:  "/teachers",
-  school:   "/services/schools",
-  retreat:  "/services/retreats",
-  product:  "/services/products",
-  workshop: "/services/workshops",
+  studio:   "/yogastudio",
+  teacher:  "/yogateacher",
+  school:   "/yogaschool",
+  retreat:  "/retreatcenter",
+  product:  "/yogaproducts",
+  workshop: "/yogaworkshops",
 };
 
 export default function NotFound() {

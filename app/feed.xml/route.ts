@@ -36,7 +36,7 @@ export async function GET() {
 
   const items = (posts ?? [])
     .map((post) => {
-      const url        = `${SITE.url}/journal/${post.slug}`;
+      const url        = `${SITE.url}/community/${post.slug}`;
       const pubDate    = new Date(post.created_at).toUTCString();
       const title      = escapeXml(post.title);
       const excerpt    = escapeXml(post.excerpt ?? '');
@@ -63,7 +63,7 @@ export async function GET() {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(SITE.name)} — The Journal</title>
-    <link>${SITE.url}/journal</link>
+    <link>${SITE.url}/community</link>
     <description>${escapeXml(SITE.description)}</description>
     <language>en-us</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>

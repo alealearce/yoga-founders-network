@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
       'Subscription Confirmed',
       "You're now subscribed to the Yoga Founders Network newsletter. Welcome to the community!",
       'Read the Journal',
-      `${SITE.url}/journal`
+      `${SITE.url}/community`
     ), {
       status: 200,
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
