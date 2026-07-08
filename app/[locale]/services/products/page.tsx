@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getIpLocation } from "@/lib/utils/ipLocation";
 import type { Listing } from "@/lib/supabase/types";
 import { PRODUCT_CATEGORIES } from "@/lib/config/categories";
-import { SITE } from "@/lib/config/site";
+import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
 import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: "Yoga Products & Brands",
     description: "Yoga mats, props, apparel, books, and courses — from local makers and trusted brands.",
     url: `${SITE.url}/yogaproducts`,
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 

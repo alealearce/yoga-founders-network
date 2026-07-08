@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/supabase/types";
-import { SITE } from "@/lib/config/site";
+import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 const BLOG_CATEGORIES = [
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     title: `The Journal — ${SITE.name}`,
     description: "Insights, guides, and wisdom for yoga students — how to find the right studio, choose a teacher, deepen your practice, and more.",
     url: `${SITE.url}/community`,
+    images: [DEFAULT_OG_IMAGE],
     siteName: SITE.name,
     locale: "en_US",
     type: "website",

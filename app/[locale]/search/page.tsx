@@ -14,6 +14,9 @@ export const metadata = {
   // All ?q=/type=/country= variants consolidate to the bare /search URL so
   // parameterized result pages never compete as thin duplicates.
   alternates: { canonical: `${SITE.url}/search` },
+  // Internal search results are thin/duplicative — keep them out of the index
+  // but let crawlers follow links through to the listings and hub pages.
+  robots: { index: false, follow: true },
 };
 
 interface SearchPageProps {

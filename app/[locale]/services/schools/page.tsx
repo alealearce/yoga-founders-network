@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getIpLocation } from "@/lib/utils/ipLocation";
 import type { Listing } from "@/lib/supabase/types";
 import { SCHOOL_CERTIFICATIONS } from "@/lib/config/categories";
-import { SITE } from "@/lib/config/site";
+import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
 import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: "Yoga Teacher Training Near You",
     description: "Accredited yoga schools nearest to you, with 200/300/500-hour programs.",
     url: `${SITE.url}/yogaschool`,
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 

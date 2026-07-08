@@ -37,6 +37,20 @@ export const SITE = {
   favicon: "/images/favicon.png",
 } as const;
 
+// ── Default social share image ───────────────────────────────────────────────
+// Served by app/[locale]/opengraph-image.tsx (Digital Atrium brand card).
+// Relative URL — resolved against metadataBase, and the unprefixed path is
+// intl-rewritten by the middleware so it serves without a redirect hop.
+// Pages that define their own `openGraph` must include this in `images`
+// (or their own image) because config openGraph in a sub-segment overrides
+// the file-convention image from [locale].
+export const DEFAULT_OG_IMAGE = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: `${SITE.name} — ${SITE.tagline}`,
+} as const;
+
 // ── Categories / Listing Types ───────────────────────────────────────────────
 // id matches the ListingType in supabase/types.ts (singular)
 export const LISTING_TYPES = [

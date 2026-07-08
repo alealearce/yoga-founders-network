@@ -47,5 +47,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|opengraph-image|icon|sitemap|robots|.*\\..*).*)'],
+  matcher: ['/((?!api|_next|_vercel|icon|sitemap|robots|.*\\..*).*)'],
 };

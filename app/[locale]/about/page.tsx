@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { SITE } from "@/lib/config/site";
+import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     title: "About Yoga Founders Network",
     description: `${SITE.tagline}. A global directory and community for yoga studios, teachers, schools, retreats, and founders.`,
     url: `${SITE.url}/about`,
+    images: [DEFAULT_OG_IMAGE],
     type: "website",
   },
 };

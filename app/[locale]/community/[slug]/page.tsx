@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/supabase/types";
-import { SITE } from "@/lib/config/site";
+import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import { Clock, Calendar, ArrowLeft } from "lucide-react";
 
 interface Props {
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: "en_US",
       type: "article",
       publishedTime: data.published_at ?? undefined,
-      images: data.cover_image ? [{ url: data.cover_image }] : [],
+      images: data.cover_image ? [{ url: data.cover_image }] : [DEFAULT_OG_IMAGE],
     },
   };
 }

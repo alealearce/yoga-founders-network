@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/supabase/types";
 import { YOGA_CATEGORIES } from "@/lib/config/categories";
 import { getIpLocation } from "@/lib/utils/ipLocation";
-import { SITE } from "@/lib/config/site";
+import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import SearchBar from "@/components/directory/SearchBar";
 import FilteredListingGrid from "@/components/directory/FilteredListingGrid";
 import CategoryJsonLd from "@/components/directory/CategoryJsonLd";
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: "Yoga Studios Near You",
     description: "Find yoga studios near your location, ranked by distance.",
     url: `${SITE.url}/yogastudio`,
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 

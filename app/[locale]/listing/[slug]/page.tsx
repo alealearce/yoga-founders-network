@@ -4,11 +4,12 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import type { Listing, Review } from "@/lib/supabase/types";
 import { MapPin, Globe, Mail, Phone, BadgeCheck, Star, Instagram, Facebook, Youtube } from "lucide-react";
-import { SITE } from "@/lib/config/site";
+import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import { getListingUrl } from "@/lib/utils/listingUrl";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 import CoverImage from "@/components/ui/CoverImage";
 import ReviewForm from "@/components/reviews/ReviewForm";
+import ListingJsonLd from "@/components/directory/ListingJsonLd";
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${data.name}${location ? ` — ${location}` : ""}`,
       description: data.tagline ?? data.description ?? "",
       url: canonical,
-      images: data.images?.[0] ? [{ url: data.images[0] }] : [],
+      images: data.images?.[0] ? [{ url: data.images[0] }] : [DEFAULT_OG_IMAGE],
     },
   };
 }
@@ -91,6 +92,8 @@ export default async function ListingPage({ params }: Props) {
 
   return (
     <>
+      <ListingJsonLd listing={listing} reviews={reviews} />
+
       {/* Hero — only when there's a real image; otherwise a slim brand band */}
       {coverImage ? (
         <div className="pt-16 bg-[#ffffff]">
