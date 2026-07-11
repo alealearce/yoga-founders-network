@@ -74,21 +74,13 @@ export default async function HomePage() {
       {/* ── The register: category index ── */}
       <section className="py-20 lg:py-24 bg-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
-            <div className="max-w-2xl">
-              <p className="font-sans text-xs font-bold tracking-[0.18em] text-on-surface-variant uppercase mb-2">
-                The Directory
-              </p>
-              <h2 className="font-serif text-display-sm text-on-surface">
-                Browse the network
-              </h2>
-            </div>
-            <Link
-              href="/about"
-              className="flex-shrink-0 font-sans text-sm font-bold text-accent-text hover:underline underline-offset-4"
-            >
-              About our review standard →
-            </Link>
+          <div className="max-w-2xl mb-10">
+            <p className="font-sans text-xs font-bold tracking-[0.18em] text-on-surface-variant uppercase mb-2">
+              The Directory
+            </p>
+            <h2 className="font-serif text-display-sm text-on-surface">
+              Browse the network
+            </h2>
           </div>
 
           <div className="border-t border-outline-variant">
