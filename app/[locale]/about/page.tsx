@@ -37,29 +37,6 @@ const aboutSchema = {
   },
 };
 
-const CORE_VALUES = [
-  {
-    icon: "I",
-    title: "Integrity",
-    description: "We curate with care. Every listing is reviewed so you can trust what you find here.",
-  },
-  {
-    icon: "C",
-    title: "Collaboration",
-    description: "We believe the yoga community grows stronger together — sharing resources, referrals, and wisdom.",
-  },
-  {
-    icon: "S",
-    title: "Sustainability",
-    description: "We support business models that allow yoga founders to thrive without burning out.",
-  },
-  {
-    icon: "A",
-    title: "Abundance",
-    description: "There is enough space, students, and success for every yoga founder. We celebrate each other's growth.",
-  },
-];
-
 export default function AboutPage() {
   return (
     <>
@@ -97,13 +74,10 @@ export default function AboutPage() {
             </div>
             <div className="space-y-4 font-sans text-base text-on-surface-variant leading-relaxed">
               <p>
-                We live in an era of rapid digital transformation and artificial intelligence — a world that increasingly pulls us away from our bodies, our breath, and each other. Yoga studios and communities have become sanctuaries of human connection in this shifting landscape.
+                We live in an era of rapid digital transformation — a world that increasingly pulls us away from our bodies. Yoga studios and communities have become sanctuaries of human connection.
               </p>
               <p>
-                Yet the founders behind these spaces — often operate on thin margins, wearing every hat, and struggling to be discovered in an algorithm-driven world.
-              </p>
-              <p>
-                We built Yoga Founders Network to help with that. Our mission is to amplify the reach of yoga businesses so they can focus on what matters most: their students, their business, and their community.
+                We built Yoga Founders Network to help yoga communities be found. Our mission is to amplify the reach of yoga in society.
               </p>
             </div>
           </div>
@@ -156,33 +130,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Core Values */}
-      <section className="py-20 lg:py-28 bg-bg">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
-            <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
-              What We Stand For
-            </p>
-            <h2 className="font-serif text-display-sm text-on-surface">
-              Core Values
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {CORE_VALUES.map(value => (
-              <div key={value.title} className="rounded-2xl p-8 border border-on-surface/20">
-                <h3 className="font-serif text-xl text-on-surface mb-3">
-                  {value.title}
-                </h3>
-                <p className="font-sans text-sm text-on-surface-variant leading-relaxed">
-                  {value.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Our Founder */}
       <section className="py-20 lg:py-28 bg-surface-low">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -191,18 +138,9 @@ export default function AboutPage() {
               <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
                 The Story Behind It
               </p>
-              <h2 className="font-serif text-display-sm text-on-surface mb-6">
-                Built by a yoga founder, for yoga founders.
-              </h2>
               <div className="space-y-4 font-sans text-base text-on-surface-variant leading-relaxed">
                 <p>
-                  One of my past projects was an online yoga studio app, I wore all the hats — producing content, customer service, handling marketing, payments, and tech.
-                </p>
-                <p>
-                  Most business owners in yoga face the same invisible ceiling: deep expertise in the craft, but limited time and resources to build the business side. Yoga Founders is working on providing you with visibility and a community that supports you.
-                </p>
-                <p>
-                  Our vision is to amplify your visibility through automation tools and create a space where the community can easily find you.
+                  I ran an online yoga studio in the past — content production, customer service, marketing, payments, the tech stack. Building something good and getting it found are two completely different problems. That’s why we’re building Yoga Founders.
                 </p>
               </div>
             </div>
