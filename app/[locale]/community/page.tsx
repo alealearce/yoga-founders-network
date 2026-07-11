@@ -58,7 +58,7 @@ export default async function CommunityPage({
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#ffffff]">
+      <section className="pt-32 pb-16 bg-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
             Stories &amp; Wisdom
@@ -73,12 +73,12 @@ export default async function CommunityPage({
       </section>
 
       {/* Category filter */}
-      <section className="pb-8 bg-[#ffffff]">
+      <section className="pb-8 bg-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex flex-wrap gap-2">
             <Link
               href="/community"
-              className={`px-4 py-1.5 rounded-full font-sans text-sm font-medium border transition-colors ${
+              className={`px-4 py-1.5 rounded-[2px] font-sans text-sm font-medium border transition-colors ${
                 !searchParams.category
                   ? "bg-primary text-white border-primary"
                   : "border-outline-variant/40 text-on-surface-variant hover:border-primary hover:text-primary"
@@ -90,7 +90,7 @@ export default async function CommunityPage({
               <Link
                 key={cat.id}
                 href={`/community?category=${cat.id}`}
-                className={`px-4 py-1.5 rounded-full font-sans text-sm font-medium border transition-colors ${
+                className={`px-4 py-1.5 rounded-[2px] font-sans text-sm font-medium border transition-colors ${
                   searchParams.category === cat.id
                     ? "bg-primary text-white border-primary"
                     : "border-outline-variant/40 text-on-surface-variant hover:border-primary hover:text-primary"
@@ -105,7 +105,7 @@ export default async function CommunityPage({
 
       {/* Featured Post */}
       {featured ? (
-        <section className="pb-16 bg-[#ffffff]">
+        <section className="pb-16 bg-bg">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <Link
               href={`/community/${featured.slug}`}
@@ -154,7 +154,7 @@ export default async function CommunityPage({
           </div>
         </section>
       ) : (
-        <section className="pb-16 bg-[#ffffff]">
+        <section className="pb-16 bg-bg">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="bg-surface-card rounded-2xl p-16 text-center border border-outline-variant/10">
               <div className="flex justify-center mb-4"><YogaSilhouette pose="seated" size={48} /></div>
@@ -171,7 +171,7 @@ export default async function CommunityPage({
 
       {/* Post Grid */}
       {rest.length > 0 && (
-        <section className="pb-20 lg:pb-24 bg-[#ffffff]">
+        <section className="pb-20 lg:pb-24 bg-bg">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {rest.map(post => (
@@ -195,7 +195,7 @@ function BlogPostCard({ post }: { post: BlogPost }) {
   return (
     <Link
       href={`/community/${post.slug}`}
-      className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 hover:-translate-y-1"
+      className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400"
     >
       <div className="p-5 pt-6">
         {post.category && (
@@ -203,7 +203,7 @@ function BlogPostCard({ post }: { post: BlogPost }) {
             {post.category.replace(/_/g, " ")}
           </span>
         )}
-        <h3 className="font-serif text-lg font-bold text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">
+        <h3 className="font-serif text-lg text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">
           {post.title}
         </h3>
         {post.excerpt && (

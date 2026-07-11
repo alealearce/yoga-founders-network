@@ -55,8 +55,8 @@ export default function SearchBar({
     <div className="w-full">
       <form onSubmit={handleSubmit}>
         <div className={cn(
-          "flex items-center gap-3 bg-surface-low rounded-full",
-          compact ? "px-4 py-2" : "px-6 py-4"
+          "flex items-center gap-3 bg-surface-card border border-outline-variant rounded-[2px]",
+          compact ? "px-4 py-2" : "px-5 py-3.5"
         )}>
           <Search
             size={compact ? 16 : 20}
@@ -94,11 +94,10 @@ export default function SearchBar({
           <button
             type="submit"
             className={cn(
-              "flex-shrink-0 rounded-full font-sans font-semibold text-white",
-              "transition-all duration-400 hover:opacity-90",
+              "flex-shrink-0 rounded-[2px] font-sans font-bold bg-primary text-primary-on",
+              "transition-colors duration-300 hover:bg-accent",
               compact ? "px-4 py-1.5 text-xs" : "px-6 py-2.5 text-sm"
             )}
-            style={{ background: "#111111" }}
           >
             Search
           </button>
@@ -113,11 +112,11 @@ export default function SearchBar({
               type="button"
               onClick={() => setType(chip.value)}
               className={cn(
-                "px-4 py-1.5 rounded-full font-sans text-sm font-medium",
-                "transition-all duration-300",
+                "px-4 py-1.5 rounded-[2px] border font-sans text-sm font-semibold",
+                "transition-colors duration-300",
                 type === chip.value
-                  ? "bg-primary text-white"
-                  : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
+                  ? "bg-primary border-primary text-primary-on"
+                  : "border-outline-variant text-on-surface-variant hover:border-primary hover:text-on-surface"
               )}
             >
               {chip.label}

@@ -11,9 +11,9 @@ const LAST_UPDATED = "April 2025";
 
 export default function PrivacyPage() {
   return (
-    <div className="bg-[#ffffff] min-h-screen">
+    <div className="bg-bg min-h-screen">
       {/* Header */}
-      <section className="pt-32 pb-12 bg-[#ffffff]">
+      <section className="pt-32 pb-12 bg-bg">
         <div className="max-w-3xl mx-auto px-6 lg:px-8">
           <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
             Legal
@@ -170,7 +170,7 @@ export default function PrivacyPage() {
 function LegalSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="font-serif text-lg font-bold text-on-surface mb-4">
+      <h2 className="font-serif text-lg text-on-surface mb-4">
         {title}
       </h2>
       <div className="space-y-3">

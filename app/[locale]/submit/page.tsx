@@ -72,9 +72,9 @@ export default function SubmitPage() {
 
   if (status === "success") {
     return (
-      <div className="min-h-screen bg-[#ffffff] flex items-center justify-center px-6">
+      <div className="min-h-screen bg-bg flex items-center justify-center px-6">
         <div className="max-w-md text-center py-20">
-          <div className="flex justify-center mb-6"><YogaSilhouette pose="lotus" size={64} color="#111111" /></div>
+          <div className="flex justify-center mb-6"><YogaSilhouette pose="lotus" size={64} color="#231E17" /></div>
           <h1 className="font-serif text-display-sm text-on-surface mb-4">
             You&apos;re in the queue!
           </h1>
@@ -83,8 +83,8 @@ export default function SubmitPage() {
           </p>
           <a
             href="/"
-            className="inline-flex px-6 py-3 rounded-full font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ background: "#111111" }}
+            className="inline-flex px-6 py-3 rounded-[2px] font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            style={{ background: "#231E17" }}
           >
             Back to Home
           </a>
@@ -96,7 +96,7 @@ export default function SubmitPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-12 bg-[#ffffff]">
+      <section className="pt-32 pb-12 bg-bg">
         <div className="max-w-3xl mx-auto px-6 lg:px-8">
           <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
             Join the Directory
@@ -111,13 +111,13 @@ export default function SubmitPage() {
       </section>
 
       {/* Form */}
-      <section className="pb-24 bg-[#ffffff]">
+      <section className="pb-24 bg-bg">
         <div className="max-w-3xl mx-auto px-6 lg:px-8">
           <form onSubmit={handleSubmit} className="space-y-8">
 
             {/* Basic Info */}
             <div className="bg-surface-card rounded-2xl p-8 space-y-6">
-              <h2 className="font-serif text-xl font-bold text-on-surface">
+              <h2 className="font-serif text-xl text-on-surface">
                 Basic Information
               </h2>
 
@@ -232,7 +232,7 @@ export default function SubmitPage() {
 
             {/* Description */}
             <div className="bg-surface-card rounded-2xl p-8 space-y-6">
-              <h2 className="font-serif text-xl font-bold text-on-surface">
+              <h2 className="font-serif text-xl text-on-surface">
                 Tell Us About Your Practice
               </h2>
 
@@ -253,7 +253,7 @@ export default function SubmitPage() {
 
             {/* Yoga Styles */}
             <div className="bg-surface-card rounded-2xl p-8">
-              <h2 className="font-serif text-xl font-bold text-on-surface mb-2">
+              <h2 className="font-serif text-xl text-on-surface mb-2">
                 Yoga Styles
               </h2>
               <p className="font-sans text-sm text-on-surface-variant mb-6">
@@ -265,7 +265,7 @@ export default function SubmitPage() {
                     key={cat.id}
                     type="button"
                     onClick={() => toggle(cat.label)}
-                    className={`px-4 py-2 rounded-full font-sans text-sm font-medium transition-all duration-300 ${
+                    className={`px-4 py-2 rounded-[2px] font-sans text-sm font-medium transition-all duration-300 ${
                       form.yoga_styles.includes(cat.label)
                         ? "bg-primary text-white"
                         : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
@@ -279,7 +279,7 @@ export default function SubmitPage() {
 
             {/* Languages */}
             <div className="bg-surface-card rounded-2xl p-8">
-              <h2 className="font-serif text-xl font-bold text-on-surface mb-2">
+              <h2 className="font-serif text-xl text-on-surface mb-2">
                 Languages
               </h2>
               <p className="font-sans text-sm text-on-surface-variant mb-6">
@@ -291,7 +291,7 @@ export default function SubmitPage() {
                     key={lang}
                     type="button"
                     onClick={() => toggleLanguage(lang)}
-                    className={`px-4 py-2 rounded-full font-sans text-sm font-medium transition-all duration-300 ${
+                    className={`px-4 py-2 rounded-[2px] font-sans text-sm font-medium transition-all duration-300 ${
                       form.languages.includes(lang)
                         ? "bg-primary text-white"
                         : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
@@ -306,7 +306,7 @@ export default function SubmitPage() {
             {/* School — Certification Hours */}
             {form.type === "school" && (
               <div className="bg-surface-card rounded-2xl p-8">
-                <h2 className="font-serif text-xl font-bold text-on-surface mb-2">
+                <h2 className="font-serif text-xl text-on-surface mb-2">
                   Certification Hours
                 </h2>
                 <p className="font-sans text-sm text-on-surface-variant mb-6">
@@ -323,7 +323,7 @@ export default function SubmitPage() {
                           ? f.experience_levels.filter(v => v !== cert)
                           : [...f.experience_levels, cert],
                       }))}
-                      className={`px-4 py-2 rounded-full font-sans text-sm font-medium transition-all duration-300 ${
+                      className={`px-4 py-2 rounded-[2px] font-sans text-sm font-medium transition-all duration-300 ${
                         form.experience_levels.includes(cert)
                           ? "bg-primary text-white"
                           : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
@@ -339,7 +339,7 @@ export default function SubmitPage() {
             {/* Product — Categories */}
             {form.type === "product" && (
               <div className="bg-surface-card rounded-2xl p-8">
-                <h2 className="font-serif text-xl font-bold text-on-surface mb-2">
+                <h2 className="font-serif text-xl text-on-surface mb-2">
                   Product Category
                 </h2>
                 <p className="font-sans text-sm text-on-surface-variant mb-6">
@@ -356,7 +356,7 @@ export default function SubmitPage() {
                           ? f.experience_levels.filter(v => v !== cat)
                           : [...f.experience_levels, cat],
                       }))}
-                      className={`px-4 py-2 rounded-full font-sans text-sm font-medium transition-all duration-300 ${
+                      className={`px-4 py-2 rounded-[2px] font-sans text-sm font-medium transition-all duration-300 ${
                         form.experience_levels.includes(cat)
                           ? "bg-primary text-white"
                           : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
@@ -371,7 +371,7 @@ export default function SubmitPage() {
 
             {/* Notes */}
             <div className="bg-surface-card rounded-2xl p-8">
-              <h2 className="font-serif text-xl font-bold text-on-surface mb-4">
+              <h2 className="font-serif text-xl text-on-surface mb-4">
                 Anything else to share?
               </h2>
               <textarea
@@ -394,8 +394,8 @@ export default function SubmitPage() {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="w-full py-4 rounded-full font-sans text-base font-semibold text-white transition-all duration-400 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
-              style={{ background: "#111111" }}
+              className="w-full py-4 rounded-[2px] font-sans text-base font-semibold text-white transition-all duration-400 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{ background: "#231E17" }}
             >
               {status === "loading" ? (
                 <span className="flex items-center justify-center gap-3">

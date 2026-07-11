@@ -269,9 +269,9 @@ export default function StudioNameGeneratorPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#ffffff]">
+    <div className="min-h-screen bg-bg">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#ffffff]">
+      <section className="pt-32 pb-16 bg-bg">
         <div className="max-w-3xl mx-auto px-6">
           <Link
             href="/resources"
@@ -411,7 +411,7 @@ export default function StudioNameGeneratorPage() {
             disabled={!canGenerate}
             className="w-full rounded-full py-4 text-white font-semibold font-sans text-base transition-opacity disabled:opacity-40"
             style={{
-              background: "#111111",
+              background: "#231E17",
             }}
           >
             Generate Studio Names
@@ -445,7 +445,7 @@ export default function StudioNameGeneratorPage() {
                   onClick={handleGenerate}
                   className="shrink-0 rounded-full px-5 py-2.5 font-sans text-sm font-semibold text-white"
                   style={{
-                    background: "#111111",
+                    background: "#231E17",
                   }}
                 >
                   Generate More
@@ -465,7 +465,7 @@ export default function StudioNameGeneratorPage() {
                     {favorites.has(item.name) ? "★" : "☆"}
                   </button>
 
-                  <h3 className="font-serif text-xl font-bold text-on-surface pr-8 mb-1">
+                  <h3 className="font-serif text-xl text-on-surface pr-8 mb-1">
                     {item.name}
                   </h3>
                   <p className="font-sans text-xs italic text-on-surface-variant mb-4">
@@ -527,7 +527,7 @@ export default function StudioNameGeneratorPage() {
                 href="/list-your-studio"
                 className="inline-block rounded-full px-8 py-3 text-white font-semibold font-sans text-sm"
                 style={{
-                  background: "#111111",
+                  background: "#231E17",
                 }}
               >
                 List Your Studio

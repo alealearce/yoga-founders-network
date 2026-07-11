@@ -66,7 +66,7 @@ export default async function AdminPage() {
   const totalApproved = approvedCount ?? all.filter((l) => l.status === "approved").length;
 
   return (
-    <div className="min-h-screen bg-[#ffffff] px-6 py-16">
+    <div className="min-h-screen bg-bg px-6 py-16">
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
@@ -90,7 +90,7 @@ export default async function AdminPage() {
             { label: "Featured", value: all.filter((l) => l.is_featured).length, color: "text-primary" },
           ].map((stat) => (
             <div key={stat.label} className="bg-surface-card rounded-2xl shadow-card p-5 text-center">
-              <p className={`font-serif text-3xl font-bold ${stat.color} mb-1`}>
+              <p className={`font-serif text-3xl ${stat.color} mb-1`}>
                 {stat.value}
               </p>
               <p className="font-sans text-xs text-on-surface-variant">{stat.label}</p>

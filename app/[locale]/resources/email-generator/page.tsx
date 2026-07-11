@@ -257,9 +257,9 @@ export default function EmailGeneratorPage() {
   const isFormValid = formData.studioName.trim() && formData.studentName.trim();
 
   return (
-    <div className="min-h-screen bg-[#ffffff]">
+    <div className="min-h-screen bg-bg">
       {/* Hero */}
-      <section className="pt-32 pb-12 bg-[#ffffff]">
+      <section className="pt-32 pb-12 bg-bg">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Link
             href="/resources"
@@ -395,8 +395,8 @@ export default function EmailGeneratorPage() {
           <button
             onClick={handleGenerate}
             disabled={!isFormValid}
-            className="w-full py-4 rounded-full font-sans font-semibold text-white text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.99]"
-            style={{ background: "#111111" }}
+            className="w-full py-4 rounded-[2px] font-sans font-semibold text-white text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.99]"
+            style={{ background: "#231E17" }}
           >
             Generate My 7-Email Sequence
           </button>
@@ -444,7 +444,7 @@ export default function EmailGeneratorPage() {
                     >
                       <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-secondary-container flex flex-col items-center justify-center">
                         <span className="font-sans text-xs font-bold text-primary/70 uppercase leading-none">Day</span>
-                        <span className="font-serif text-xl font-bold text-primary leading-tight">{email.day}</span>
+                        <span className="font-serif text-xl text-primary leading-tight">{email.day}</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
@@ -452,7 +452,7 @@ export default function EmailGeneratorPage() {
                             Email {email.number}
                           </span>
                         </div>
-                        <p className="font-serif text-base font-bold text-on-surface truncate">{email.title}</p>
+                        <p className="font-serif text-base text-on-surface truncate">{email.title}</p>
                         <p className="font-sans text-xs text-on-surface-variant mt-0.5 line-clamp-1">{email.goal}</p>
                       </div>
                       <div className="flex-shrink-0">
@@ -538,7 +538,7 @@ export default function EmailGeneratorPage() {
                             <p className="font-sans text-xs font-bold text-primary uppercase tracking-widest mb-1">
                               CTA Button Text
                             </p>
-                            <span className="inline-block font-sans text-sm font-semibold text-white px-5 py-2 rounded-full" style={{ background: "#111111" }}>
+                            <span className="inline-block font-sans text-sm font-semibold text-white px-5 py-2 rounded-full" style={{ background: "#231E17" }}>
                               {email.ctaText}
                             </span>
                           </div>

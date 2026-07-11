@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Serif, Manrope } from "next/font/google";
+import { Instrument_Serif, Manrope } from "next/font/google";
 import { notFound } from "next/navigation";
 import { routing } from "@/routing";
 import { NextIntlClientProvider } from "next-intl";
@@ -9,9 +9,11 @@ import Footer from "@/components/layout/Footer";
 import { SITE } from "@/lib/config/site";
 import "@/app/globals.css";
 
-const notoSerif = Noto_Serif({
+// Single display weight by design — hierarchy comes from scale, not boldness.
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: "400",
+  style: ["normal", "italic"],
   variable: "--font-serif",
   display: "swap",
 });
@@ -105,9 +107,9 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${notoSerif.variable} ${manrope.variable}`}
+      className={`${instrumentSerif.variable} ${manrope.variable}`}
     >
-      <body className="font-sans bg-white text-on-surface antialiased">
+      <body className="font-sans bg-bg text-on-surface antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}

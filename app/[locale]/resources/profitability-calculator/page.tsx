@@ -234,9 +234,9 @@ export default function ProfitabilityCalculatorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#ffffff]">
+    <div className="min-h-screen bg-bg">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#ffffff]">
+      <section className="pt-32 pb-16 bg-bg">
         <div className="max-w-3xl mx-auto px-6">
           <Link
             href="/resources"
@@ -392,7 +392,7 @@ export default function ProfitabilityCalculatorPage() {
             onClick={handleCalculate}
             className="w-full rounded-full py-4 text-white font-semibold font-sans text-base"
             style={{
-              background: "#111111",
+              background: "#231E17",
             }}
           >
             Calculate Profitability
@@ -419,7 +419,7 @@ export default function ProfitabilityCalculatorPage() {
                 Net Monthly {results.netProfit >= 0 ? "Profit" : "Loss"}
               </p>
               <p
-                className={`font-serif text-5xl font-bold ${
+                className={`font-serif text-5xl ${
                   results.netProfit >= 0 ? "text-green-700" : "text-red-600"
                 }`}
               >
@@ -444,7 +444,7 @@ export default function ProfitabilityCalculatorPage() {
               ].map((m) => (
                 <div key={m.label} className="bg-surface-card rounded-2xl p-5 text-center">
                   <p className="font-sans text-xs text-on-surface-variant mb-2">{m.label}</p>
-                  <p className="font-serif text-xl font-bold text-on-surface">{m.value}</p>
+                  <p className="font-serif text-xl text-on-surface">{m.value}</p>
                 </div>
               ))}
             </div>
@@ -458,7 +458,7 @@ export default function ProfitabilityCalculatorPage() {
                 <div className="mb-6">
                   <div className="flex rounded-full overflow-hidden h-4 mb-3">
                     {[
-                      { value: results.unlimitedRev, color: "bg-[#111111]" },
+                      { value: results.unlimitedRev, color: "bg-primary" },
                       { value: results.packRev, color: "bg-[#7a9b6a]" },
                       { value: results.dropInRev, color: "bg-[#a8c498]" },
                       { value: results.otherRev, color: "bg-[#e8e8e8]" },
@@ -474,7 +474,7 @@ export default function ProfitabilityCalculatorPage() {
                   </div>
                   <div className="flex flex-wrap gap-x-5 gap-y-1.5">
                     {[
-                      { label: "Unlimited", color: "bg-[#111111]" },
+                      { label: "Unlimited", color: "bg-primary" },
                       { label: "Class Packs", color: "bg-[#7a9b6a]" },
                       { label: "Drop-ins", color: "bg-[#a8c498]" },
                       { label: "Other", color: "bg-[#e8e8e8] border border-outline-variant/40" },
@@ -631,7 +631,7 @@ export default function ProfitabilityCalculatorPage() {
                 href="/list-your-studio"
                 className="inline-block rounded-full px-8 py-3 text-white font-semibold font-sans text-sm"
                 style={{
-                  background: "#111111",
+                  background: "#231E17",
                 }}
               >
                 List Your Studio

@@ -43,7 +43,7 @@ export default function YFNIcon({
     <span
       className={cn(
         "inline-flex items-center justify-center rounded-xl flex-shrink-0",
-        "font-serif italic font-bold leading-none select-none",
+        "font-serif italic leading-none select-none",
         SIZE_CLASSES[size],
         VARIANT_CLASSES[variant],
         className,

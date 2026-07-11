@@ -160,14 +160,14 @@ export default function FilteredListingGrid({
   return (
     <>
       {/* Filter bars */}
-      <section className="py-4 bg-[#ffffff] border-b border-outline-variant/20">
+      <section className="py-4 bg-bg border-b border-outline-variant/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 space-y-3">
           {/* Near me control */}
           <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={requestNearMe}
               disabled={geoState === "requesting"}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-sans text-sm font-semibold transition-all duration-300 ${
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-[2px] font-sans text-sm font-semibold transition-all duration-300 ${
                 userCoords
                   ? "bg-primary text-white"
                   : "bg-primary/10 text-primary hover:bg-primary hover:text-white"
@@ -220,7 +220,7 @@ export default function FilteredListingGrid({
                 <select
                   value={activeCountry ?? ""}
                   onChange={(e) => setActiveCountry(e.target.value || null)}
-                  className={`appearance-none pl-8 pr-8 py-1.5 rounded-full font-sans text-sm font-semibold cursor-pointer outline-none transition-all duration-300 ${
+                  className={`appearance-none pl-8 pr-8 py-1.5 rounded-[2px] font-sans text-sm font-semibold cursor-pointer outline-none transition-all duration-300 ${
                     activeCountry
                       ? "bg-primary text-white"
                       : "bg-surface-low text-on-surface-variant hover:bg-secondary-container"
@@ -246,7 +246,7 @@ export default function FilteredListingGrid({
               )}
               <button
                 onClick={() => setActiveFilters(prev => ({ ...prev, [group.field]: null }))}
-                className={`px-4 py-1.5 rounded-full font-sans text-sm font-medium transition-all duration-300 ${
+                className={`px-4 py-1.5 rounded-[2px] font-sans text-sm font-medium transition-all duration-300 ${
                   activeFilters[group.field] === null
                     ? "bg-primary text-white"
                     : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
@@ -258,7 +258,7 @@ export default function FilteredListingGrid({
                 <button
                   key={opt}
                   onClick={() => toggle(group.field, opt)}
-                  className={`px-4 py-1.5 rounded-full font-sans text-sm font-medium transition-all duration-300 ${
+                  className={`px-4 py-1.5 rounded-[2px] font-sans text-sm font-medium transition-all duration-300 ${
                     activeFilters[group.field] === opt
                       ? "bg-primary text-white"
                       : "bg-surface-low text-on-surface-variant hover:bg-secondary-container hover:text-primary"
@@ -273,7 +273,7 @@ export default function FilteredListingGrid({
       </section>
 
       {/* Grid */}
-      <section className="py-16 lg:py-20 bg-[#ffffff]">
+      <section className="py-16 lg:py-20 bg-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {userCoords && (
             <p className="flex items-center gap-2 font-sans text-sm text-on-surface-variant mb-6">
@@ -318,8 +318,8 @@ export default function FilteredListingGrid({
               </p>
               <a
                 href="/submit"
-                className="inline-flex px-6 py-3 rounded-full font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                style={{ background: "#111111" }}
+                className="inline-flex px-6 py-3 rounded-[2px] font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                style={{ background: "#231E17" }}
               >
                 {emptyCta}
               </a>

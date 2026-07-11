@@ -72,7 +72,7 @@ export default function ResourcesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#ffffff]">
+      <section className="pt-32 pb-16 bg-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
             Tools &amp; Guides
@@ -87,14 +87,14 @@ export default function ResourcesPage() {
       </section>
 
       {/* Resources Grid */}
-      <section className="pb-24 bg-[#ffffff]">
+      <section className="pb-24 bg-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {RESOURCES.map(resource => (
               <Link
                 key={resource.href}
                 href={resource.href}
-                className="group flex bg-white rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 hover:-translate-y-1 border border-outline-variant/20"
+                className="group flex bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 border border-outline-variant/20"
               >
                 {/* Silhouette panel */}
                 <div className="flex-shrink-0 w-36 bg-on-surface flex items-center justify-center py-8">
@@ -108,7 +108,7 @@ export default function ResourcesPage() {
                     </span>
                     <span className="font-sans text-xs text-on-surface-variant/50">~{resource.time}</span>
                   </div>
-                  <h2 className="font-serif text-lg font-bold text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">
+                  <h2 className="font-serif text-lg text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">
                     {resource.title}
                   </h2>
                   <p className="font-sans text-sm text-on-surface-variant leading-relaxed mb-4">
@@ -123,12 +123,12 @@ export default function ResourcesPage() {
             ))}
 
             {/* Coming Soon */}
-            <div className="flex bg-white rounded-2xl overflow-hidden border border-outline-variant/20 border-dashed opacity-60">
+            <div className="flex bg-surface-card rounded-2xl overflow-hidden border border-outline-variant/20 border-dashed opacity-60">
               <div className="flex-shrink-0 w-36 bg-surface-low flex items-center justify-center py-8">
                 <YogaSilhouette pose="mountain" size={72} color="#d0d0d0" />
               </div>
               <div className="flex flex-col justify-center px-7 py-6">
-                <h2 className="font-serif text-lg font-bold text-on-surface-variant leading-snug mb-2">
+                <h2 className="font-serif text-lg text-on-surface-variant leading-snug mb-2">
                   More Coming Soon
                 </h2>
                 <p className="font-sans text-sm text-on-surface-variant/60 leading-relaxed">

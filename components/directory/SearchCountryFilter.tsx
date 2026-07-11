@@ -38,7 +38,7 @@ export default function SearchCountryFilter({
       <select
         value={current}
         onChange={(e) => onChange(e.target.value)}
-        className={`appearance-none pl-8 pr-8 py-1.5 rounded-full font-sans text-sm font-semibold cursor-pointer outline-none transition-all duration-300 ${
+        className={`appearance-none pl-8 pr-8 py-1.5 rounded-[2px] font-sans text-sm font-semibold cursor-pointer outline-none transition-all duration-300 ${
           current
             ? "bg-primary text-white"
             : "bg-surface-low text-on-surface-variant hover:bg-secondary-container"

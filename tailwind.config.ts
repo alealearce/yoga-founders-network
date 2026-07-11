@@ -1,22 +1,31 @@
 /**
  * tailwind.config.ts — Yoga Founders Network
- * Design System: "The Digital Atrium"
+ * Design System: "The Warm Register"
  * Colors must stay in sync with COLORS in lib/config/site.ts
+ *
+ * Rules of the system:
+ * - Warm paper ground, warm ink text, one turmeric accent (line + text only).
+ * - Radius is 2px on everything; pills are reserved for the verification stamp
+ *   and circular icons (rounded-full).
+ * - No elevation: the shadow tokens render as 1px hairline rings so legacy
+ *   `shadow-card` / `shadow-float` usage reads as bordered, not floating.
  */
 import type { Config } from "tailwindcss";
 
-// ── Brand Colors (Black & White palette) ────────────────────────────────────
-const BG                    = "#ffffff"  // Pure white background
-const SURFACE_LOW           = "#f5f5f5"  // Secondary sectioning
-const SURFACE_LOWEST        = "#ffffff"  // Interactive cards
-const PRIMARY               = "#111111"  // Near-black — primary actions
-const PRIMARY_CONTAINER     = "#333333"  // Hover state
-const ON_PRIMARY            = "#ffffff"  // Text on primary
-const SECONDARY_CONTAINER   = "#e8e8e8"  // Secondary buttons
-const ON_SURFACE            = "#111111"  // High-contrast text
-const ON_SURFACE_VARIANT    = "#555555"  // Secondary text
-const OUTLINE_VARIANT       = "#d0d0d0"  // Ghost borders
-const SURFACE_HIGHEST       = "#f0f0f0"  // Input backgrounds
+// ── Brand Colors (Warm Register palette) ────────────────────────────────────
+const BG                    = "#FAF6EF"  // Warm paper background
+const SURFACE_LOW           = "#F3EDE0"  // Secondary sectioning
+const SURFACE_LOWEST        = "#FFFDF8"  // Raised cards
+const PRIMARY               = "#231E17"  // Warm ink — primary actions
+const PRIMARY_CONTAINER     = "#3A322A"  // Hover state
+const ON_PRIMARY            = "#FAF6EF"  // Text on primary
+const SECONDARY_CONTAINER   = "#EAE1CF"  // Secondary buttons
+const ON_SURFACE            = "#231E17"  // High-contrast text
+const ON_SURFACE_VARIANT    = "#75695A"  // Secondary text
+const OUTLINE_VARIANT       = "#E5DCCB"  // Hairlines
+const SURFACE_HIGHEST       = "#F3EDE0"  // Input backgrounds
+const ACCENT                = "#A2620F"  // Turmeric — lines & large text
+const ACCENT_TEXT           = "#8A530C"  // Turmeric, darkened for small text
 
 const config: Config = {
   content: [
@@ -36,29 +45,35 @@ const config: Config = {
           container: PRIMARY_CONTAINER,
           on:        ON_PRIMARY,
         },
+        accent: {
+          DEFAULT: ACCENT,
+          text:    ACCENT_TEXT,
+        },
         "secondary-container": SECONDARY_CONTAINER,
         "on-surface":         ON_SURFACE,
         "on-surface-variant": ON_SURFACE_VARIANT,
         "outline-variant":    OUTLINE_VARIANT,
       },
       fontFamily: {
-        serif: ["Noto Serif", "Georgia", "serif"],
-        sans:  ["Manrope", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
+        sans:  ["var(--font-sans)", "Manrope", "system-ui", "sans-serif"],
       },
       fontSize: {
-        "display-lg": ["3.5rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
-        "display-md": ["2.75rem", { lineHeight: "1.15", letterSpacing: "-0.015em" }],
-        "display-sm": ["2rem",   { lineHeight: "1.2",  letterSpacing: "-0.01em" }],
+        "display-lg": ["4.5rem",  { lineHeight: "1.04", letterSpacing: "-0.015em" }],
+        "display-md": ["3.25rem", { lineHeight: "1.08", letterSpacing: "-0.015em" }],
+        "display-sm": ["2.5rem",  { lineHeight: "1.12", letterSpacing: "-0.01em" }],
       },
+      // Legacy rounded-xl/2xl/3xl usage across the app all collapses to the
+      // system's 2px radius — sharp by token, no per-file sweep needed.
       borderRadius: {
-        "xl":   "1rem",
-        "2xl":  "1.5rem",
-        "3xl":  "2rem",
-        "full": "9999px",
+        "xl":   "2px",
+        "2xl":  "2px",
+        "3xl":  "2px",
       },
+      // Hairline rings, not elevation.
       boxShadow: {
-        "float": "0 0 40px 0 rgba(26, 28, 25, 0.04)",
-        "card":  "0 2px 20px 0 rgba(26, 28, 25, 0.06)",
+        "float": `0 0 0 1px #CDBFA6`,
+        "card":  `0 0 0 1px ${OUTLINE_VARIANT}`,
       },
       backdropBlur: {
         "glass": "16px",

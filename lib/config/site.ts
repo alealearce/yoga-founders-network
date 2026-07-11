@@ -5,16 +5,18 @@
 
 // ── Colors (must stay in sync with tailwind.config.ts) ──────────────────────
 export const COLORS = {
-  bg:               "#ffffff",
-  surfaceLow:       "#f5f5f5",
-  surfaceCard:      "#ffffff",
-  primary:          "#111111",
-  primaryContainer: "#333333",
-  onPrimary:        "#ffffff",
-  secondaryContainer: "#e8e8e8",
-  onSurface:        "#111111",
-  onSurfaceVariant: "#555555",
-  outlineVariant:   "#d0d0d0",
+  bg:               "#FAF6EF",
+  surfaceLow:       "#F3EDE0",
+  surfaceCard:      "#FFFDF8",
+  primary:          "#231E17",
+  primaryContainer: "#3A322A",
+  onPrimary:        "#FAF6EF",
+  secondaryContainer: "#EAE1CF",
+  onSurface:        "#231E17",
+  onSurfaceVariant: "#75695A",
+  outlineVariant:   "#E5DCCB",
+  accent:           "#A2620F",
+  accentText:       "#8A530C",
 } as const;
 
 // ── Site Identity ────────────────────────────────────────────────────────────
@@ -75,16 +77,18 @@ export const CHATBOT = {
 // ── Homepage Copy ────────────────────────────────────────────────────────────
 export const COPY = {
   hero: {
-    headline:    "The space to\nbreathe.",
-    subheadline: "Discover yoga studios, teachers, retreats, and schools from around the world. Your global yoga community starts here.",
-    cta:         "Find Your Practice",
-    ctaSecondary:"List Your Space",
+    // headlineAccent renders as the italic turmeric line after the headline.
+    headline:       "A register of the world's yoga spaces,",
+    headlineAccent: "kept by people who practice.",
+    subheadline: "Studios, teachers, schools, and retreats — every entry reviewed by a human before it appears here. No pay-to-rank. No listings we wouldn't visit ourselves.",
+    cta:         "Find your practice",
+    ctaSecondary:"List your space",
   },
-  searchPlaceholder: "Search studios, teachers, retreats...",
+  searchPlaceholder: "Vinyasa in Lisbon, teacher training in Bali…",
   featuredSection: {
-    title:    "Our favourites this month",
+    title:    "Recently verified",
     subtitle: "Hand-picked studios, teachers, and retreats the community is loving right now.",
-    cta:      "Discover more",
+    cta:      "All studios",
   },
   communitySection: {
     title:    "The Journal",
@@ -92,9 +96,10 @@ export const COPY = {
     cta:      "Read the Journal",
   },
   submitCta: {
-    title:    "Are you a yoga founder?",
-    subtitle: "Join the community of verified studios, teachers, and schools already in our directory.",
-    cta:      "Submit Your Listing — It's Free!",
+    title:       "Your space belongs",
+    titleAccent: "in the register.",
+    subtitle: "Listing is free. A real person reviews every submission — most are live within two days, with a verification mark your students can trust.",
+    cta:      "List your space — free",
   },
   footer: {
     tagline: "Helping Yoga grow its Impact in Society",

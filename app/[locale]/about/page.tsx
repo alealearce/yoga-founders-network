@@ -68,7 +68,7 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
       />
       {/* Hero — Mission Statement */}
-      <section className="pt-32 pb-20 bg-white border-b border-outline-variant/20">
+      <section className="pt-32 pb-20 bg-surface-card border-b border-outline-variant/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
           <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-8">
             Our Mission
@@ -84,7 +84,7 @@ export default function AboutPage() {
       </section>
 
       {/* Why We Exist */}
-      <section className="py-20 lg:py-28 bg-[#ffffff]">
+      <section className="py-20 lg:py-28 bg-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
@@ -144,7 +144,7 @@ export default function AboutPage() {
               },
             ].map(item => (
               <div key={item.title} className="bg-surface-card rounded-2xl p-8">
-                <h3 className="font-serif text-xl font-bold text-on-surface mb-3">
+                <h3 className="font-serif text-xl text-on-surface mb-3">
                   {item.title}
                 </h3>
                 <p className="font-sans text-sm text-on-surface-variant leading-relaxed">
@@ -157,7 +157,7 @@ export default function AboutPage() {
       </section>
 
       {/* Core Values */}
-      <section className="py-20 lg:py-28 bg-[#ffffff]">
+      <section className="py-20 lg:py-28 bg-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
             <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">
@@ -171,7 +171,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
             {CORE_VALUES.map(value => (
               <div key={value.title} className="rounded-2xl p-8 border border-on-surface/20">
-                <h3 className="font-serif text-xl font-bold text-on-surface mb-3">
+                <h3 className="font-serif text-xl text-on-surface mb-3">
                   {value.title}
                 </h3>
                 <p className="font-sans text-sm text-on-surface-variant leading-relaxed">
@@ -225,7 +225,7 @@ export default function AboutPage() {
       {/* CTA */}
       <section
         className="py-20 lg:py-28"
-        style={{ background: "#111111" }}
+        style={{ background: "#231E17" }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
           <h2 className="font-serif text-display-sm text-white mb-4">
@@ -236,7 +236,7 @@ export default function AboutPage() {
           </p>
           <Link
             href="/submit"
-            className="inline-flex px-8 py-4 rounded-full font-sans text-base font-semibold bg-white text-[#111111] hover:bg-white/90 transition-all duration-400"
+            className="inline-flex px-8 py-4 rounded-[2px] font-sans text-base font-semibold bg-surface-card text-primary hover:bg-surface-card/90 transition-all duration-400"
           >
             Submit Your Listing
           </Link>

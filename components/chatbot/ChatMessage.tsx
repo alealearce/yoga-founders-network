@@ -17,7 +17,7 @@ export function ChatMessage({ role, content }: Props) {
       {/* Lotus avatar — only for assistant */}
       {!isUser && (
         <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-base"
-          style={{ background: "#111111" }}>
+          style={{ background: "#231E17" }}>
           🪷
         </div>
       )}
@@ -30,7 +30,7 @@ export function ChatMessage({ role, content }: Props) {
         }`}
         style={
           isUser
-            ? { background: "#111111" }
+            ? { background: "#231E17" }
             : undefined
         }
       >

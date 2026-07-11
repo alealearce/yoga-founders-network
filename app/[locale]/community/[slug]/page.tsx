@@ -129,7 +129,7 @@ export default async function BlogPostPage({ params }: Props) {
       />
 
       {/* Back nav */}
-      <div className="pt-24 pb-4 bg-[#ffffff]">
+      <div className="pt-24 pb-4 bg-bg">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Link
             href="/community"
@@ -142,7 +142,7 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* Article */}
-      <article className="bg-[#ffffff]">
+      <article className="bg-bg">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 py-8">
 
           {/* Category + city tags */}
@@ -233,7 +233,7 @@ export default async function BlogPostPage({ params }: Props) {
             if (!dir) return null;
             return (
               <div className="mt-10 p-6 bg-surface-low rounded-2xl border border-outline-variant/10">
-                <p className="font-serif text-lg font-bold text-on-surface mb-1">
+                <p className="font-serif text-lg text-on-surface mb-1">
                   Looking for {dir.label}?
                 </p>
                 <p className="font-sans text-sm text-on-surface-variant mb-4">
@@ -263,7 +263,7 @@ export default async function BlogPostPage({ params }: Props) {
                 <Link
                   key={p.id}
                   href={`/community/${p.slug}`}
-                  className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 hover:-translate-y-1"
+                  className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400"
                 >
                   <div className="relative h-48 bg-surface-low overflow-hidden">
                     {p.cover_image ? (
@@ -273,14 +273,14 @@ export default async function BlogPostPage({ params }: Props) {
                         alt={p.title}
                         loading="lazy"
                         decoding="async"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[600ms]"
+                        className="w-full h-full object-cover transition-transform duration-[600ms]"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-4xl">🪷</div>
                     )}
                   </div>
                   <div className="p-5">
-                    <h3 className="font-serif text-lg font-bold text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug">
+                    <h3 className="font-serif text-lg text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug">
                       {p.title}
                     </h3>
                     <p className="font-sans text-xs text-on-surface-variant mt-2">

@@ -34,7 +34,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#ffffff] flex items-center justify-center px-6 py-24">
+    <div className="min-h-screen bg-bg flex items-center justify-center px-6 py-24">
       <div className="w-full max-w-md">
 
         {/* Logo / Brand */}
@@ -110,8 +110,8 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="w-full py-3.5 rounded-full font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
-              style={{ background: "#111111" }}
+              className="w-full py-3.5 rounded-[2px] font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{ background: "#231E17" }}
             >
               {status === "loading" ? (
                 <span className="flex items-center justify-center gap-3">

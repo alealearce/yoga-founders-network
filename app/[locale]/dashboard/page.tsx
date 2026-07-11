@@ -42,7 +42,7 @@ export default async function DashboardPage() {
   >[];
 
   return (
-    <div className="min-h-screen bg-[#ffffff] px-6 py-16">
+    <div className="min-h-screen bg-bg px-6 py-16">
       <div className="max-w-4xl mx-auto">
 
         {/* Page header */}
@@ -57,8 +57,8 @@ export default async function DashboardPage() {
           </div>
           <Link
             href="/submit"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90 whitespace-nowrap"
-            style={{ background: "#111111" }}
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[2px] font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90 whitespace-nowrap"
+            style={{ background: "#231E17" }}
           >
             + Submit New Listing
           </Link>
@@ -77,8 +77,8 @@ export default async function DashboardPage() {
             </p>
             <Link
               href="/submit"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
-              style={{ background: "#111111" }}
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-[2px] font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
+              style={{ background: "#231E17" }}
             >
               Submit Your Listing
             </Link>
@@ -140,7 +140,7 @@ export default async function DashboardPage() {
                   )}
                   <Link
                     href={`/dashboard/edit/${listing.slug}`}
-                    className="inline-flex items-center justify-center px-5 py-2 rounded-full font-sans text-sm font-semibold bg-secondary-container text-primary hover:bg-secondary-container/80 transition-all duration-300"
+                    className="inline-flex items-center justify-center px-5 py-2 rounded-[2px] font-sans text-sm font-semibold bg-secondary-container text-primary hover:bg-secondary-container/80 transition-all duration-300"
                   >
                     Edit
                   </Link>

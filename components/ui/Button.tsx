@@ -44,7 +44,7 @@ export default function Button({
   rel,
 }: ButtonProps) {
   const base = cn(
-    "inline-flex items-center justify-center gap-2 rounded-full font-sans font-semibold",
+    "inline-flex items-center justify-center gap-2 rounded-[2px] font-sans font-semibold",
     "transition-all duration-400 cursor-pointer select-none",
     variantClasses[variant],
     sizeClasses[size],
@@ -54,7 +54,7 @@ export default function Button({
 
   const inlineStyle =
     variant === "primary"
-      ? { background: "#111111" }
+      ? { background: "#231E17" }
       : undefined;
 
   const content = loading ? (

@@ -73,8 +73,8 @@ export function ChatWidget() {
         <button
           onClick={() => setOpen(true)}
           aria-label={`Open ${CHATBOT.name} chat`}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full font-sans font-semibold text-sm text-white shadow-float hover:opacity-90 transition-all duration-300"
-          style={{ background: "#111111" }}
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-[2px] font-sans font-semibold text-sm text-white shadow-float hover:opacity-90 transition-all duration-300"
+          style={{ background: "#231E17" }}
         >
           <span>Ask Lotus</span>
         </button>
@@ -89,10 +89,10 @@ export function ChatWidget() {
           {/* Header */}
           <div
             className="flex items-center justify-between px-5 py-4 flex-shrink-0"
-            style={{ background: "#111111" }}
+            style={{ background: "#231E17" }}
           >
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+              <div className="w-9 h-9 rounded-full bg-surface-card/20 flex items-center justify-center flex-shrink-0">
                 <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 2C9 5 7 8 7 11c0 2.76 2.24 5 5 5s5-2.24 5-5c0-3-2-6-5-9zm0 12c-1.65 0-3-1.35-3-3 0-1.8.9-3.6 3-6 2.1 2.4 3 4.2 3 6 0 1.65-1.35 3-3 3z"/>
                   <path d="M2 12c1.5 1 3 1.5 5 1.5S10 13 12 12c-2-1-4-1.5-5-1.5S3 11 2 12z" opacity="0.6"/>
@@ -128,7 +128,7 @@ export function ChatWidget() {
               <div className="flex items-end gap-2">
                 <div
                   className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-base"
-                  style={{ background: "#111111" }}
+                  style={{ background: "#231E17" }}
                 >
                   🪷
                 </div>

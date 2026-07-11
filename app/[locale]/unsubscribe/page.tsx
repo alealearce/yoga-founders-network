@@ -25,7 +25,7 @@ export default async function UnsubscribePage({
   }
 
   return (
-    <div className="min-h-screen bg-[#ffffff] flex items-center justify-center px-6 py-24">
+    <div className="min-h-screen bg-bg flex items-center justify-center px-6 py-24">
       <div className="text-center max-w-md">
         <div className="text-5xl mb-6">🍃</div>
 
@@ -66,8 +66,8 @@ export default async function UnsubscribePage({
 
         <Link
           href="/"
-          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
-          style={{ background: "#111111" }}
+          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-[2px] font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
+          style={{ background: "#231E17" }}
         >
           Return home
         </Link>

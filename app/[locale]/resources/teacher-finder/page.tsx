@@ -234,9 +234,9 @@ export default function TeacherFinderPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#ffffff]">
+    <div className="min-h-screen bg-bg">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#ffffff]">
+      <section className="pt-32 pb-16 bg-bg">
         <div className="max-w-3xl mx-auto px-6">
           <Link
             href="/resources"
@@ -345,7 +345,7 @@ export default function TeacherFinderPage() {
               disabled={!canSubmit}
               className="w-full rounded-full py-4 text-white font-semibold font-sans text-base transition-opacity disabled:opacity-40"
               style={{
-                background: "#111111",
+                background: "#231E17",
               }}
             >
               Find My Teacher Match
@@ -384,7 +384,7 @@ export default function TeacherFinderPage() {
 
                     <div className="flex items-start justify-between gap-4 mt-4">
                       <div>
-                        <h3 className="font-serif text-2xl font-bold text-on-surface">
+                        <h3 className="font-serif text-2xl text-on-surface">
                           {teacher.name}
                         </h3>
                         <p className="font-sans text-sm italic text-on-surface-variant mt-1">
@@ -461,7 +461,7 @@ export default function TeacherFinderPage() {
                 rel="noopener noreferrer"
                 className="inline-block rounded-full px-8 py-4 text-white font-semibold font-sans text-base"
                 style={{
-                  background: "#111111",
+                  background: "#231E17",
                 }}
               >
                 Book at One Yoga Vancouver

@@ -68,7 +68,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#ffffff] px-6 py-16">
+    <div className="min-h-screen bg-bg px-6 py-16">
       <div className="max-w-5xl mx-auto">
 
         {/* Header */}
@@ -121,12 +121,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             return (
               <Link
                 href={allHref}
-                className={`inline-flex items-center px-4 py-1.5 rounded-full font-sans text-sm font-semibold transition-all duration-300 ${
+                className={`inline-flex items-center px-4 py-1.5 rounded-[2px] font-sans text-sm font-semibold transition-all duration-300 ${
                   !typeFilter
                     ? "text-white"
                     : "bg-surface-low text-on-surface-variant hover:bg-secondary-container"
                 }`}
-                style={!typeFilter ? { background: "#111111" } : undefined}
+                style={!typeFilter ? { background: "#231E17" } : undefined}
               >
                 All
               </Link>
@@ -143,14 +143,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               <Link
                 key={t.id}
                 href={href}
-                className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-sans text-sm font-semibold transition-all duration-300 ${
+                className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-[2px] font-sans text-sm font-semibold transition-all duration-300 ${
                   isActive
                     ? "text-white"
                     : "bg-surface-low text-on-surface-variant hover:bg-secondary-container"
                 }`}
                 style={
                   isActive
-                    ? { background: "#111111" }
+                    ? { background: "#231E17" }
                     : undefined
                 }
               >
@@ -183,8 +183,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             </p>
             <Link
               href="/"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
-              style={{ background: "#111111" }}
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-[2px] font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
+              style={{ background: "#231E17" }}
             >
               Explore all listings
             </Link>
