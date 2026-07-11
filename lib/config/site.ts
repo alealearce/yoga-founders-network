@@ -78,7 +78,7 @@ export const CHATBOT = {
 export const COPY = {
   hero: {
     // headlineAccent renders as the italic turmeric line after the headline.
-    headline:       "A register of the world's yoga spaces,",
+    headline:       "A network of the world's yoga spaces,",
     headlineAccent: "kept by people who practice.",
     subheadline: "Studios, teachers, schools, and retreats — every entry reviewed by a human before it appears here. No pay-to-rank. No listings we wouldn't visit ourselves.",
     cta:         "Find your practice",
@@ -97,7 +97,7 @@ export const COPY = {
   },
   submitCta: {
     title:       "Your space belongs",
-    titleAccent: "in the register.",
+    titleAccent: "in the network.",
     subtitle: "Listing is free. A real person reviews every submission — most are live within two days, with a verification mark your students can trust.",
     cta:      "List your space — free",
   },

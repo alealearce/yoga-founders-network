@@ -80,7 +80,7 @@ export default async function HomePage() {
                 The Directory
               </p>
               <h2 className="font-serif text-display-sm text-on-surface">
-                Browse the register
+                Browse the network
               </h2>
             </div>
             <Link
