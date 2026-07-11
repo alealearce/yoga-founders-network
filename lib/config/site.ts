@@ -78,8 +78,8 @@ export const CHATBOT = {
 export const COPY = {
   hero: {
     // headlineAccent renders as the italic turmeric line after the headline.
-    headline:       "A network of the world's yoga spaces,",
-    headlineAccent: "kept by people who practice.",
+    headline:       "A network of the world's yoga spaces",
+    headlineAccent: "and people.",
     subheadline: "Studios, teachers, schools, and retreats — every entry reviewed by a human before it appears here. No pay-to-rank. No listings we wouldn't visit ourselves.",
     cta:         "Find your practice",
     ctaSecondary:"List your space",
