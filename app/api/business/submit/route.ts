@@ -22,6 +22,7 @@ const SubmitSchema = z.object({
   social_instagram: z.string().max(300).optional().or(z.literal('')),
   social_facebook:  z.string().max(300).optional().or(z.literal('')),
   social_youtube:   z.string().max(300).optional().or(z.literal('')),
+  social_tiktok:    z.string().max(300).optional().or(z.literal('')),
 });
 
 // Only accept photo URLs that came from our own storage bucket.
@@ -32,12 +33,13 @@ function isOwnStorageUrl(url: string): boolean {
 
 // Accept full URLs or bare handles ("@mystudio" / "mystudio") and normalize
 // to a URL, since the listing page renders these as plain hrefs.
-function normalizeSocial(input: string | undefined, kind: 'instagram' | 'facebook' | 'youtube'): string | null {
+function normalizeSocial(input: string | undefined, kind: 'instagram' | 'facebook' | 'youtube' | 'tiktok'): string | null {
   const v = input?.trim();
   if (!v) return null;
   if (/^https?:\/\//i.test(v)) return v;
   const handle = v.replace(/^@/, '').replace(/^\/+/, '');
   if (kind === 'youtube') return `https://youtube.com/@${handle}`;
+  if (kind === 'tiktok')  return `https://tiktok.com/@${handle}`;
   return `https://${kind}.com/${handle}`;
 }
 
@@ -70,7 +72,7 @@ export async function POST(req: NextRequest) {
       name, type, email, website, phone, address,
       city, country, description, yoga_styles, languages, tagline,
       yoga_alliance_id, images, price_range,
-      social_instagram, social_facebook, social_youtube,
+      social_instagram, social_facebook, social_youtube, social_tiktok,
     } = parsed.data;
 
     const supabase = createAdminClient();
@@ -102,6 +104,7 @@ export async function POST(req: NextRequest) {
       social_instagram: normalizeSocial(social_instagram, 'instagram'),
       social_facebook:  normalizeSocial(social_facebook,  'facebook'),
       social_youtube:   normalizeSocial(social_youtube,   'youtube'),
+      social_tiktok:    normalizeSocial(social_tiktok,    'tiktok'),
     });
 
     if (insertError) {

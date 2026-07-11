@@ -36,6 +36,7 @@ const INITIAL = {
   social_instagram:  "",
   social_facebook:   "",
   social_youtube:    "",
+  social_tiktok:     "",
   notes:             "",
 };
 
@@ -381,7 +382,7 @@ export default function SubmitPage() {
                 </p>
               </div>
 
-              <div className="grid sm:grid-cols-3 gap-5">
+              <div className="grid sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
                     Instagram
@@ -415,6 +416,18 @@ export default function SubmitPage() {
                     value={form.social_youtube}
                     onChange={e => setForm(f => ({ ...f, social_youtube: e.target.value }))}
                     placeholder="@yourchannel"
+                    className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                    TikTok
+                  </label>
+                  <input
+                    type="text"
+                    value={form.social_tiktok}
+                    onChange={e => setForm(f => ({ ...f, social_tiktok: e.target.value }))}
+                    placeholder="@yourstudio"
                     className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                 </div>
