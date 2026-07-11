@@ -140,7 +140,7 @@ export default function AboutPage() {
               </p>
               <div className="space-y-4 font-sans text-base text-on-surface-variant leading-relaxed">
                 <p>
-                  I ran an online yoga studio in the past — content production, customer service, marketing, payments, the tech stack. Building something good and getting it found are two completely different problems. That’s why we’re building Yoga Founders.
+                  I ran an online yoga studio in the past — content production, customer service, marketing, payments, the tech stack. Building something good and getting it found are two completely different problems. That’s why we’re building Yoga Founders, to help yoga communities be found.
                 </p>
               </div>
             </div>
