@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { ImagePlus, X } from "lucide-react";
 import { LISTING_TYPES } from "@/lib/config/site";
 import { YOGA_CATEGORIES, SCHOOL_CERTIFICATIONS, PRODUCT_CATEGORIES, LISTING_LANGUAGES } from "@/lib/config/categories";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
@@ -8,11 +9,21 @@ import CountrySelect from "@/components/ui/CountrySelect";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
+const MAX_PHOTOS = 6;
+
+const PRICE_RANGES = [
+  { value: "$",   label: "$ — budget-friendly" },
+  { value: "$$",  label: "$$ — mid-range" },
+  { value: "$$$", label: "$$$ — premium" },
+];
+
 const INITIAL = {
   name:              "",
   type:              "",
   email:             "",
   website:           "",
+  phone:             "",
+  address:           "",
   city:              "",
   country:           "",
   description:       "",
@@ -20,6 +31,11 @@ const INITIAL = {
   experience_levels: [] as string[],
   languages:         [] as string[],
   yoga_alliance_id:  "",
+  images:            [] as string[],
+  price_range:       "",
+  social_instagram:  "",
+  social_facebook:   "",
+  social_youtube:    "",
   notes:             "",
 };
 
@@ -27,6 +43,43 @@ export default function SubmitPage() {
   const [form,    setForm]    = useState(INITIAL);
   const [status,  setStatus]  = useState<FormState>("idle");
   const [message, setMessage] = useState("");
+  const [uploading,   setUploading]   = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotos = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploadError("");
+    const room = MAX_PHOTOS - form.images.length;
+    const batch = Array.from(files).slice(0, room);
+    if (batch.length === 0) {
+      setUploadError(`You can add up to ${MAX_PHOTOS} photos.`);
+      return;
+    }
+    setUploading(true);
+    try {
+      for (const file of batch) {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res  = await fetch("/api/business/upload-photo", { method: "POST", body: fd });
+        const data = await res.json();
+        if (!res.ok) {
+          setUploadError(data.error ?? "Upload failed. Please try again.");
+          continue;
+        }
+        setForm(f => ({ ...f, images: [...f.images, data.url].slice(0, MAX_PHOTOS) }));
+      }
+    } catch {
+      setUploadError("Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const removePhoto = (url: string) => {
+    setForm(f => ({ ...f, images: f.images.filter(u => u !== url) }));
+  };
 
   const toggle = (style: string) => {
     setForm(f => ({
@@ -248,6 +301,181 @@ export default function SubmitPage() {
                   placeholder="Describe your studio, teaching style, what makes you unique, who your students are..."
                   className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
                 />
+              </div>
+            </div>
+
+            {/* Photos */}
+            <div className="bg-surface-card rounded-2xl p-8">
+              <h2 className="font-serif text-xl text-on-surface mb-2">
+                Photos
+              </h2>
+              <p className="font-sans text-sm text-on-surface-variant mb-6">
+                Add up to {MAX_PHOTOS} photos of your space, classes, or work — the first one becomes your cover image. Listings with photos get far more attention.
+              </p>
+
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                {form.images.map((url, i) => (
+                  <div key={url} className="relative aspect-square rounded-[2px] overflow-hidden border border-outline-variant group">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                    {i === 0 && (
+                      <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded-[2px] bg-primary text-primary-on font-sans text-[9px] font-extrabold tracking-[0.1em] uppercase">
+                        Cover
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(url)}
+                      aria-label={`Remove photo ${i + 1}`}
+                      className="absolute top-1 right-1 p-1 rounded-full bg-primary/80 text-primary-on hover:bg-primary transition-colors"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
+
+                {form.images.length < MAX_PHOTOS && (
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className="aspect-square rounded-[2px] border border-dashed border-outline-variant flex flex-col items-center justify-center gap-1.5 text-on-surface-variant hover:border-primary hover:text-on-surface transition-colors disabled:opacity-60"
+                  >
+                    {uploading ? (
+                      <span className="w-5 h-5 border-2 border-on-surface-variant border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <ImagePlus size={20} />
+                        <span className="font-sans text-[11px] font-semibold">Add photo</span>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                className="hidden"
+                onChange={e => handlePhotos(e.target.files)}
+              />
+
+              {uploadError && (
+                <p className="font-sans text-sm text-red-700 mt-4">{uploadError}</p>
+              )}
+              <p className="font-sans text-xs text-on-surface-variant/60 mt-4">
+                JPEG, PNG, or WebP — up to 5 MB each.
+              </p>
+            </div>
+
+            {/* Social Media */}
+            <div className="bg-surface-card rounded-2xl p-8 space-y-6">
+              <div>
+                <h2 className="font-serif text-xl text-on-surface mb-2">
+                  Social Media
+                </h2>
+                <p className="font-sans text-sm text-on-surface-variant">
+                  Where can students follow you? Paste a link or just your handle — these appear on your listing.
+                </p>
+              </div>
+
+              <div className="grid sm:grid-cols-3 gap-5">
+                <div>
+                  <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                    Instagram
+                  </label>
+                  <input
+                    type="text"
+                    value={form.social_instagram}
+                    onChange={e => setForm(f => ({ ...f, social_instagram: e.target.value }))}
+                    placeholder="@yourstudio"
+                    className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                    Facebook
+                  </label>
+                  <input
+                    type="text"
+                    value={form.social_facebook}
+                    onChange={e => setForm(f => ({ ...f, social_facebook: e.target.value }))}
+                    placeholder="facebook.com/yourstudio"
+                    className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                    YouTube
+                  </label>
+                  <input
+                    type="text"
+                    value={form.social_youtube}
+                    onChange={e => setForm(f => ({ ...f, social_youtube: e.target.value }))}
+                    placeholder="@yourchannel"
+                    className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Helpful Details */}
+            <div className="bg-surface-card rounded-2xl p-8 space-y-6">
+              <div>
+                <h2 className="font-serif text-xl text-on-surface mb-2">
+                  Helpful Details
+                </h2>
+                <p className="font-sans text-sm text-on-surface-variant">
+                  Optional, but they help students choose — all of this shows on your listing.
+                </p>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={form.phone}
+                    onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                    placeholder="+1 604 555 0123"
+                    className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                    Price Range
+                  </label>
+                  <select
+                    value={form.price_range}
+                    onChange={e => setForm(f => ({ ...f, price_range: e.target.value }))}
+                    className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer"
+                  >
+                    <option value="">Prefer not to say</option>
+                    {PRICE_RANGES.map(p => (
+                      <option key={p.value} value={p.value}>{p.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
+                  Street Address
+                </label>
+                <input
+                  type="text"
+                  value={form.address}
+                  onChange={e => setForm(f => ({ ...f, address: e.target.value }))}
+                  placeholder="123 Main Street, Suite 4"
+                  className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                />
+                <p className="font-sans text-xs text-on-surface-variant/60 mt-2">
+                  Shown on your listing so students can find you. Leave blank if you teach online or prefer not to share it.
+                </p>
               </div>
             </div>
 

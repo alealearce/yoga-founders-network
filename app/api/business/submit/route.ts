@@ -9,6 +9,7 @@ const SubmitSchema = z.object({
   email:       z.string().email(),
   website:     z.string().url().optional().or(z.literal('')),
   phone:       z.string().max(30).optional(),
+  address:     z.string().max(200).optional().or(z.literal('')),
   city:        z.string().min(2).max(100),
   country:     z.string().min(2).max(100),
   description: z.string().max(2000).optional(),
@@ -16,7 +17,29 @@ const SubmitSchema = z.object({
   languages:   z.array(z.string().max(40)).max(20).optional(),
   tagline:     z.string().max(200).optional(),
   yoga_alliance_id: z.string().max(60).optional().or(z.literal('')),
+  images:      z.array(z.string().url().max(500)).max(6).optional(),
+  price_range: z.enum(['$', '$$', '$$$']).optional().or(z.literal('')),
+  social_instagram: z.string().max(300).optional().or(z.literal('')),
+  social_facebook:  z.string().max(300).optional().or(z.literal('')),
+  social_youtube:   z.string().max(300).optional().or(z.literal('')),
 });
+
+// Only accept photo URLs that came from our own storage bucket.
+function isOwnStorageUrl(url: string): boolean {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  return !!base && url.startsWith(`${base}/storage/v1/object/public/listing-images/`);
+}
+
+// Accept full URLs or bare handles ("@mystudio" / "mystudio") and normalize
+// to a URL, since the listing page renders these as plain hrefs.
+function normalizeSocial(input: string | undefined, kind: 'instagram' | 'facebook' | 'youtube'): string | null {
+  const v = input?.trim();
+  if (!v) return null;
+  if (/^https?:\/\//i.test(v)) return v;
+  const handle = v.replace(/^@/, '').replace(/^\/+/, '');
+  if (kind === 'youtube') return `https://youtube.com/@${handle}`;
+  return `https://${kind}.com/${handle}`;
+}
 
 function slugify(name: string, city: string): string {
   const base = `${name}-${city}`
@@ -44,9 +67,10 @@ export async function POST(req: NextRequest) {
     }
 
     const {
-      name, type, email, website, phone,
+      name, type, email, website, phone, address,
       city, country, description, yoga_styles, languages, tagline,
-      yoga_alliance_id,
+      yoga_alliance_id, images, price_range,
+      social_instagram, social_facebook, social_youtube,
     } = parsed.data;
 
     const supabase = createAdminClient();
@@ -59,6 +83,7 @@ export async function POST(req: NextRequest) {
       email,
       website:       website  || null,
       phone:         phone    || null,
+      address:       address  || null,
       city:          city,
       country:       country  || null,
       description:   description || null,
@@ -68,11 +93,15 @@ export async function POST(req: NextRequest) {
       is_featured:   false,
       is_verified:   false,
       owner_id:      null,
-      images:        [],
+      images:        (images ?? []).filter(isOwnStorageUrl),
       experience_levels: [],
       languages:     languages ?? [],
       plan:          'free',
       yoga_alliance_id: yoga_alliance_id || null,
+      price_range:   price_range || null,
+      social_instagram: normalizeSocial(social_instagram, 'instagram'),
+      social_facebook:  normalizeSocial(social_facebook,  'facebook'),
+      social_youtube:   normalizeSocial(social_youtube,   'youtube'),
     });
 
     if (insertError) {
