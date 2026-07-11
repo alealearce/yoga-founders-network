@@ -94,7 +94,7 @@ export default function CountrySelect({
       </button>
 
       {open && (
-        <div className="absolute z-30 mt-2 w-full rounded-xl bg-white shadow-float border border-outline-variant/30 overflow-hidden">
+        <div className="absolute z-30 mt-2 w-full rounded-xl bg-surface-card shadow-float border border-outline-variant/30 overflow-hidden">
           <div className="flex items-center gap-2 px-3 py-2 border-b border-outline-variant/20">
             <Search size={15} className="text-on-surface-variant/50 shrink-0" />
             <input

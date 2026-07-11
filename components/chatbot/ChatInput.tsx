@@ -40,7 +40,7 @@ export function ChatInput({ onSend, disabled }: Props) {
         disabled={disabled}
         aria-label="Send message"
         className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full text-white transition-all duration-300 hover:opacity-90 disabled:opacity-40"
-        style={{ background: "#111111" }}
+        style={{ background: "#231E17" }}
       >
         <Send className="w-4 h-4" />
       </button>

@@ -1045,9 +1045,9 @@ export default function ClassThemeGeneratorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#ffffff]">
+    <div className="min-h-screen bg-bg">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#ffffff]">
+      <section className="pt-32 pb-16 bg-bg">
         <div className="max-w-3xl mx-auto px-4">
           <Link
             href="/resources"
@@ -1172,7 +1172,7 @@ export default function ClassThemeGeneratorPage() {
             onClick={handleGenerate}
             className="w-full py-4 rounded-full text-white font-semibold font-sans text-base transition-opacity hover:opacity-90 active:opacity-80"
             style={{
-              background: "#111111",
+              background: "#231E17",
             }}
           >
             Generate Class Theme
@@ -1186,7 +1186,7 @@ export default function ClassThemeGeneratorPage() {
               <div
                 className="rounded-2xl p-8 text-white"
                 style={{
-                  background: "#111111",
+                  background: "#231E17",
                 }}
               >
                 <p className="font-sans text-xs font-bold tracking-widest uppercase opacity-70 mb-3">
@@ -1239,7 +1239,7 @@ export default function ClassThemeGeneratorPage() {
                     >
                       <span
                         className="text-xs font-bold font-sans rounded-full w-6 h-6 flex items-center justify-center text-white shrink-0"
-                        style={{ background: "#111111" }}
+                        style={{ background: "#231E17" }}
                       >
                         {i + 1}
                       </span>
@@ -1295,7 +1295,7 @@ export default function ClassThemeGeneratorPage() {
                   onClick={handleGenerateAnother}
                   className="flex-1 py-4 rounded-full text-white font-semibold font-sans text-base transition-opacity hover:opacity-90"
                   style={{
-                    background: "#111111",
+                    background: "#231E17",
                   }}
                 >
                   Generate Another Theme

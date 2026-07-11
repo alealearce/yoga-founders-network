@@ -48,7 +48,7 @@ export default async function ProductsPage() {
         total={total}
       />
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#ffffff]">
+      <section className="pt-32 pb-16 bg-bg">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-2xl">
             <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-4">

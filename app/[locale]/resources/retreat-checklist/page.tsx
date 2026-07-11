@@ -143,7 +143,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
   const phase2: ChecklistPhase = {
     phase: "Phase 2",
     timeframe: "6–12 Months Before",
-    color: "#111111",
+    color: "#231E17",
     categories: [
       {
         name: "Booking & Contracts",
@@ -254,7 +254,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
   const phase4: ChecklistPhase = {
     phase: "Phase 4",
     timeframe: "1–3 Months Before",
-    color: "#111111",
+    color: "#231E17",
     categories: [
       {
         name: "Attendee Communications",
@@ -331,7 +331,7 @@ function generateChecklist(form: FormData): { phases: ChecklistPhase[]; proTips:
   const phase6: ChecklistPhase = {
     phase: "Phase 6",
     timeframe: "Day Before & During",
-    color: "#111111",
+    color: "#231E17",
     categories: [
       {
         name: "Arrival & Setup",
@@ -610,9 +610,9 @@ export default function RetreatChecklistPage() {
   const totalProgress = showResults ? getTotalProgress() : { done: 0, total: 0 };
 
   return (
-    <div className="min-h-screen bg-[#ffffff]">
+    <div className="min-h-screen bg-bg">
       {/* Hero */}
-      <section className="pt-32 pb-12 bg-[#ffffff]">
+      <section className="pt-32 pb-12 bg-bg">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Link
             href="/resources"
@@ -828,8 +828,8 @@ export default function RetreatChecklistPage() {
           <button
             onClick={handleGenerate}
             disabled={!isFormValid}
-            className="w-full py-4 rounded-full font-sans font-semibold text-white text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.99]"
-            style={{ background: "#111111" }}
+            className="w-full py-4 rounded-[2px] font-sans font-semibold text-white text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.99]"
+            style={{ background: "#231E17" }}
           >
             Generate My Personalized Checklist
           </button>
@@ -875,7 +875,7 @@ export default function RetreatChecklistPage() {
                   className="h-2 rounded-full transition-all duration-500"
                   style={{
                     width: totalProgress.total > 0 ? `${(totalProgress.done / totalProgress.total) * 100}%` : "0%",
-                    background: "#111111",
+                    background: "#231E17",
                   }}
                 />
               </div>
@@ -906,17 +906,17 @@ export default function RetreatChecklistPage() {
                     >
                       <div
                         className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
-                        style={{ background: isComplete ? "#111111" : "#e8e8e8" }}
+                        style={{ background: isComplete ? "#231E17" : "#e8e8e8" }}
                       >
                         {isComplete ? (
                           <span className="text-white text-lg">✓</span>
                         ) : (
-                          <span className="font-serif text-base font-bold text-primary">{phaseIdx + 1}</span>
+                          <span className="font-serif text-base text-primary">{phaseIdx + 1}</span>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-sans text-xs font-bold text-primary/70 uppercase tracking-wider">{phase.phase}</p>
-                        <p className="font-serif text-base font-bold text-on-surface">{phase.timeframe}</p>
+                        <p className="font-serif text-base text-on-surface">{phase.timeframe}</p>
                         <div className="flex items-center gap-2 mt-1.5">
                           <div className="flex-1 max-w-[120px] bg-outline-variant/20 rounded-full h-1.5">
                             <div

@@ -48,7 +48,7 @@ export default function ReviewForm({ listingId, listingName }: ReviewFormProps) 
         <p className="font-sans text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">
           Leave a Review
         </p>
-        <h2 className="font-serif text-xl font-bold text-on-surface mb-1">
+        <h2 className="font-serif text-xl text-on-surface mb-1">
           Do you know {listingName}?
         </h2>
         <p className="font-sans text-sm text-on-surface-variant">
@@ -59,7 +59,7 @@ export default function ReviewForm({ listingId, listingName }: ReviewFormProps) 
       {status === "success" ? (
         <div className="py-6 text-center">
           <div className="text-3xl mb-3">🙏</div>
-          <p className="font-serif text-lg font-bold text-on-surface mb-1">Thank you!</p>
+          <p className="font-serif text-lg text-on-surface mb-1">Thank you!</p>
           <p className="font-sans text-sm text-on-surface-variant">{message}</p>
         </div>
       ) : (
@@ -134,8 +134,8 @@ export default function ReviewForm({ listingId, listingName }: ReviewFormProps) 
           <button
             type="submit"
             disabled={status === "loading"}
-            className="w-full py-3 rounded-full font-sans text-sm font-semibold text-white transition-all duration-300 hover:opacity-90 disabled:opacity-50"
-            style={{ background: "#111111" }}
+            className="w-full py-3 rounded-[2px] font-sans text-sm font-semibold text-white transition-all duration-300 hover:opacity-90 disabled:opacity-50"
+            style={{ background: "#231E17" }}
           >
             {status === "loading" ? "Submitting…" : "Submit Review"}
           </button>

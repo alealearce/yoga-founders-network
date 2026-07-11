@@ -2,7 +2,6 @@ import Link from "next/link";
 import { MapPin, BadgeCheck } from "lucide-react";
 import CoverImage from "@/components/ui/CoverImage";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
-import { cn } from "@/lib/utils/cn";
 import { getListingUrl } from "@/lib/utils/listingUrl";
 
 const POSES = ["seated", "tree", "warrior", "lotus", "child", "mountain"] as const;
@@ -35,9 +34,18 @@ interface ListingCardProps {
 }
 
 function formatDistance(km: number): string {
-  if (km < 1) return `${Math.round(km * 1000)} m away`;
-  if (km < 10) return `${km.toFixed(1)} km away`;
-  return `${Math.round(km)} km away`;
+  if (km < 1) return `${Math.round(km * 1000)} m away`;
+  if (km < 10) return `${km.toFixed(1)} km away`;
+  return `${Math.round(km)} km away`;
+}
+
+/** The verification stamp — the one pill in the system. */
+function VerifiedStamp() {
+  return (
+    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-accent-text bg-bg text-accent-text font-sans text-[10px] font-extrabold tracking-[0.14em] uppercase">
+      <BadgeCheck size={11} /> Verified
+    </span>
+  );
 }
 
 export default function ListingCard({
@@ -54,19 +62,19 @@ export default function ListingCard({
     return (
       <Link
         href={getListingUrl(type, slug)}
-        className="group flex items-start gap-5 p-4 rounded-2xl bg-surface-card hover:shadow-card transition-all duration-400"
+        className="group flex items-start gap-5 p-4 border border-outline-variant rounded-[2px] bg-bg hover:bg-surface-card transition-colors duration-300"
       >
         {/* Thumbnail */}
-        <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-surface-low">
+        <div className="relative w-24 h-24 rounded-[2px] overflow-hidden flex-shrink-0 bg-surface-low">
           {coverImage ? (
-            <CoverImage src={coverImage} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-400" />
+            <CoverImage src={coverImage} alt={name} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full bg-secondary-container/40 rounded-xl flex items-center justify-center">
-              <YogaSilhouette pose={pose} size={48} color="#1118" />
+            <div className="w-full h-full bg-secondary-container/50 flex items-center justify-center">
+              <YogaSilhouette pose={pose} size={48} color="#8C7B60" />
             </div>
           )}
           {is_verified && (
-            <div className="absolute top-1.5 left-1.5 bg-primary text-white rounded-full p-0.5">
+            <div className="absolute top-1.5 left-1.5 bg-bg border border-accent-text text-accent-text rounded-full p-0.5">
               <BadgeCheck size={12} />
             </div>
           )}
@@ -74,10 +82,10 @@ export default function ListingCard({
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <p className="font-sans text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-1">
+          <p className="font-sans text-[10px] font-extrabold tracking-[0.16em] text-on-surface-variant uppercase mb-1">
             {TYPE_LABELS[type] ?? type}
           </p>
-          <h3 className="font-serif text-lg font-bold text-on-surface group-hover:text-primary transition-colors duration-300 truncate">
+          <h3 className="font-serif text-xl text-on-surface group-hover:text-accent-text transition-colors duration-300 truncate">
             {name}
           </h3>
           {location && (
@@ -86,13 +94,9 @@ export default function ListingCard({
             </p>
           )}
           {yoga_styles && yoga_styles.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-2">
-              {yoga_styles.slice(0, 3).map(s => (
-                <span key={s} className="px-2 py-0.5 rounded-full bg-secondary-container font-sans text-xs text-primary font-medium">
-                  {s}
-                </span>
-              ))}
-            </div>
+            <p className="font-serif italic text-[15px] text-on-surface-variant mt-1.5 truncate">
+              {yoga_styles.slice(0, 3).join(" · ")}
+            </p>
           )}
         </div>
 
@@ -103,33 +107,32 @@ export default function ListingCard({
   return (
     <Link
       href={getListingUrl(type, slug)}
-      className="group block bg-surface-card rounded-2xl overflow-hidden hover:shadow-card transition-all duration-400 hover:-translate-y-1"
+      className="group block border border-outline-variant rounded-[2px] overflow-hidden bg-bg hover:bg-surface-card transition-colors duration-300"
     >
       {/* Cover Image */}
       <div className="relative h-52 bg-surface-low overflow-hidden">
         {coverImage ? (
-          <CoverImage src={coverImage} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[600ms]" />
+          <CoverImage src={coverImage} alt={name} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full bg-secondary-container/40 flex items-center justify-center">
-            <YogaSilhouette pose={pose} size={96} color="#11181a" />
+          <div className="w-full h-full bg-secondary-container/50 flex items-center justify-center">
+            <YogaSilhouette pose={pose} size={96} color="#8C7B60" />
           </div>
         )}
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex gap-2">
-          {is_featured && (
-            <span className="px-2.5 py-1 rounded-full bg-primary text-white font-sans text-xs font-bold tracking-wide">
-              Featured
-            </span>
-          )}
-          {is_verified && (
-            <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 text-primary font-sans text-xs font-bold">
-              <BadgeCheck size={11} /> Verified
-            </span>
-          )}
-        </div>
-        {/* Distance pill — top right of the image */}
+        {/* Featured label — quiet, top-left */}
+        {is_featured && (
+          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-[2px] bg-primary text-primary-on font-sans text-[10px] font-extrabold tracking-[0.14em] uppercase">
+            Featured
+          </span>
+        )}
+        {/* Verification stamp — top-right */}
+        {is_verified && (
+          <span className="absolute top-3 right-3">
+            <VerifiedStamp />
+          </span>
+        )}
+        {/* Distance — bottom-right of the image */}
         {typeof distance_km === "number" && (
-          <span className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 text-primary font-sans text-xs font-bold shadow-sm">
+          <span className="absolute bottom-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-[2px] bg-bg/95 text-on-surface font-sans text-xs font-bold">
             <MapPin size={11} /> {formatDistance(distance_km)}
           </span>
         )}
@@ -137,30 +140,30 @@ export default function ListingCard({
 
       {/* Content */}
       <div className="p-5">
-        <p className="font-sans text-xs font-bold tracking-widest text-on-surface-variant uppercase mb-2">
-          {TYPE_LABELS[type] ?? type}
-        </p>
-        <h3 className="font-serif text-xl font-bold text-on-surface group-hover:text-primary transition-colors duration-300 leading-tight mb-1">
+        {/* Type label with trailing hairline */}
+        <div className="flex items-center gap-3 mb-2.5">
+          <p className="font-sans text-[10px] font-extrabold tracking-[0.16em] text-on-surface-variant uppercase">
+            {TYPE_LABELS[type] ?? type}
+          </p>
+          <span className="h-px flex-1 bg-outline-variant" aria-hidden="true" />
+        </div>
+        <h3 className="font-serif text-[1.625rem] text-on-surface group-hover:text-accent-text transition-colors duration-300 leading-tight mb-1">
           {name}
         </h3>
-        {tagline && (
-          <p className="font-sans text-sm text-on-surface-variant leading-relaxed line-clamp-2 mb-3">
-            {tagline}
-          </p>
-        )}
         {location && (
-          <p className="flex items-center gap-1.5 font-sans text-xs text-on-surface-variant mb-3">
+          <p className="flex items-center gap-1.5 font-sans text-[13px] font-semibold text-on-surface-variant mb-2">
             <MapPin size={12} /> {location}
           </p>
         )}
+        {tagline && (
+          <p className="font-sans text-sm text-on-surface-variant leading-relaxed line-clamp-2 mb-2">
+            {tagline}
+          </p>
+        )}
         {yoga_styles && yoga_styles.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {yoga_styles.slice(0, 3).map(s => (
-              <span key={s} className="px-2.5 py-1 rounded-full bg-secondary-container font-sans text-xs text-primary font-medium">
-                {s}
-              </span>
-            ))}
-          </div>
+          <p className="font-serif italic text-[15px] text-on-surface-variant">
+            {yoga_styles.slice(0, 3).join(" · ")}
+          </p>
         )}
       </div>
     </Link>

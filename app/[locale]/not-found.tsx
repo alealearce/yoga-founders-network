@@ -14,7 +14,7 @@ const TYPE_PREFIXES: Record<string, string> = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#ffffff] px-6 py-24 flex items-center justify-center">
+    <div className="min-h-screen bg-bg px-6 py-24 flex items-center justify-center">
       <div className="max-w-2xl w-full">
         {/* Mark + 404 */}
         <div className="flex flex-col items-center text-center mb-12">
@@ -53,14 +53,14 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <Link
             href="/"
-            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
-            style={{ background: "#111111" }}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-[2px] font-sans font-semibold text-sm text-white transition-all duration-300 hover:opacity-90"
+            style={{ background: "#231E17" }}
           >
             Return home
           </Link>
           <Link
             href="/search"
-            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-sans font-semibold text-sm text-on-surface border border-outline-variant/40 hover:bg-surface-low transition-all duration-300"
+            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-[2px] font-sans font-semibold text-sm text-on-surface border border-outline-variant/40 hover:bg-surface-low transition-all duration-300"
           >
             Search the directory
           </Link>

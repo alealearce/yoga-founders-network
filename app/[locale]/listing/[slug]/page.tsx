@@ -96,7 +96,7 @@ export default async function ListingPage({ params }: Props) {
 
       {/* Hero — only when there's a real image; otherwise a slim brand band */}
       {coverImage ? (
-        <div className="pt-16 bg-[#ffffff]">
+        <div className="pt-16 bg-bg">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 pb-0">
             <div
               className="relative w-full overflow-hidden"
@@ -111,7 +111,7 @@ export default async function ListingPage({ params }: Props) {
           </div>
         </div>
       ) : (
-        <div className="pt-16 bg-[#ffffff]">
+        <div className="pt-16 bg-bg">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 pb-0">
             <div className="relative w-full overflow-hidden bg-secondary-container/40 flex items-center justify-center" style={{ height: "140px", borderRadius: "1.5rem 1.5rem 1.5rem 0" }}>
               <YogaSilhouette pose="tree" size={64} color="#1118" />
@@ -182,7 +182,7 @@ export default async function ListingPage({ params }: Props) {
             {/* Yoga Styles */}
             {listing.yoga_styles?.length > 0 && (
               <div>
-                <h2 className="font-serif text-xl font-bold text-on-surface mb-4">
+                <h2 className="font-serif text-xl text-on-surface mb-4">
                   Yoga Styles
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -201,7 +201,7 @@ export default async function ListingPage({ params }: Props) {
             {/* Description */}
             {(listing.long_description || listing.description) && (
               <div>
-                <h2 className="font-serif text-xl font-bold text-on-surface mb-4">
+                <h2 className="font-serif text-xl text-on-surface mb-4">
                   About
                 </h2>
                 <div className="prose prose-sm max-w-none text-on-surface-variant leading-relaxed font-sans">
@@ -251,7 +251,7 @@ export default async function ListingPage({ params }: Props) {
             {/* Reviews */}
             {reviews.length > 0 && (
               <div>
-                <h2 className="font-serif text-xl font-bold text-on-surface mb-6">
+                <h2 className="font-serif text-xl text-on-surface mb-6">
                   Reviews
                 </h2>
                 <div className="space-y-4">
@@ -270,7 +270,7 @@ export default async function ListingPage({ params }: Props) {
           <div className="space-y-6">
             {/* Contact Card */}
             <div className="bg-surface-card rounded-2xl shadow-card p-6 space-y-4">
-              <h3 className="font-serif text-lg font-bold text-on-surface">
+              <h3 className="font-serif text-lg text-on-surface">
                 Get in Touch
               </h3>
 
@@ -279,8 +279,8 @@ export default async function ListingPage({ params }: Props) {
                   href={listing.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 w-full px-5 py-3 rounded-full font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90"
-                  style={{ background: "#111111" }}
+                  className="flex items-center gap-3 w-full px-5 py-3 rounded-[2px] font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90"
+                  style={{ background: "#231E17" }}
                 >
                   <Globe size={14} />
                   Visit Website
@@ -290,7 +290,7 @@ export default async function ListingPage({ params }: Props) {
               {listing.email && (
                 <a
                   href={`mailto:${listing.email}`}
-                  className="flex items-center gap-3 w-full px-5 py-3 rounded-full font-sans text-sm font-semibold text-primary bg-secondary-container hover:bg-secondary-container/80 transition-all duration-400"
+                  className="flex items-center gap-3 w-full px-5 py-3 rounded-[2px] font-sans text-sm font-semibold text-primary bg-secondary-container hover:bg-secondary-container/80 transition-all duration-400"
                 >
                   <Mail size={14} />
                   Send Email
@@ -300,7 +300,7 @@ export default async function ListingPage({ params }: Props) {
               {listing.phone && (
                 <a
                   href={`tel:${listing.phone}`}
-                  className="flex items-center gap-3 w-full px-5 py-3 rounded-full font-sans text-sm font-medium text-on-surface-variant bg-surface-low hover:bg-secondary-container hover:text-primary transition-all duration-400"
+                  className="flex items-center gap-3 w-full px-5 py-3 rounded-[2px] font-sans text-sm font-medium text-on-surface-variant bg-surface-low hover:bg-secondary-container hover:text-primary transition-all duration-400"
                 >
                   <Phone size={14} />
                   {listing.phone}
@@ -310,7 +310,7 @@ export default async function ListingPage({ params }: Props) {
 
             {/* Details */}
             <div className="bg-surface-card rounded-2xl shadow-card p-6 space-y-4">
-              <h3 className="font-serif text-lg font-bold text-on-surface">
+              <h3 className="font-serif text-lg text-on-surface">
                 Details
               </h3>
 
@@ -339,7 +339,7 @@ export default async function ListingPage({ params }: Props) {
             {/* Claim — only when the listing is unowned */}
             {!listing.owner_id && (
               <div className="bg-surface-low rounded-2xl p-6 space-y-3">
-                <h3 className="font-serif text-sm font-bold text-on-surface">
+                <h3 className="font-serif text-sm text-on-surface">
                   Is this your listing?
                 </h3>
                 <p className="font-sans text-xs text-on-surface-variant leading-relaxed">
@@ -347,7 +347,7 @@ export default async function ListingPage({ params }: Props) {
                 </p>
                 <Link
                   href={`/claim/${listing.slug}`}
-                  className="inline-flex items-center justify-center w-full px-5 py-2.5 rounded-full font-sans text-xs font-semibold text-on-surface border border-outline-variant/40 hover:bg-surface-card transition-all duration-300"
+                  className="inline-flex items-center justify-center w-full px-5 py-2.5 rounded-[2px] font-sans text-xs font-semibold text-on-surface border border-outline-variant/40 hover:bg-surface-card transition-all duration-300"
                 >
                   Claim this listing
                 </Link>
@@ -357,7 +357,7 @@ export default async function ListingPage({ params }: Props) {
             {/* Social */}
             {(listing.social_instagram || listing.social_facebook || listing.social_youtube) && (
               <div className="bg-surface-card rounded-2xl shadow-card p-6">
-                <h3 className="font-serif text-lg font-bold text-on-surface mb-4">
+                <h3 className="font-serif text-lg text-on-surface mb-4">
                   Follow Along
                 </h3>
                 <div className="flex gap-3">
@@ -398,7 +398,7 @@ export default async function ListingPage({ params }: Props) {
             {/* Back link — canonical hub URL + keyword-rich anchor text */}
             <Link
               href={hub.url}
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-full font-sans text-sm text-on-surface-variant hover:text-on-surface bg-surface-low hover:bg-secondary-container transition-all duration-300"
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-[2px] font-sans text-sm text-on-surface-variant hover:text-on-surface bg-surface-low hover:bg-secondary-container transition-all duration-300"
             >
               ← {hub.label}
             </Link>

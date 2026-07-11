@@ -54,8 +54,8 @@ export default function Navbar() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-400",
           scrolled
-            ? "bg-[#ffffff]/90 backdrop-blur-[16px] shadow-[0_2px_20px_rgba(26,28,25,0.06)]"
-            : "bg-transparent"
+            ? "bg-[#FAF6EF]/90 backdrop-blur-[16px] border-b border-outline-variant"
+            : "bg-transparent border-b border-transparent"
         )}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -175,8 +175,7 @@ export default function Navbar() {
               )}
               <Link
                 href="/submit"
-                className="px-5 py-2 rounded-full font-sans text-sm font-semibold text-white transition-all duration-300 hover:opacity-90"
-                style={{ background: "#111111" }}
+                className="px-5 py-2 rounded-[2px] font-sans text-sm font-bold bg-primary text-primary-on transition-colors duration-300 hover:bg-accent"
               >
                 List Your Business — It&apos;s Free!
               </Link>
@@ -213,7 +212,7 @@ export default function Navbar() {
         {/* Panel */}
         <div
           className={cn(
-            "absolute top-0 right-0 h-full w-80 max-w-full bg-[#ffffff] shadow-float",
+            "absolute top-0 right-0 h-full w-80 max-w-full bg-bg border-l border-outline-variant",
             "transition-transform duration-400",
             mobileOpen ? "translate-x-0" : "translate-x-full"
           )}
@@ -249,15 +248,14 @@ export default function Navbar() {
               <Link
                 href={isAuthed ? "/dashboard" : "/login"}
                 onClick={() => setMobileOpen(false)}
-                className="text-center py-3 rounded-full font-sans text-sm font-semibold text-on-surface border border-outline-variant/40 hover:bg-surface-low transition-colors"
+                className="text-center py-3 rounded-[2px] font-sans text-sm font-bold text-on-surface border border-on-surface hover:bg-surface-low transition-colors"
               >
                 {isAuthed ? "Dashboard" : "Sign In"}
               </Link>
               <Link
                 href="/submit"
                 onClick={() => setMobileOpen(false)}
-                className="text-center py-3 rounded-full font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                style={{ background: "#111111" }}
+                className="text-center py-3 rounded-[2px] font-sans text-sm font-bold bg-primary text-primary-on transition-colors hover:bg-accent"
               >
                 List Your Space
               </Link>

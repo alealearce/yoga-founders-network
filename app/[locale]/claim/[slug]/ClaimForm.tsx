@@ -93,8 +93,8 @@ export default function ClaimForm({ slug, existingYaId, userEmail }: Props) {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full py-3.5 rounded-full font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
-        style={{ background: "#111111" }}
+        className="w-full py-3.5 rounded-[2px] font-sans text-sm font-semibold text-white transition-all duration-400 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+        style={{ background: "#231E17" }}
       >
         {status === "loading" ? "Submitting..." : "Submit claim"}
       </button>

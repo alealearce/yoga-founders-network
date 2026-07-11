@@ -119,14 +119,14 @@ export default function AdminClient({ pending: initialPending, all: initialAll }
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-5 py-2 rounded-full font-sans text-sm font-semibold transition-all duration-300 ${
+            className={`px-5 py-2 rounded-[2px] font-sans text-sm font-semibold transition-all duration-300 ${
               tab === t
                 ? "text-white"
                 : "bg-surface-low text-on-surface-variant hover:bg-secondary-container"
             }`}
             style={
               tab === t
-                ? { background: "#111111" }
+                ? { background: "#231E17" }
                 : undefined
             }
           >
@@ -196,21 +196,21 @@ export default function AdminClient({ pending: initialPending, all: initialAll }
                           <button
                             onClick={() => approve(listing.id)}
                             disabled={busy === listing.id}
-                            className="px-4 py-1.5 rounded-full font-sans text-xs font-semibold bg-green-100 text-green-700 hover:bg-green-200 transition-colors disabled:opacity-50"
+                            className="px-4 py-1.5 rounded-[2px] font-sans text-xs font-semibold bg-green-100 text-green-700 hover:bg-green-200 transition-colors disabled:opacity-50"
                           >
                             {busy === listing.id ? "..." : "Approve"}
                           </button>
                           <button
                             onClick={() => reject(listing.id)}
                             disabled={busy === listing.id}
-                            className="px-4 py-1.5 rounded-full font-sans text-xs font-semibold bg-red-100 text-red-600 hover:bg-red-200 transition-colors disabled:opacity-50"
+                            className="px-4 py-1.5 rounded-[2px] font-sans text-xs font-semibold bg-red-100 text-red-600 hover:bg-red-200 transition-colors disabled:opacity-50"
                           >
                             {busy === listing.id ? "..." : "Reject"}
                           </button>
                           <button
                             onClick={() => removeListing(listing.id, listing.name)}
                             disabled={busy === listing.id + "-delete"}
-                            className="px-4 py-1.5 rounded-full font-sans text-xs font-semibold bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100 transition-colors disabled:opacity-50"
+                            className="px-4 py-1.5 rounded-[2px] font-sans text-xs font-semibold bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100 transition-colors disabled:opacity-50"
                           >
                             {busy === listing.id + "-delete" ? "..." : "Delete"}
                           </button>
@@ -287,7 +287,7 @@ export default function AdminClient({ pending: initialPending, all: initialAll }
                       <button
                         onClick={() => toggleFeatured(listing.id, listing.is_featured)}
                         disabled={busy === listing.id + "-featured"}
-                        className={`px-3 py-1 rounded-full font-sans text-xs font-semibold transition-colors disabled:opacity-50 ${
+                        className={`px-3 py-1 rounded-[2px] font-sans text-xs font-semibold transition-colors disabled:opacity-50 ${
                           listing.is_featured
                             ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
                             : "bg-surface-low text-on-surface-variant hover:bg-secondary-container"
@@ -298,7 +298,7 @@ export default function AdminClient({ pending: initialPending, all: initialAll }
                       <button
                         onClick={() => toggleVerified(listing.id, listing.is_verified)}
                         disabled={busy === listing.id + "-verified"}
-                        className={`px-3 py-1 rounded-full font-sans text-xs font-semibold transition-colors disabled:opacity-50 ${
+                        className={`px-3 py-1 rounded-[2px] font-sans text-xs font-semibold transition-colors disabled:opacity-50 ${
                           listing.is_verified
                             ? "bg-primary/10 text-primary hover:bg-primary/20"
                             : "bg-surface-low text-on-surface-variant hover:bg-secondary-container"
@@ -309,7 +309,7 @@ export default function AdminClient({ pending: initialPending, all: initialAll }
                       <button
                         onClick={() => removeListing(listing.id, listing.name)}
                         disabled={busy === listing.id + "-delete"}
-                        className="px-3 py-1 rounded-full font-sans text-xs font-semibold bg-red-50 text-red-600 ring-1 ring-red-200 hover:bg-red-100 transition-colors disabled:opacity-50"
+                        className="px-3 py-1 rounded-[2px] font-sans text-xs font-semibold bg-red-50 text-red-600 ring-1 ring-red-200 hover:bg-red-100 transition-colors disabled:opacity-50"
                       >
                         {busy === listing.id + "-delete" ? "..." : "🗑 Delete"}
                       </button>

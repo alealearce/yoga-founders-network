@@ -28,7 +28,7 @@ export default async function ClaimPage({
   if (!listing) notFound();
 
   return (
-    <div className="min-h-screen bg-[#ffffff] px-6 py-24">
+    <div className="min-h-screen bg-bg px-6 py-24">
       <div className="max-w-xl mx-auto">
         <div className="mb-8">
           <p className="font-sans text-xs font-bold tracking-widest text-primary uppercase mb-3">
