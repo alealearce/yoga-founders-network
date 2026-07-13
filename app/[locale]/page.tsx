@@ -166,6 +166,29 @@ export default async function HomePage() {
               cta={{ label: "List Your Space", href: "/submit" }}
             />
           )}
+
+          {/* ── Member Spotlight banner ── */}
+          <div className="mt-12 border border-outline-variant rounded-[2px] px-6 py-8 sm:px-10 sm:py-9 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10">
+            <div className="flex-1">
+              <p className="font-sans text-xs font-bold tracking-[0.18em] text-accent-text uppercase mb-2">
+                Member Spotlight
+              </p>
+              <h3 className="font-serif text-2xl sm:text-3xl text-on-surface leading-snug mb-3">
+                Join the network — we&apos;ll tell your story.
+              </h3>
+              <p className="font-sans text-sm sm:text-base text-on-surface-variant leading-relaxed max-w-2xl">
+                List your studio, school, or practice and answer five short questions.
+                We publish your welcome feature in The Journal and spotlight you across
+                our channels — in your own words.
+              </p>
+            </div>
+            <Link
+              href="/submit"
+              className="flex-shrink-0 self-start sm:self-center border border-primary text-primary px-6 py-3 rounded-[2px] font-sans text-sm font-bold hover:bg-primary hover:text-white transition-colors duration-300"
+            >
+              List Your Space →
+            </Link>
+          </div>
         </div>
       </section>
 
