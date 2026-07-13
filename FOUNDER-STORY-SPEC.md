@@ -1,6 +1,6 @@
 # Founder Story Pipeline — Spec
 
-**Status: APPROVED 2026-07-12 — build in progress. Amendments from approval: public-facing framing is "Welcome + Member Spotlight" (not "story"); form gets an opt-out toggle that collapses the Your Story section and skips the pipeline.**
+**Status: BUILT 2026-07-12 — committed on main (b04476d), DB migration applied to remote, dry-run verified. Awaiting push to deploy. Amendments from approval: public-facing framing is "Welcome + Member Spotlight" (not "story"); form has an opt-out toggle that collapses the Your Story section and skips the pipeline.**
 
 Every new teacher, studio, or business owner who joins the network gets their story
 told: five questions and up to three photos collected at onboarding become a published
@@ -64,10 +64,12 @@ fields (this copy is the lever — it sells the feature at the moment of signup)
 - Question text lives in a config constant (`FOUNDER_QUESTIONS` in
   `lib/config/site.ts`) so wording can be tuned without touching form or prompt code.
 
-**Photos:** "Add up to 3 photos of you and your space — a portrait works best as the
-first one." Reuses the existing per-file upload to `/api/business/upload-photo`
-(same 5 MB / jpeg-png-webp limits, same `listing-images` bucket, `submissions/`
-namespace). First photo = blog cover + social hero slide.
+**Photos (amended 2026-07-12):** the form has ONE photos section — the listing's
+existing 6-photo uploader. The spotlight draws from it via `storyPhotos()` in
+`lib/social/eligibility.ts`: dedicated `founder_images` when present (legacy
+submissions keep working), otherwise `listing.images`. First photo = blog cover +
+social hero slide. The Your Story section just notes that the Photos section below
+feeds the feature.
 
 ---
 

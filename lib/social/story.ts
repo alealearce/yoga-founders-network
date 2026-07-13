@@ -31,7 +31,7 @@ const TYPE_LABEL: Record<string, string> = {
 // Lives in lib/social/eligibility.ts (client-safe) so the admin UI shares the
 // exact rule without pulling server-only imports into its bundle.
 
-import { ineligibleReason, isStoryEligible } from '@/lib/social/eligibility';
+import { ineligibleReason, isStoryEligible, storyPhotos } from '@/lib/social/eligibility';
 export { isStoryEligible };
 
 // ─────────────────────────────── generation ──────────────────────────────────
@@ -90,7 +90,7 @@ function buildUserPrompt(listing: Listing): string {
     .join('\n\n');
 
   const loc = [listing.city, listing.country].filter(Boolean).join(', ');
-  const embedImages = (listing.founder_images ?? []).slice(1, 3); // [0] is the cover photo, already shown above the post
+  const embedImages = storyPhotos(listing).slice(1, 3); // [0] is the cover photo, already shown above the post
   const imageInstruction = embedImages.length
     ? `Embed these image URL(s) as markdown images on their own line, spaced between sections of the piece:\n${embedImages.map((u) => `- ${u}`).join('\n')}`
     : 'No additional images to embed.';
@@ -198,7 +198,7 @@ async function publishStoryCarousel(
   if (platforms.length === 0) return { platforms: [] };
 
   const kind = TYPE_LABEL[listing.type] ?? 'Member';
-  const hero = listing.founder_images?.[0] || '';
+  const hero = storyPhotos(listing)[0] || '';
   const blurb = truncate(listing.founder_story?.leap?.trim() || generated.excerpt, 180);
   const quote = truncate(generated.pull_quote, 220);
 
@@ -287,7 +287,7 @@ export async function runFounderSpotlight(
     return { ok: false, error: `Story generation failed: ${err instanceof Error ? err.message : String(err)}` };
   }
 
-  const contentWithImages = ensureImagesEmbedded(generated.content, listing.founder_images ?? [], listing.name);
+  const contentWithImages = ensureImagesEmbedded(generated.content, storyPhotos(listing), listing.name);
   const baseSlug = `welcome-${listing.slug}`;
 
   if (dry) {
@@ -306,7 +306,7 @@ export async function runFounderSpotlight(
     content: contentWithImages,
     author: 'Yoga Founders Network',
     author_avatar: null,
-    cover_image: listing.founder_images?.[0] ?? null,
+    cover_image: storyPhotos(listing)[0] ?? null,
     tags: [listing.type, listing.city].filter(Boolean),
     is_published: true,
     reading_time_minutes: estimateReadingMinutes(contentWithImages),

@@ -4,7 +4,7 @@ import { Fragment, useState } from "react";
 import { ChevronDown, ChevronRight, Loader2, Sparkles } from "lucide-react";
 import type { Listing } from "@/lib/supabase/types";
 import { FOUNDER_QUESTIONS } from "@/lib/config/site";
-import { isStoryEligible } from "@/lib/social/eligibility";
+import { isStoryEligible, storyPhotos } from "@/lib/social/eligibility";
 import Badge from "@/components/ui/Badge";
 
 type AdminListing = Pick<
@@ -22,6 +22,7 @@ type AdminListing = Pick<
   | "created_at"
   | "founder_story"
   | "founder_images"
+  | "images"
   | "story_opt_out"
   | "story_post_id"
 >;
@@ -85,7 +86,9 @@ function FounderStoryDetail({ listing }: { listing: AdminListing }) {
     return typeof val === "string" && val.trim().length > 0;
   });
 
-  if (answers.length === 0 && listing.founder_images.length === 0) {
+  const photos = storyPhotos(listing);
+
+  if (answers.length === 0 && photos.length === 0) {
     return (
       <div className="px-5 py-4 bg-surface-low font-sans text-sm text-on-surface-variant">
         No story answers or photos submitted.
@@ -105,13 +108,13 @@ function FounderStoryDetail({ listing }: { listing: AdminListing }) {
           </p>
         </div>
       ))}
-      {listing.founder_images.length > 0 && (
+      {photos.length > 0 && (
         <div>
           <p className="font-sans text-xs font-semibold uppercase tracking-wide text-accent-text mb-2">
-            Founder Photos
+            Spotlight Photos
           </p>
           <div className="flex gap-2 flex-wrap">
-            {listing.founder_images.map((url) => (
+            {photos.map((url) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 key={url}

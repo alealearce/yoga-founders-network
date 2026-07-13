@@ -24,12 +24,13 @@ type AdminListing = Pick<
   | "created_at"
   | "founder_story"
   | "founder_images"
+  | "images"
   | "story_opt_out"
   | "story_post_id"
 >;
 
 const LISTING_COLUMNS =
-  "id, name, slug, type, status, is_featured, is_verified, city, country, plan, created_at, founder_story, founder_images, story_opt_out, story_post_id";
+  "id, name, slug, type, status, is_featured, is_verified, city, country, plan, created_at, founder_story, founder_images, images, story_opt_out, story_post_id";
 
 export default async function AdminPage() {
   const supabase = await createClient();

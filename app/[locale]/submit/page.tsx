@@ -10,7 +10,6 @@ import CountrySelect from "@/components/ui/CountrySelect";
 type FormState = "idle" | "loading" | "success" | "error";
 
 const MAX_PHOTOS = 6;
-const MAX_STORY_PHOTOS = 3;
 const STORY_ANSWER_MAX = 600;
 
 const PRICE_RANGES = [
@@ -41,7 +40,6 @@ const INITIAL = {
   social_tiktok:     "",
   notes:             "",
   founder_story:     {} as Record<string, string>,
-  founder_images:    [] as string[],
   story_opt_out:     false,
 };
 
@@ -52,9 +50,6 @@ export default function SubmitPage() {
   const [uploading,   setUploading]   = useState(false);
   const [uploadError, setUploadError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [storyUploading,   setStoryUploading]   = useState(false);
-  const [storyUploadError, setStoryUploadError] = useState("");
-  const storyFileInputRef = useRef<HTMLInputElement>(null);
 
   const handlePhotos = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -88,40 +83,6 @@ export default function SubmitPage() {
 
   const removePhoto = (url: string) => {
     setForm(f => ({ ...f, images: f.images.filter(u => u !== url) }));
-  };
-
-  const handleStoryPhotos = async (files: FileList | null) => {
-    if (!files || files.length === 0) return;
-    setStoryUploadError("");
-    const room = MAX_STORY_PHOTOS - form.founder_images.length;
-    const batch = Array.from(files).slice(0, room);
-    if (batch.length === 0) {
-      setStoryUploadError(`You can add up to ${MAX_STORY_PHOTOS} photos.`);
-      return;
-    }
-    setStoryUploading(true);
-    try {
-      for (const file of batch) {
-        const fd = new FormData();
-        fd.append("file", file);
-        const res  = await fetch("/api/business/upload-photo", { method: "POST", body: fd });
-        const data = await res.json();
-        if (!res.ok) {
-          setStoryUploadError(data.error ?? "Upload failed. Please try again.");
-          continue;
-        }
-        setForm(f => ({ ...f, founder_images: [...f.founder_images, data.url].slice(0, MAX_STORY_PHOTOS) }));
-      }
-    } catch {
-      setStoryUploadError("Upload failed. Please try again.");
-    } finally {
-      setStoryUploading(false);
-      if (storyFileInputRef.current) storyFileInputRef.current.value = "";
-    }
-  };
-
-  const removeStoryPhoto = (url: string) => {
-    setForm(f => ({ ...f, founder_images: f.founder_images.filter(u => u !== url) }));
   };
 
   const toggle = (style: string) => {
@@ -391,70 +352,9 @@ export default function SubmitPage() {
                     </div>
                   ))}
 
-                  <div>
-                    <label className="block font-sans text-sm font-semibold text-on-surface mb-2">
-                      Photos
-                    </label>
-                    <p className="font-sans text-sm text-on-surface-variant mb-4">
-                      Add up to {MAX_STORY_PHOTOS} photos of you and your space — a portrait works best as the first one.
-                    </p>
-
-                    <div className="grid grid-cols-3 gap-3">
-                      {form.founder_images.map((url, i) => (
-                        <div key={url} className="relative aspect-square rounded-[2px] overflow-hidden border border-outline-variant group">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={url} alt={`Story photo ${i + 1}`} className="w-full h-full object-cover" />
-                          {i === 0 && (
-                            <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded-[2px] bg-primary text-primary-on font-sans text-[9px] font-extrabold tracking-[0.1em] uppercase">
-                              Cover
-                            </span>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => removeStoryPhoto(url)}
-                            aria-label={`Remove story photo ${i + 1}`}
-                            className="absolute top-1 right-1 p-1 rounded-full bg-primary/80 text-primary-on hover:bg-primary transition-colors"
-                          >
-                            <X size={12} />
-                          </button>
-                        </div>
-                      ))}
-
-                      {form.founder_images.length < MAX_STORY_PHOTOS && (
-                        <button
-                          type="button"
-                          onClick={() => storyFileInputRef.current?.click()}
-                          disabled={storyUploading}
-                          className="aspect-square rounded-[2px] border border-dashed border-outline-variant flex flex-col items-center justify-center gap-1.5 text-on-surface-variant hover:border-primary hover:text-on-surface transition-colors disabled:opacity-60"
-                        >
-                          {storyUploading ? (
-                            <span className="w-5 h-5 border-2 border-on-surface-variant border-t-transparent rounded-full animate-spin" />
-                          ) : (
-                            <>
-                              <ImagePlus size={20} />
-                              <span className="font-sans text-[11px] font-semibold">Add photo</span>
-                            </>
-                          )}
-                        </button>
-                      )}
-                    </div>
-
-                    <input
-                      ref={storyFileInputRef}
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp"
-                      multiple
-                      className="hidden"
-                      onChange={e => handleStoryPhotos(e.target.files)}
-                    />
-
-                    {storyUploadError && (
-                      <p className="font-sans text-sm text-red-700 mt-4">{storyUploadError}</p>
-                    )}
-                    <p className="font-sans text-xs text-on-surface-variant/60 mt-4">
-                      JPEG, PNG, or WebP — up to 5 MB each.
-                    </p>
-                  </div>
+                  <p className="font-sans text-sm text-on-surface-variant border-t border-outline-variant/40 pt-4">
+                    Your feature will use the photos you add in the Photos section below — a portrait of you or your space works beautifully.
+                  </p>
                 </div>
               )}
             </div>
