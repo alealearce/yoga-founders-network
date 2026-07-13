@@ -173,3 +173,39 @@ export function igHandle(raw: string): string {
   const m = raw.trim().match(/(?:instagram\.com\/)?@?([A-Za-z0-9._]+)\/?$/);
   return m ? `@${m[1]}` : '';
 }
+
+// ──────────────────────────── founder spotlight ──────────────────────────────
+// "Welcome + Member Spotlight" carousel caption for a newly-approved listing
+// with a founder story. No emojis — this surface stays plain-text/typographic.
+
+const STORY_SYS = `You write warm Instagram captions for Yoga Founders Network welcoming a brand-new member with a Member Spotlight feature in The Journal.
+Voice: calm, grounded, genuinely celebratory — never gushing, never salesy. No emojis anywhere.
+Write 2–3 short lines that make a reader want to read their spotlight. Do not open with a greeting like "Please welcome" — that line is added separately. No hashtags, no links, no quote marks around your own text. Output ONLY the caption text.`;
+
+/** Caption for the founder-spotlight carousel (Welcome + Member Spotlight). No emojis. */
+export async function buildStoryCaption(
+  listing: Pick<Listing, 'name' | 'type' | 'city' | 'country'>,
+  storyUrl: string,
+  pullQuote: string
+): Promise<string> {
+  const label = TYPE_LABEL[listing.type] ?? 'member';
+  const loc = [listing.city, listing.country].filter(Boolean).join(', ');
+  const hashtags = tags(TYPE_TAGS[listing.type] ?? [], BASE_TAGS);
+  const firstName = listing.name.trim().split(/\s+/)[0] || listing.name;
+
+  const body =
+    (await ask(
+      STORY_SYS,
+      `New ${label}: ${listing.name}\nLocation: ${loc || 'worldwide'}\nPull quote from their spotlight: "${pullQuote}"`
+    )) || `${listing.name} just joined the network${loc ? ` from ${loc}` : ''} — read what brought them here.`;
+
+  return [
+    `Please welcome ${listing.name} to the network.`,
+    body,
+    `"${pullQuote}"`,
+    `Read ${firstName}'s full spotlight in The Journal: ${storyUrl}`,
+    hashtags,
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+}

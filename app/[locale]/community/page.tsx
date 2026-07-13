@@ -12,7 +12,13 @@ const BLOG_CATEGORIES = [
   { id: "teacher_guides",    label: "Teacher Guides" },
   { id: "wellness",          label: "Wellness" },
   { id: "yoga_lifestyle",    label: "Yoga Lifestyle" },
+  { id: "founder_story",     label: "Member Spotlight" },
 ];
+
+// Falls back to a de-slugged category id for any category not in the list above.
+function categoryLabel(id: string): string {
+  return BLOG_CATEGORIES.find((c) => c.id === id)?.label ?? id.replace(/_/g, " ");
+}
 
 export const revalidate = 3600;
 
@@ -118,7 +124,7 @@ export default async function CommunityPage({
                   </p>
                   {featured.category && (
                     <span className="px-3 py-1 rounded-full bg-secondary-container font-sans text-xs font-bold text-primary">
-                      {featured.category.replace(/_/g, " ")}
+                      {categoryLabel(featured.category)}
                     </span>
                   )}
                 </div>
@@ -200,7 +206,7 @@ function BlogPostCard({ post }: { post: BlogPost }) {
       <div className="p-5 pt-6">
         {post.category && (
           <span className="inline-block mb-3 px-2.5 py-1 rounded-full bg-secondary-container font-sans text-xs font-bold text-primary">
-            {post.category.replace(/_/g, " ")}
+            {categoryLabel(post.category)}
           </span>
         )}
         <h3 className="font-serif text-lg text-on-surface group-hover:text-primary transition-colors duration-300 leading-snug mb-2">

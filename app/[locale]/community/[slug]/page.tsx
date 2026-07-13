@@ -18,6 +18,28 @@ const CATEGORY_TO_LISTING: Record<string, { slug: string; label: string }> = {
   yoga_lifestyle: { slug: "yogaproducts", label: "Yoga Products" },
 };
 
+// Founder Story ("Member Spotlight") posts are about one specific listing type,
+// stored as tags[0] (see lib/social/story.ts) — not a fixed category-wide type
+// like the guides above, so it's looked up separately at render time.
+const LISTING_TYPE_TO_LISTING: Record<string, { slug: string; label: string }> = {
+  studio:   { slug: "yogastudio",    label: "Yoga Studios" },
+  teacher:  { slug: "yogateacher",   label: "Yoga Teachers" },
+  school:   { slug: "yogaschool",    label: "Yoga Schools" },
+  retreat:  { slug: "retreatcenter", label: "Retreat Centers" },
+  product:  { slug: "yogaproducts",  label: "Yoga Products" },
+  workshop: { slug: "yogaworkshops", label: "Yoga Workshops" },
+};
+
+const CATEGORY_LABELS: Record<string, string> = {
+  mission:        "Yoga's Impact",
+  finding_yoga:   "Finding Yoga",
+  studio_guides:  "Studio Guides",
+  teacher_guides: "Teacher Guides",
+  wellness:       "Wellness",
+  yoga_lifestyle: "Yoga Lifestyle",
+  founder_story:  "Member Spotlight",
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const supabase  = await createClient();
@@ -149,7 +171,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="flex flex-wrap gap-2 mb-6">
             {post.category && (
               <span className="px-3 py-1 rounded-full bg-secondary-container text-primary font-sans text-xs font-bold">
-                {post.category.replace(/_/g, " ")}
+                {CATEGORY_LABELS[post.category] ?? post.category.replace(/_/g, " ")}
               </span>
             )}
             {post.city && (
@@ -229,7 +251,12 @@ export default async function BlogPostPage({ params }: Props) {
 
           {/* Directory CTA */}
           {(() => {
-            const dir = CATEGORY_TO_LISTING[post.category ?? ""];
+            // Member Spotlight posts cross-link by the featured listing's type
+            // (stored as tags[0] — see lib/social/story.ts), not a fixed
+            // category-wide mapping like the guide categories below.
+            const dir = post.category === "founder_story"
+              ? LISTING_TYPE_TO_LISTING[post.tags?.[0] ?? ""]
+              : CATEGORY_TO_LISTING[post.category ?? ""];
             if (!dir) return null;
             return (
               <div className="mt-10 p-6 bg-surface-low rounded-2xl border border-outline-variant/10">
@@ -339,6 +366,15 @@ function markdownToHtml(md: string): string {
 
   for (const line of lines) {
     const trimmed = line.trim();
+
+    const imgMatch = trimmed.match(/^!\[(.*?)\]\((https?:\/\/[^)\s]+)\)$/);
+    if (imgMatch) {
+      flushPara();
+      closeList();
+      const alt = imgMatch[1].replace(/"/g, "&quot;");
+      output.push(`<img src="${imgMatch[2]}" alt="${alt}" loading="lazy" decoding="async" class="rounded-[2px] border border-outline-variant/20 my-8 w-full" />`);
+      continue;
+    }
 
     if (/^---+$/.test(trimmed)) { flushPara(); closeList(); output.push("<hr>"); continue; }
     if (/^### /.test(trimmed)) { flushPara(); closeList(); output.push(`<h3>${inline(trimmed.slice(4))}</h3>`); continue; }

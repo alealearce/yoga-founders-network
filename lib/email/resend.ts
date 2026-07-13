@@ -102,9 +102,23 @@ export async function sendApprovalEmail(
   to: string,
   name: string,
   listingName: string,
-  listingUrl: string
+  listingUrl: string,
+  storyUrl?: string
 ) {
-  const subject = `Your listing "${listingName}" is now live on Yoga Founders Network`;
+  const subject = storyUrl
+    ? `You're live — and so is your Spotlight, ${name}`
+    : `Your listing "${listingName}" is now live on Yoga Founders Network`;
+
+  const storySection = storyUrl
+    ? `
+    <p style="margin:0 0 16px;">There's more — your <strong>Member Spotlight</strong> is live in The Journal too. It's your welcome story, told in your own words, published for the whole network to read.</p>
+    <p style="margin:0 0 24px;text-align:center;">
+      <a href="${storyUrl}" style="display:inline-block;background-color:${SAGE};color:#ffffff;padding:14px 32px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;letter-spacing:0.5px;">Read Your Spotlight</a>
+    </p>
+    <p style="margin:0 0 16px;">We'd love for you to share it with your own community — it's the easiest way to introduce yourself to the network.</p>
+    `
+    : '';
+
   const body = `
     <p style="margin:0 0 16px;">Dear ${name},</p>
     <p style="margin:0 0 16px;">Wonderful news — <strong>${listingName}</strong> has been approved and is now live on Yoga Founders Network!</p>
@@ -112,6 +126,7 @@ export async function sendApprovalEmail(
     <p style="margin:0 0 24px;text-align:center;">
       <a href="${listingUrl}" style="display:inline-block;background-color:${SAGE};color:#ffffff;padding:14px 32px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;letter-spacing:0.5px;">View Your Listing</a>
     </p>
+    ${storySection}
     <p style="margin:0 0 16px;">To maximize your visibility, consider upgrading to a <strong>Verified</strong> or <strong>Pro</strong> plan for a featured placement and enhanced profile options.</p>
     <p style="margin:0;">With gratitude,<br/>The Yoga Founders Network Team</p>
   `;
@@ -121,6 +136,28 @@ export async function sendApprovalEmail(
     to,
     subject,
     html: baseTemplate(`${listingName} is Live`, body),
+  });
+}
+
+// ── Spotlight Live Email (retry / manual "story" action path) ──────────────
+
+export async function sendSpotlightLiveEmail(to: string, name: string, storyUrl: string) {
+  const subject = `Your Member Spotlight is live, ${name}`;
+  const body = `
+    <p style="margin:0 0 16px;">Dear ${name},</p>
+    <p style="margin:0 0 16px;">Your welcome story — the <strong>Member Spotlight</strong> the network puts together from your own words — is now published in The Journal.</p>
+    <p style="margin:0 0 24px;text-align:center;">
+      <a href="${storyUrl}" style="display:inline-block;background-color:${SAGE};color:#ffffff;padding:14px 32px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;letter-spacing:0.5px;">Read Your Spotlight</a>
+    </p>
+    <p style="margin:0;">We'd love for you to share it with your own community — it's the easiest way to introduce yourself to the network.</p>
+    <p style="margin:16px 0 0;">With gratitude,<br/>The Yoga Founders Network Team</p>
+  `;
+
+  return getResend().emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject,
+    html: baseTemplate('Your Spotlight is Live', body),
   });
 }
 

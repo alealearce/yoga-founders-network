@@ -23,6 +23,15 @@ const SubmitSchema = z.object({
   social_facebook:  z.string().max(300).optional().or(z.literal('')),
   social_youtube:   z.string().max(300).optional().or(z.literal('')),
   social_tiktok:    z.string().max(300).optional().or(z.literal('')),
+  founder_story: z.object({
+    origin:     z.string().max(1000).optional(),
+    leap:       z.string().max(1000).optional(),
+    hard_truth: z.string().max(1000).optional(),
+    feeling:    z.string().max(1000).optional(),
+    advice:     z.string().max(1000).optional(),
+  }).optional(),
+  founder_images: z.array(z.string().url().max(500)).max(3).optional(),
+  story_opt_out:  z.boolean().optional().default(false),
 });
 
 // Only accept photo URLs that came from our own storage bucket.
@@ -41,6 +50,19 @@ function normalizeSocial(input: string | undefined, kind: 'instagram' | 'faceboo
   if (kind === 'youtube') return `https://youtube.com/@${handle}`;
   if (kind === 'tiktok')  return `https://tiktok.com/@${handle}`;
   return `https://${kind}.com/${handle}`;
+}
+
+// Strip empty/blank answers; return null if nothing meaningful was answered.
+function cleanFounderStory(
+  story: Partial<Record<'origin' | 'leap' | 'hard_truth' | 'feeling' | 'advice', string>> | undefined
+): Record<string, string> | null {
+  if (!story) return null;
+  const cleaned: Record<string, string> = {};
+  for (const [key, value] of Object.entries(story)) {
+    const trimmed = value?.trim();
+    if (trimmed) cleaned[key] = trimmed;
+  }
+  return Object.keys(cleaned).length > 0 ? cleaned : null;
 }
 
 function slugify(name: string, city: string): string {
@@ -73,6 +95,7 @@ export async function POST(req: NextRequest) {
       city, country, description, yoga_styles, languages, tagline,
       yoga_alliance_id, images, price_range,
       social_instagram, social_facebook, social_youtube, social_tiktok,
+      founder_story, founder_images, story_opt_out,
     } = parsed.data;
 
     const supabase = createAdminClient();
@@ -105,6 +128,9 @@ export async function POST(req: NextRequest) {
       social_facebook:  normalizeSocial(social_facebook,  'facebook'),
       social_youtube:   normalizeSocial(social_youtube,   'youtube'),
       social_tiktok:    normalizeSocial(social_tiktok,    'tiktok'),
+      founder_story:  cleanFounderStory(founder_story),
+      founder_images: (founder_images ?? []).filter(isOwnStorageUrl),
+      story_opt_out:  story_opt_out ?? false,
     });
 
     if (insertError) {

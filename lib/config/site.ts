@@ -66,6 +66,16 @@ export const LISTING_TYPES = [
 
 export type ListingTypeId = typeof LISTING_TYPES[number]["id"];
 
+// ── Founder Story questions (submit form + story pipeline) ──────────────────
+export const FOUNDER_QUESTIONS = [
+  { key: 'origin', label: 'What first brought you to yoga?' },
+  { key: 'leap', label: 'What made you take the leap — teaching, opening your doors, or building this?' },
+  { key: 'hard_truth', label: "What's the hardest part of this work that most people never see?" },
+  { key: 'feeling', label: 'What do you want people to feel when they leave your class, space, or experience?' },
+  { key: 'advice', label: 'What would you tell someone thinking about starting their own yoga journey or business?' },
+] as const
+export type FounderQuestionKey = (typeof FOUNDER_QUESTIONS)[number]['key']
+
 // ── AI Chatbot ───────────────────────────────────────────────────────────────
 export const CHATBOT = {
   name:     "Lotus",
@@ -92,7 +102,7 @@ export const COPY = {
   },
   communitySection: {
     title:    "The Journal",
-    subtitle: "Insights, stories, and wisdom from the global yoga community.",
+    subtitle: "Insights, stories, and wisdom from the global yoga community. Every founder who joins gets their story told.",
     cta:      "Read the Journal",
   },
   submitCta: {
