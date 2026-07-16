@@ -8,9 +8,9 @@ import { sendFeaturedEmail } from '@/lib/email/resend';
 import type { Listing } from '@/lib/supabase/types';
 
 /**
- * Daily cron: publish two carousels to social via Blotato —
- *   • blog digest    — today's auto-generated Journal post (title + 3-pt TL;DR + link)
- *   • listing showcase — a rotating member of the directory
+ * Daily cron: publish a listing-showcase carousel to social via Blotato —
+ * a rotating member of the directory. (The blog-digest cron was retired
+ * 2026-07-16 — blog stays for SEO only; ?kind=blog remains for manual runs.)
  *
  * Auth: Authorization: Bearer ${CRON_SECRET} (Vercel Cron sets this).
  * Query params (manual runs / testing):
