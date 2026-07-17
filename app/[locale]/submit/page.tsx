@@ -6,6 +6,7 @@ import { LISTING_TYPES, FOUNDER_QUESTIONS } from "@/lib/config/site";
 import { YOGA_CATEGORIES, SCHOOL_CERTIFICATIONS, PRODUCT_CATEGORIES, LISTING_LANGUAGES } from "@/lib/config/categories";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 import CountrySelect from "@/components/ui/CountrySelect";
+import { compressImage } from "@/lib/utils/compressImage";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
@@ -62,7 +63,8 @@ export default function SubmitPage() {
     }
     setUploading(true);
     try {
-      for (const file of batch) {
+      for (let file of batch) {
+        if (file.size > 3.5 * 1024 * 1024) file = await compressImage(file);
         const fd = new FormData();
         fd.append("file", file);
         const res  = await fetch("/api/business/upload-photo", { method: "POST", body: fd });

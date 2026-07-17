@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { ImagePlus, X } from "lucide-react";
 import { FOUNDER_QUESTIONS } from "@/lib/config/site";
+import { compressImage } from "@/lib/utils/compressImage";
 
 const MAX_IMAGES = 6;
 const STORY_ANSWER_MAX = 600;
@@ -42,7 +43,8 @@ export default function GetFeaturedForm({
     }
     setUploading(true);
     try {
-      for (const file of batch) {
+      for (let file of batch) {
+        if (file.size > 3.5 * 1024 * 1024) file = await compressImage(file);
         const fd = new FormData();
         fd.append("file", file);
         const res  = await fetch("/api/business/upload-photo", { method: "POST", body: fd });
