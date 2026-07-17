@@ -19,6 +19,10 @@
     {
       "path": "/api/admin/daily-social?kind=showcase",
       "schedule": "0 16 * * *"
+    },
+    {
+      "path": "/api/admin/spotlight-invites?live=1&limit=25",
+      "schedule": "30 16 * * 1-5"
     }
   ]
 }
