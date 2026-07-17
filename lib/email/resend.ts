@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { SITE } from '@/lib/config/site';
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY ?? 'placeholder');
@@ -158,6 +159,83 @@ export async function sendSpotlightLiveEmail(to: string, name: string, storyUrl:
     to,
     subject,
     html: baseTemplate('Your Spotlight is Live', body),
+  });
+}
+
+// ── Get Featured outreach: spotlight invite (DISARMED engine — see
+// app/api/admin/spotlight-invites/route.ts) ─────────────────────────────────
+
+export async function sendSpotlightInviteEmail(
+  to: string,
+  listingName: string,
+  inviteUrl: string,
+  listingUrl: string,
+  unsubscribeUrl: string,
+  exampleUrl?: string
+) {
+  const subject = `${listingName} is on Yoga Founders Network — we'd love to feature you`;
+
+  const exampleSection = exampleUrl
+    ? `<p style="margin:0 0 16px;">Here&rsquo;s a recent spotlight to give you a feel for it: <a href="${exampleUrl}" style="color:${SAGE};">${exampleUrl}</a></p>`
+    : '';
+
+  const body = `
+    <p style="margin:0 0 16px;">Dear ${listingName},</p>
+    <p style="margin:0 0 16px;">Your listing is live on Yoga Founders Network, the global directory of yoga studios, teachers, schools, and retreats. You can see your page here: <a href="${listingUrl}" style="color:${SAGE};">${listingUrl}</a></p>
+    <p style="margin:0 0 16px;">We&rsquo;d like to introduce you properly. Every founder in the network can receive a Member Spotlight — a welcome feature in The Journal, told in your own words, shared with our audience on Instagram and beyond.</p>
+    ${exampleSection}
+    <p style="margin:0 0 16px;">It takes about five minutes: five short questions, answered in your own voice, plus a photo or two of you and your space.</p>
+    <p style="margin:0 0 24px;text-align:center;">
+      <a href="${inviteUrl}" style="display:inline-block;background-color:${SAGE};color:#ffffff;padding:14px 32px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;letter-spacing:0.5px;">Get Featured — Answer 5 Questions</a>
+    </p>
+    <p style="margin:0 0 16px;">There&rsquo;s no cost and no account to create. We&rsquo;ll shape your answers into your feature, and you&rsquo;ll receive the link the moment it&rsquo;s live.</p>
+    <p style="margin:0 0 24px;">With gratitude,<br/>The Yoga Founders Network Team</p>
+    <p style="margin:0;font-size:12px;color:#888;font-family:Arial,sans-serif;">You&rsquo;re receiving this because ${listingName} is listed on yogafoundersnetwork.com. If you&rsquo;d rather we didn&rsquo;t email you about this, <a href="${unsubscribeUrl}" style="color:#888;">one click and we won&rsquo;t</a>.</p>
+  `;
+
+  return getResend().emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject,
+    html: baseTemplate('Get Featured in The Journal', body),
+  });
+}
+
+// ── Get Featured outreach: confirmation to the founder after they submit ───
+
+export async function sendStoryReceivedEmail(to: string, name: string) {
+  const subject = 'Your spotlight is on its way';
+  const body = `
+    <p style="margin:0 0 16px;">Dear ${name},</p>
+    <p style="margin:0 0 16px;">Thank you — we&rsquo;ve received your answers and photos. We&rsquo;re shaping them into your Member Spotlight now.</p>
+    <p style="margin:0;">We&rsquo;ll email you the link the moment it&rsquo;s live.</p>
+  `;
+
+  return getResend().emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject,
+    html: baseTemplate('Your Spotlight is on Its Way', body),
+  });
+}
+
+// ── Get Featured outreach: notify the admin a story was submitted ──────────
+
+export async function sendAdminStorySubmittedEmail(listingName: string) {
+  const subject = `Spotlight story submitted: ${listingName}`;
+  const body = `
+    <p style="margin:0 0 16px;">Story answers were submitted via the get-featured link for <strong>${listingName}</strong>.</p>
+    <p style="margin:0 0 24px;text-align:center;">
+      <a href="${SITE.url}/admin" style="display:inline-block;background-color:${SAGE};color:#ffffff;padding:14px 32px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;letter-spacing:0.5px;">Review in Admin</a>
+    </p>
+    <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif;">Review the answers and click &ldquo;Generate spotlight&rdquo; in the admin dashboard to publish.</p>
+  `;
+
+  return getResend().emails.send({
+    from: FROM_EMAIL,
+    to: ADMIN_EMAIL,
+    subject,
+    html: baseTemplate('Spotlight Story Submitted', body),
   });
 }
 

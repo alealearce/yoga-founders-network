@@ -229,6 +229,32 @@ Reuse the full `daily-social` stack:
   (Blotato supports `scheduledTime`; see the peptide custom-scheduling pattern).
 - Auto-DM/notify the founder on the platforms where they were tagged.
 
+## 6b. Phase 2 — Get Featured engine (approved 2026-07-16, building)
+
+Converts the seeded directory (621 approved unclaimed listings, 613 with emails,
+0 with stories as of 2026-07-16) into spotlighted members:
+
+- **Magic-link form** `/get-featured?token={listings.invite_token}` — the 5
+  questions + photo upload (appends to `listing.images`, cap 6, 71% of seeds have
+  no photos); prefills existing answers; submits via `/api/get-featured`; admin
+  gets a "story submitted" email and the existing "Generate spotlight" button
+  publishes it.
+- **Invite email** `sendSpotlightInviteEmail` — "you're already listed, get your
+  Member Spotlight" with personal link, optional example-spotlight link, and a
+  one-click unsubscribe (`/api/outreach/unsubscribe?token=` →
+  `listings.outreach_opt_out`). CASL posture: published business address +
+  message about their own listing = implied consent; unsubscribe + suppression
+  honored forever.
+- **Send engine (DISARMED)** `/api/admin/spotlight-invites` — CRON_SECRET auth,
+  dry-run by default, `live=1` to send, limit default 25 (hard cap 50), logs to
+  `outreach_log`, excludes already-invited/opted-out/storied listings. NOT in
+  vercel.json — fired manually until the user arms it.
+- Migration `20260716100000_get_featured_outreach.sql`: `invite_token` (unique)
+  + `outreach_opt_out` on listings; `outreach_log` table.
+
+Later phases (not built): IG caption tagging of member handles, weekly "Get
+Featured" recruitment carousel, discovery scraper feeding new seeds.
+
 ## 7. Build order
 
 1. Migration + types + form section + submit API (story data flowing in, visible in admin). 

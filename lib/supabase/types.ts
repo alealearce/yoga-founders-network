@@ -47,6 +47,8 @@ export interface Listing {
   founder_images: string[];
   story_opt_out: boolean;
   story_post_id: string | null;
+  invite_token: string;
+  outreach_opt_out: boolean;
 }
 
 export interface Review {
