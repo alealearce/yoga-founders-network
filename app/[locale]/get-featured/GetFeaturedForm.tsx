@@ -139,8 +139,8 @@ export default function GetFeaturedForm({
         <h2 className="font-serif text-xl text-on-surface mb-2">Photos</h2>
         <p className="font-sans text-sm text-on-surface-variant mb-6">
           {existingImages.length > 0
-            ? "These photos are already on your listing and will be used in your feature. Add more if you like — a portrait of you works beautifully."
-            : "Add at least one photo of you and your space — a portrait works beautifully as the first one."}
+            ? "These photos are already on your listing and will be used in your feature. Add more if you like — a portrait of you works beautifully. The first photo you add will lead your feature."
+            : "Add at least one photo of you and your space — a portrait works beautifully as the first one. The first photo you add will lead your feature."}
         </p>
 
         <div className="grid grid-cols-3 gap-3">

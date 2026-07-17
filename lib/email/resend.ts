@@ -226,9 +226,9 @@ export async function sendAdminStorySubmittedEmail(listingName: string) {
   const body = `
     <p style="margin:0 0 16px;">Story answers were submitted via the get-featured link for <strong>${listingName}</strong>.</p>
     <p style="margin:0 0 24px;text-align:center;">
-      <a href="${SITE.url}/admin" style="display:inline-block;background-color:${SAGE};color:#ffffff;padding:14px 32px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;letter-spacing:0.5px;">Review in Admin</a>
+      <a href="${SITE.url}/admin?tab=stories" style="display:inline-block;background-color:${SAGE};color:#ffffff;padding:14px 32px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;letter-spacing:0.5px;">Review in Admin</a>
     </p>
-    <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif;">Review the answers and click &ldquo;Generate spotlight&rdquo; in the admin dashboard to publish.</p>
+    <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif;">You&rsquo;ll find them in the Stories tab — read the answers, generate and preview the draft, then publish &amp; share.</p>
   `;
 
   return getResend().emails.send({

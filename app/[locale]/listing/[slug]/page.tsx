@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import type { Listing, Review } from "@/lib/supabase/types";
-import { MapPin, Globe, Mail, Phone, BadgeCheck, Star, Instagram, Facebook, Youtube } from "lucide-react";
+import { MapPin, Globe, Mail, Phone, BadgeCheck, Star, Instagram, Facebook, Youtube, ArrowRight } from "lucide-react";
 import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import { getListingUrl } from "@/lib/utils/listingUrl";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
@@ -77,6 +77,18 @@ export default async function ListingPage({ params }: Props) {
   // Filter reviews for this listing
   const allReviews: Review[] = reviewsRes.data ?? [];
   const reviews = allReviews.filter(r => r.listing_id === listing.id);
+
+  // Member Spotlight — only when a Journal post exists for this listing AND is published.
+  let spotlightPost: { slug: string; title: string } | null = null;
+  if (listing.story_post_id) {
+    const { data: sp } = await supabase
+      .from("blog_posts")
+      .select("slug, title, is_published")
+      .eq("id", listing.story_post_id)
+      .single();
+    if (sp?.is_published) spotlightPost = { slug: sp.slug, title: sp.title };
+  }
+  const firstName = listing.name.split(" ")[0];
 
   const location   = [listing.city, listing.country].filter(Boolean).join(", ");
   const coverImage = listing.images?.[0] ?? listing.logo_url ?? null;
@@ -223,6 +235,27 @@ export default async function ListingPage({ params }: Props) {
                     ))}
                 </div>
               </div>
+            )}
+
+            {/* Member Spotlight cross-link */}
+            {spotlightPost && (
+              <Link
+                href={`/community/${spotlightPost.slug}`}
+                className="group flex items-center justify-between gap-4 rounded-[2px] border border-outline-variant/40 bg-surface-card p-6 hover:border-accent-text/40 transition-colors duration-300"
+              >
+                <div>
+                  <p className="font-sans text-xs font-bold text-accent-text uppercase tracking-[0.15em] mb-2">
+                    Member Spotlight
+                  </p>
+                  <p className="font-serif text-lg text-on-surface">
+                    Read {firstName}&apos;s welcome feature in The Journal
+                  </p>
+                </div>
+                <ArrowRight
+                  size={18}
+                  className="flex-shrink-0 text-accent-text group-hover:translate-x-1 transition-transform duration-300"
+                />
+              </Link>
             )}
 
             {/* Experience & Languages */}

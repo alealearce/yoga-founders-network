@@ -239,13 +239,21 @@ function DottedBg() {
   );
 }
 
-function ShowcaseHero({ name, kind, city, country, img }: { name: string; kind: string; city: string; country: string; img: string }) {
+function ShowcaseHero({ name, kind, city, country, img }: { name: string; kind: string; city: string; country: string; img: string | null }) {
   const loc = [city, country].filter(Boolean).join(', ');
   return (
     <div style={{ width: W, height: H, display: 'flex', flexDirection: 'column', position: 'relative', background: INK }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img} alt="" width={W} height={H} style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, objectFit: 'cover' }} />
-      <div style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, display: 'flex', background: 'linear-gradient(180deg, rgba(10,8,16,0.55) 0%, rgba(10,8,16,0.05) 38%, rgba(10,8,16,0.35) 66%, rgba(10,8,16,0.92) 100%)' }} />
+      {img ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img src={img} alt="" width={W} height={H} style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, objectFit: 'cover' }} />
+      ) : (
+        <div style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.14 }}>
+          <FlowerOfLife size={680} color="#ffffff" sw={1.5} />
+        </div>
+      )}
+      {img ? (
+        <div style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, display: 'flex', background: 'linear-gradient(180deg, rgba(10,8,16,0.55) 0%, rgba(10,8,16,0.05) 38%, rgba(10,8,16,0.35) 66%, rgba(10,8,16,0.92) 100%)' }} />
+      ) : null}
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '70px', position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}><Logo color="#ffffff" /></div>
         <div style={{ display: 'flex', flex: 1 }} />
@@ -318,12 +326,20 @@ function SpotlightPill({ color = INK, textColor = CREAM }: { color?: string; tex
   );
 }
 
-function StoryHero({ img, name, kind, city }: { img: string; name: string; kind: string; city: string }) {
+function StoryHero({ img, name, kind, city }: { img: string | null; name: string; kind: string; city: string }) {
   return (
     <div style={{ width: W, height: H, display: 'flex', flexDirection: 'column', position: 'relative', background: INK }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img} alt="" width={W} height={H} style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, objectFit: 'cover' }} />
-      <div style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, display: 'flex', background: 'linear-gradient(180deg, rgba(20,17,13,0.6) 0%, rgba(20,17,13,0.1) 38%, rgba(20,17,13,0.4) 66%, rgba(20,17,13,0.94) 100%)' }} />
+      {img ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img src={img} alt="" width={W} height={H} style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, objectFit: 'cover' }} />
+      ) : (
+        <div style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.14 }}>
+          <FlowerOfLife size={680} color="#ffffff" sw={1.5} />
+        </div>
+      )}
+      {img ? (
+        <div style={{ position: 'absolute', top: 0, left: 0, width: W, height: H, display: 'flex', background: 'linear-gradient(180deg, rgba(20,17,13,0.6) 0%, rgba(20,17,13,0.1) 38%, rgba(20,17,13,0.4) 66%, rgba(20,17,13,0.94) 100%)' }} />
+      ) : null}
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '70px', position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}><Logo color="#ffffff" /></div>
         <div style={{ display: 'flex', flex: 1 }} />
@@ -402,6 +418,31 @@ function StoryCta({ name, url }: { name: string; url: string }) {
 
 // ───────────────────────────── handler ──────────────────────────────────────
 
+/**
+ * Satori cannot decode WebP/AVIF, and CDNs (Squarespace, Unsplash) serve them
+ * via content negotiation — an <img> pointing at such a URL renders as a black
+ * void (the Susan Horning hero bug). Fetch the photo server-side forcing
+ * JPEG/PNG and inline it as a data URI; null = no usable photo, and the hero
+ * components render a branded photo-less variant instead.
+ */
+async function proxyPhoto(url: string | null): Promise<string | null> {
+  if (!url) return null;
+  try {
+    const res = await fetch(url, {
+      headers: { Accept: 'image/jpeg,image/png;q=0.9,*/*;q=0.1' },
+      signal: AbortSignal.timeout(6000),
+    });
+    if (!res.ok) return null;
+    const ct = (res.headers.get('content-type') || '').split(';')[0].trim();
+    if (!['image/jpeg', 'image/png', 'image/gif'].includes(ct)) return null;
+    const buf = Buffer.from(await res.arrayBuffer());
+    if (buf.length > 8_000_000) return null;
+    return `data:${ct};base64,${buf.toString('base64')}`;
+  } catch {
+    return null;
+  }
+}
+
 export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams;
   const type = q.get('type') || 'blog';
@@ -414,7 +455,7 @@ export async function GET(req: NextRequest) {
     const kind = q.get('kind') || 'Studio';
     const city = q.get('city') || '';
     const country = q.get('country') || '';
-    const img = q.get('img') || 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=1080&h=1350&fit=crop&q=80';
+    const img = slide === 0 ? await proxyPhoto(q.get('img') || 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=1080&h=1350&fit=crop&q=80') : null;
     const blurb = q.get('blurb') || '';
     const style = q.get('style') || '';
     const handle = q.get('handle') || '';
@@ -431,7 +472,7 @@ export async function GET(req: NextRequest) {
     const name = q.get('name') || 'A New Member';
     const kind = q.get('kind') || '';
     const city = q.get('city') || '';
-    const img = q.get('img') || 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=1080&h=1350&fit=crop&q=80';
+    const img = slide === 0 ? await proxyPhoto(q.get('img') || 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=1080&h=1350&fit=crop&q=80') : null;
     const quote = q.get('quote') || `Welcome ${name} to the network.`;
     const blurb = q.get('blurb') || 'A new founder joins Yoga Founders Network.';
     const url = q.get('url') || 'yogafoundersnetwork.com/community';

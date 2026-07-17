@@ -32,7 +32,16 @@ type AdminListing = Pick<
 const LISTING_COLUMNS =
   "id, name, slug, type, status, is_featured, is_verified, city, country, plan, created_at, founder_story, founder_images, images, story_opt_out, story_post_id";
 
-export default async function AdminPage() {
+type StoryPostsMap = Record<string, { slug: string; title: string; is_published: boolean }>;
+
+interface AdminPageProps {
+  searchParams: { tab?: string };
+}
+
+export default async function AdminPage({ searchParams }: AdminPageProps) {
+  const initialTab: "pending" | "stories" | "all" =
+    searchParams.tab === "stories" || searchParams.tab === "all" ? searchParams.tab : "pending";
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -70,6 +79,32 @@ export default async function AdminPage() {
   const totalListings = allCount ?? all.length;
   const totalApproved = approvedCount ?? all.filter((l) => l.status === "approved").length;
 
+  // Story posts for every listing that has a draft or published spotlight —
+  // keyed by blog_posts.id so AdminClient can look up slug/publish state
+  // without a second round trip per row.
+  const storyPostIds = Array.from(
+    new Set(
+      [...pending, ...all]
+        .map((l) => l.story_post_id)
+        .filter((id): id is string => !!id)
+    )
+  );
+
+  const storyPosts: StoryPostsMap = {};
+  if (storyPostIds.length > 0) {
+    const { data: storyPostsData } = await adminSupabase
+      .from("blog_posts")
+      .select("id, slug, title, is_published")
+      .in("id", storyPostIds);
+    for (const post of storyPostsData ?? []) {
+      storyPosts[post.id] = {
+        slug: post.slug,
+        title: post.title,
+        is_published: post.is_published,
+      };
+    }
+  }
+
   return (
     <div className="min-h-screen bg-bg px-6 py-16">
       <div className="max-w-6xl mx-auto">
@@ -104,7 +139,7 @@ export default async function AdminPage() {
         </div>
 
         {/* Interactive tables */}
-        <AdminClient pending={pending} all={all} />
+        <AdminClient pending={pending} all={all} storyPosts={storyPosts} initialTab={initialTab} />
       </div>
     </div>
   );

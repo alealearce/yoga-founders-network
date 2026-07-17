@@ -80,7 +80,7 @@ const SPOTLIGHT_TOOL = {
   },
 };
 
-function buildUserPrompt(listing: Listing): string {
+function buildUserPrompt(listing: Listing, photos: string[]): string {
   const qas = FOUNDER_QUESTIONS
     .map((q) => {
       const answer = listing.founder_story?.[q.key as FounderQuestionKey];
@@ -90,7 +90,7 @@ function buildUserPrompt(listing: Listing): string {
     .join('\n\n');
 
   const loc = [listing.city, listing.country].filter(Boolean).join(', ');
-  const embedImages = storyPhotos(listing).slice(1, 3); // [0] is the cover photo, already shown above the post
+  const embedImages = photos.slice(1, 3); // [0] is the cover photo, already shown above the post
   const imageInstruction = embedImages.length
     ? `Embed these image URL(s) as markdown images on their own line, spaced between sections of the piece:\n${embedImages.map((u) => `- ${u}`).join('\n')}`
     : 'No additional images to embed.';
@@ -109,7 +109,7 @@ ${imageInstruction}
 Write today's Welcome + Member Spotlight post per the system rules and call the publish_spotlight tool.`;
 }
 
-async function generateStoryPost(listing: Listing): Promise<GeneratedStory> {
+async function generateStoryPost(listing: Listing, photos: string[]): Promise<GeneratedStory> {
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const message = await anthropic.messages.create({
     model: MODEL,
@@ -117,7 +117,7 @@ async function generateStoryPost(listing: Listing): Promise<GeneratedStory> {
     system: SYSTEM_PROMPT,
     tools: [SPOTLIGHT_TOOL],
     tool_choice: { type: 'tool', name: 'publish_spotlight' },
-    messages: [{ role: 'user', content: buildUserPrompt(listing) }],
+    messages: [{ role: 'user', content: buildUserPrompt(listing, photos) }],
   });
   const toolBlock = message.content.find((b) => b.type === 'tool_use');
   if (!toolBlock || toolBlock.type !== 'tool_use') {
@@ -191,16 +191,16 @@ async function publishStoryCarousel(
   supabase: ReturnType<typeof createAdminClient>,
   listing: Listing,
   post: { id: string; slug: string },
-  generated: GeneratedStory,
+  content: { hero: string; quote: string; blurb: string },
   storyUrl: string
 ): Promise<{ platforms: string[]; error?: string }> {
   const platforms = configuredPlatforms();
   if (platforms.length === 0) return { platforms: [] };
 
   const kind = TYPE_LABEL[listing.type] ?? 'Member';
-  const hero = storyPhotos(listing)[0] || '';
-  const blurb = truncate(listing.founder_story?.leap?.trim() || generated.excerpt, 180);
-  const quote = truncate(generated.pull_quote, 220);
+  const hero = content.hero;
+  const blurb = truncate(content.blurb, 180);
+  const quote = truncate(content.quote, 220);
 
   const slideUrls = [
     slideUrl({ type: 'story', slide: '0', img: hero, name: listing.name, kind, city: listing.city ?? '' }),
@@ -209,7 +209,7 @@ async function publishStoryCarousel(
     slideUrl({ type: 'story', slide: '3', name: listing.name, url: `yogafoundersnetwork.com/community/${post.slug}` }),
   ];
 
-  const caption = await buildStoryCaption(listing, storyUrl, generated.pull_quote);
+  const caption = await buildStoryCaption(listing, storyUrl, content.quote);
 
   const uploaded = await uploadAll(slideUrls);
   if (!uploaded.ok) {
@@ -243,62 +243,93 @@ async function publishStoryCarousel(
   return { platforms: published, error: published.length === 0 ? lastError : undefined };
 }
 
-// ───────────────────────────────── entry point ────────────────────────────────
+// ───────────────────────────────── entry points ───────────────────────────────
+// Draft-then-publish flow: generateSpotlightDraft writes an UNPUBLISHED
+// blog_posts row (admin previews it), publishSpotlight flips it live and fires
+// the social carousel. regenerateSpotlightDraft discards an unpublished draft
+// and generates a fresh one.
 
-export async function runFounderSpotlight(
-  listingId: string,
-  opts: { dry?: boolean } = {}
-): Promise<{
+export type SpotlightResult = {
   ok: boolean;
   skipped?: string;
   postSlug?: string;
   storyUrl?: string;
   platforms?: string[];
   error?: string;
-}> {
-  const dry = opts.dry ?? false;
-  const supabase = createAdminClient();
+};
 
-  const { data: listingData, error: fetchErr } = await supabase
+async function loadListing(
+  supabase: ReturnType<typeof createAdminClient>,
+  listingId: string
+): Promise<{ listing: Listing } | { error: string }> {
+  const { data, error } = await supabase
     .from('listings')
     .select('*')
     .eq('id', listingId)
     .maybeSingle();
+  if (error) return { error: `Failed to load listing: ${error.message}` };
+  if (!data) return { error: 'Listing not found' };
+  return { listing: data as Listing };
+}
 
-  if (fetchErr) {
-    console.error('[story] fetch listing error:', fetchErr);
-    return { ok: false, error: `Failed to load listing: ${fetchErr.message}` };
+/**
+ * Photos that actually load as images. Guards against dead scraped URLs on
+ * seeded listings (see the Susan Horning black-hero incident — the slide
+ * renderer additionally proxies content negotiation itself).
+ */
+async function usablePhotos(listing: Listing): Promise<string[]> {
+  const out: string[] = [];
+  for (const url of storyPhotos(listing).slice(0, 6)) {
+    try {
+      const res = await fetch(url, {
+        headers: { Accept: 'image/jpeg,image/png;q=0.9,*/*;q=0.1' },
+        signal: AbortSignal.timeout(6000),
+      });
+      const ct = (res.headers.get('content-type') || '').split(';')[0].trim();
+      if (res.ok && ct.startsWith('image/')) out.push(url);
+      res.body?.cancel();
+    } catch {
+      // unreachable photo — skip it
+    }
   }
-  const listing = listingData as Listing | null;
-  if (!listing) return { ok: false, error: 'Listing not found' };
+  return out;
+}
 
-  if (!dry && listing.status !== 'approved') {
-    return { ok: true, skipped: 'listing is not approved' };
+function fallbackQuote(listing: Listing): string {
+  const order: FounderQuestionKey[] = ['hard_truth', 'origin', 'leap', 'feeling', 'advice'];
+  for (const key of order) {
+    const v = listing.founder_story?.[key];
+    if (v && v.trim()) return v.trim();
   }
+  return `Welcome ${listing.name} to the network.`;
+}
 
+/** Generate the Welcome + Member Spotlight post as an UNPUBLISHED draft. */
+export async function generateSpotlightDraft(listingId: string): Promise<SpotlightResult> {
+  const supabase = createAdminClient();
+  const loaded = await loadListing(supabase, listingId);
+  if ('error' in loaded) return { ok: false, error: loaded.error };
+  const { listing } = loaded;
+
+  if (listing.status !== 'approved') return { ok: true, skipped: 'listing is not approved' };
   const reason = ineligibleReason(listing);
   if (reason) return { ok: true, skipped: reason };
 
+  const photos = await usablePhotos(listing);
+  if (photos.length === 0) {
+    return { ok: false, error: 'None of the listing photos could be loaded — add a working photo and regenerate' };
+  }
+
   let generated: GeneratedStory;
   try {
-    generated = await generateStoryPost(listing);
+    generated = await generateStoryPost(listing, photos);
   } catch (err) {
     console.error('[story] generation failed:', err);
     return { ok: false, error: `Story generation failed: ${err instanceof Error ? err.message : String(err)}` };
   }
 
-  const contentWithImages = ensureImagesEmbedded(generated.content, storyPhotos(listing), listing.name);
+  const contentWithImages = ensureImagesEmbedded(generated.content, photos, listing.name);
   const baseSlug = `welcome-${listing.slug}`;
-
-  if (dry) {
-    console.log('[story] dry run — would publish:', { slug: baseSlug, title: generated.title, pullQuote: generated.pull_quote });
-    return {
-      ok: true,
-      postSlug: baseSlug,
-      storyUrl: `${SITE.url}/community/${baseSlug}`,
-      platforms: [],
-    };
-  }
 
   const insertResult = await insertPostWithUniqueSlug(supabase, baseSlug, {
     title: generated.title,
@@ -306,21 +337,22 @@ export async function runFounderSpotlight(
     content: contentWithImages,
     author: 'Yoga Founders Network',
     author_avatar: null,
-    cover_image: storyPhotos(listing)[0] ?? null,
+    cover_image: photos[0] ?? null,
     tags: [listing.type, listing.city].filter(Boolean),
-    is_published: true,
+    is_published: false,
     reading_time_minutes: estimateReadingMinutes(contentWithImages),
     category: 'founder_story',
     city: listing.city ?? null,
     meta_title: generated.meta_title,
     meta_description: generated.meta_description,
-    published_at: new Date().toISOString(),
+    published_at: null,
+    pull_quote: generated.pull_quote,
     generated_by: 'claude-founder-story',
   });
 
   if ('error' in insertResult) {
     console.error('[story] insert error:', insertResult.error);
-    return { ok: false, error: `Failed to save spotlight post: ${insertResult.error}` };
+    return { ok: false, error: `Failed to save spotlight draft: ${insertResult.error}` };
   }
 
   const { error: linkErr } = await supabase
@@ -329,13 +361,65 @@ export async function runFounderSpotlight(
     .eq('id', listing.id);
   if (linkErr) console.error('[story] failed to set story_post_id:', linkErr);
 
-  const storyUrl = `${SITE.url}/community/${insertResult.slug}`;
+  return { ok: true, postSlug: insertResult.slug };
+}
 
-  // Publish is best-effort: a failure here must never lose the already-published post.
+/** Publish a previously generated draft: flip it live + fire the carousel. */
+export async function publishSpotlight(listingId: string): Promise<SpotlightResult> {
+  const supabase = createAdminClient();
+  const loaded = await loadListing(supabase, listingId);
+  if ('error' in loaded) return { ok: false, error: loaded.error };
+  const { listing } = loaded;
+
+  if (!listing.story_post_id) {
+    return { ok: false, error: 'No spotlight draft exists — generate one first' };
+  }
+
+  const { data: post, error: postErr } = await supabase
+    .from('blog_posts')
+    .select('id, slug, excerpt, is_published, pull_quote')
+    .eq('id', listing.story_post_id)
+    .maybeSingle();
+  if (postErr || !post) return { ok: false, error: 'Spotlight draft could not be loaded' };
+
+  const storyUrl = `${SITE.url}/community/${post.slug}`;
+
+  if (post.is_published) {
+    // Already live — only re-run the carousel if it never went out.
+    const { data: prior } = await supabase
+      .from('social_posts')
+      .select('id')
+      .eq('kind', 'story')
+      .eq('ref_id', listing.id)
+      .eq('status', 'published')
+      .limit(1);
+    if (prior && prior.length > 0) {
+      return { ok: true, skipped: 'spotlight is already published and shared', postSlug: post.slug, storyUrl };
+    }
+  } else {
+    const { error: flipErr } = await supabase
+      .from('blog_posts')
+      .update({ is_published: true, published_at: new Date().toISOString() })
+      .eq('id', post.id);
+    if (flipErr) return { ok: false, error: `Failed to publish the post: ${flipErr.message}` };
+  }
+
+  // Carousel is best-effort: a failure here must never unpublish the post.
+  const photos = await usablePhotos(listing);
   let platforms: string[] = [];
   let publishError: string | undefined;
   try {
-    const outcome = await publishStoryCarousel(supabase, listing, insertResult, generated, storyUrl);
+    const outcome = await publishStoryCarousel(
+      supabase,
+      listing,
+      { id: post.id, slug: post.slug },
+      {
+        hero: photos[0] ?? '',
+        quote: post.pull_quote || fallbackQuote(listing),
+        blurb: listing.founder_story?.leap?.trim() || post.excerpt || '',
+      },
+      storyUrl
+    );
     platforms = outcome.platforms;
     publishError = outcome.error;
   } catch (err) {
@@ -345,9 +429,72 @@ export async function runFounderSpotlight(
 
   return {
     ok: true,
-    postSlug: insertResult.slug,
+    postSlug: post.slug,
     storyUrl,
     platforms,
     ...(publishError ? { error: publishError } : {}),
   };
+}
+
+/**
+ * Re-share the carousel for an ALREADY published spotlight, bypassing the
+ * "already shared" guard — for correcting a bad earlier share (e.g. the black
+ * hero incident). Posts a fresh carousel; it does not remove prior posts.
+ */
+export async function reshareSpotlightCarousel(listingId: string): Promise<SpotlightResult> {
+  const supabase = createAdminClient();
+  const loaded = await loadListing(supabase, listingId);
+  if ('error' in loaded) return { ok: false, error: loaded.error };
+  const { listing } = loaded;
+
+  if (!listing.story_post_id) return { ok: false, error: 'No spotlight exists for this listing' };
+  const { data: post, error: postErr } = await supabase
+    .from('blog_posts')
+    .select('id, slug, excerpt, is_published, pull_quote')
+    .eq('id', listing.story_post_id)
+    .maybeSingle();
+  if (postErr || !post) return { ok: false, error: 'Spotlight post could not be loaded' };
+  if (!post.is_published) return { ok: false, error: 'Spotlight is not published — use the publish flow instead' };
+
+  const storyUrl = `${SITE.url}/community/${post.slug}`;
+  const photos = await usablePhotos(listing);
+  const outcome = await publishStoryCarousel(
+    supabase,
+    listing,
+    { id: post.id, slug: post.slug },
+    {
+      hero: photos[0] ?? '',
+      quote: post.pull_quote || fallbackQuote(listing),
+      blurb: listing.founder_story?.leap?.trim() || post.excerpt || '',
+    },
+    storyUrl
+  );
+  return { ok: true, postSlug: post.slug, storyUrl, platforms: outcome.platforms, ...(outcome.error ? { error: outcome.error } : {}) };
+}
+
+/** Discard an unpublished draft and generate a fresh one. */
+export async function regenerateSpotlightDraft(listingId: string): Promise<SpotlightResult> {
+  const supabase = createAdminClient();
+  const loaded = await loadListing(supabase, listingId);
+  if ('error' in loaded) return { ok: false, error: loaded.error };
+  const { listing } = loaded;
+
+  if (listing.story_post_id) {
+    const { data: post } = await supabase
+      .from('blog_posts')
+      .select('id, is_published')
+      .eq('id', listing.story_post_id)
+      .maybeSingle();
+    if (post?.is_published) {
+      return { ok: false, error: 'Spotlight is already published — it can no longer be regenerated' };
+    }
+    const { error: clearErr } = await supabase
+      .from('listings')
+      .update({ story_post_id: null })
+      .eq('id', listing.id);
+    if (clearErr) return { ok: false, error: `Failed to detach old draft: ${clearErr.message}` };
+    if (post) await supabase.from('blog_posts').delete().eq('id', post.id);
+  }
+
+  return generateSpotlightDraft(listingId);
 }

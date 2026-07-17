@@ -81,6 +81,7 @@ export interface BlogPost {
   meta_title: string | null;
   meta_description: string | null;
   published_at: string | null;
+  pull_quote: string | null;
   generated_by: string | null;
 }
 

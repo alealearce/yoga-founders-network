@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import type { BlogPost } from "@/lib/supabase/types";
 import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
+import { getListingUrl } from "@/lib/utils/listingUrl";
 import { Clock, Calendar, ArrowLeft } from "lucide-react";
 
 interface Props {
@@ -97,6 +98,22 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
 
   const related: BlogPost[] = relatedRes.data ?? [];
+
+  // Member Spotlight cross-link — reverse-lookup the listing this post was
+  // written about (listings.story_post_id → this post's id). Anonymous reads
+  // are scoped by RLS to status = 'approved' (see supabase/schema.sql), so the
+  // status check below is a defensive mirror of that policy, not a substitute.
+  let spotlightListing: { name: string; slug: string; type: string } | null = null;
+  if (post.category === "founder_story") {
+    const { data: sl } = await supabase
+      .from("listings")
+      .select("name, slug, type, city, status")
+      .eq("story_post_id", post.id)
+      .single();
+    if (sl && sl.status === "approved") {
+      spotlightListing = { name: sl.name, slug: sl.slug, type: sl.type };
+    }
+  }
 
   const date = post.published_at
     ? new Date(post.published_at).toLocaleDateString("en-US", {
@@ -249,8 +266,30 @@ export default async function BlogPostPage({ params }: Props) {
             dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }}
           />
 
-          {/* Directory CTA */}
+          {/* Directory CTA — a Member Spotlight with a matched, approved
+              listing links straight to that founder's profile; every other
+              post (and any founder_story post without a live match) falls
+              back to the generic category browse CTA, unchanged. */}
           {(() => {
+            if (post.category === "founder_story" && spotlightListing) {
+              return (
+                <div className="mt-10 p-6 bg-surface-low rounded-2xl border border-outline-variant/10">
+                  <p className="font-serif text-lg text-on-surface mb-1">
+                    Meet {spotlightListing.name}
+                  </p>
+                  <p className="font-sans text-sm text-on-surface-variant mb-4">
+                    See their full profile — photos, styles, and how to get in touch — on {SITE.name}.
+                  </p>
+                  <Link
+                    href={getListingUrl(spotlightListing.type, spotlightListing.slug)}
+                    className="inline-flex items-center gap-1.5 bg-primary text-white font-sans text-sm font-semibold px-5 py-2.5 rounded-full hover:opacity-90 transition-opacity"
+                  >
+                    Visit {spotlightListing.name} on Yoga Founders Network &rarr;
+                  </Link>
+                </div>
+              );
+            }
+
             // Member Spotlight posts cross-link by the featured listing's type
             // (stored as tags[0] — see lib/social/story.ts), not a fixed
             // category-wide mapping like the guide categories below.

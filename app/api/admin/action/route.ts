@@ -3,14 +3,20 @@ import { createClient, createAdminClient } from '@/lib/supabase/server';
 import { sendApprovalEmail, sendRejectionEmail, sendSpotlightLiveEmail } from '@/lib/email/resend';
 import { SITE, isAdminEmail } from '@/lib/config/site';
 import { getListingUrl } from '@/lib/utils/listingUrl';
-import { runFounderSpotlight } from '@/lib/social/story';
+import { generateSpotlightDraft, publishSpotlight, regenerateSpotlightDraft, type SpotlightResult } from '@/lib/social/story';
 
 export const maxDuration = 300;
 
-const VALID_ACTIONS = ['approve', 'reject', 'feature', 'verify', 'delete', 'story'] as const;
+const VALID_ACTIONS = ['approve', 'reject', 'feature', 'verify', 'delete', 'story', 'story_publish', 'story_regenerate'] as const;
 type AdminAction = typeof VALID_ACTIONS[number];
 
-type StoryStatus = 'published' | 'skipped' | 'failed' | 'none';
+type StoryStatus = 'draft' | 'published' | 'skipped' | 'failed' | 'none';
+
+function statusFromDraft(result: SpotlightResult): StoryStatus {
+  if (result.ok && result.postSlug) return 'draft';
+  if (result.ok && result.skipped) return 'skipped';
+  return 'failed';
+}
 
 export async function POST(req: NextRequest) {
   const userClient = await createClient();
@@ -32,10 +38,11 @@ export async function POST(req: NextRequest) {
 
     const supabase = createAdminClient();
 
-    // Populated by the 'approve' and 'story' cases; surfaced on the response
+    // Populated by the 'approve' and 'story*' cases; surfaced on the response
     // so AdminClient.tsx can show spotlight status without a second round trip.
     let storyStatus: StoryStatus = 'none';
     let storyUrl: string | undefined;
+    let storySlug: string | undefined;
 
     switch (action as AdminAction) {
       case 'approve': {
@@ -54,31 +61,25 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // Founder Spotlight: generates the Journal post + social carousel when
-        // the listing qualifies. Never let a spotlight failure fail the
-        // approval — the listing must still go live.
+        // Founder Spotlight: generates an UNPUBLISHED draft when the listing
+        // qualifies — the admin previews and publishes it from the Stories
+        // tab. Never let a spotlight failure fail the approval.
         try {
-          const result = await runFounderSpotlight(id);
-          if (result.ok && result.storyUrl) {
-            storyStatus = 'published';
-            storyUrl = result.storyUrl;
-          } else if (result.skipped) {
-            storyStatus = 'skipped';
-          } else {
-            storyStatus = 'failed';
-          }
+          const result = await generateSpotlightDraft(id);
+          storyStatus = statusFromDraft(result);
+          storySlug = result.postSlug;
         } catch (err) {
-          console.error('[admin/approve] founder spotlight error:', err);
+          console.error('[admin/approve] spotlight draft error:', err);
           storyStatus = 'failed';
         }
 
         // Send approval email to listing owner. Awaited — un-awaited promises
         // die when Vercel freezes the function after the response is sent.
-        // One email covers both listing-live and story-live when the
-        // spotlight published in the same request.
+        // The spotlight link is NOT included here — the member gets the
+        // spotlight-live email when the admin publishes the draft.
         if (listing?.email && listing?.name && listing?.slug) {
           const listingUrl = `${SITE.url}${getListingUrl(listing.type, listing.slug)}`;
-          await sendApprovalEmail(listing.email, listing.name, listing.name, listingUrl, storyUrl).catch((err) =>
+          await sendApprovalEmail(listing.email, listing.name, listing.name, listingUrl).catch((err) =>
             console.error('[admin/approve] approval email error:', err)
           );
         }
@@ -86,35 +87,64 @@ export async function POST(req: NextRequest) {
       }
 
       case 'story': {
-        // Manual retry / trigger path — re-runs the spotlight pipeline
-        // standalone for a listing that's already approved. runFounderSpotlight
-        // is idempotent (guards on story_post_id), so this is safe to re-click.
+        // Generate (or retry) the spotlight DRAFT for an approved listing.
+        // Idempotent — guards on story_post_id inside generateSpotlightDraft.
         try {
-          const result = await runFounderSpotlight(id);
-          if (result.ok && result.storyUrl) {
-            const publishedUrl = result.storyUrl;
+          const result = await generateSpotlightDraft(id);
+          storyStatus = statusFromDraft(result);
+          storySlug = result.postSlug;
+          if (storyStatus === 'failed') console.error('[admin/story] draft failed:', result.error);
+        } catch (err) {
+          console.error('[admin/story] spotlight draft error:', err);
+          storyStatus = 'failed';
+        }
+        break;
+      }
+
+      case 'story_regenerate': {
+        // Discard an unpublished draft and generate a fresh one.
+        try {
+          const result = await regenerateSpotlightDraft(id);
+          storyStatus = statusFromDraft(result);
+          storySlug = result.postSlug;
+          if (storyStatus === 'failed') console.error('[admin/story_regenerate] failed:', result.error);
+        } catch (err) {
+          console.error('[admin/story_regenerate] error:', err);
+          storyStatus = 'failed';
+        }
+        break;
+      }
+
+      case 'story_publish': {
+        // Flip the previewed draft live + fire the social carousel + tell the
+        // member. This is the explicit "share it" moment.
+        try {
+          const result = await publishSpotlight(id);
+          if (result.ok && result.storyUrl && !result.skipped) {
             storyStatus = 'published';
-            storyUrl = publishedUrl;
+            storyUrl = result.storyUrl;
+            storySlug = result.postSlug;
 
             const { data: listing } = await supabase
               .from('listings')
               .select('name, email')
               .eq('id', id)
               .single();
-
             if (listing?.email && listing?.name) {
-              await sendSpotlightLiveEmail(listing.email, listing.name, publishedUrl).catch((err) =>
-                console.error('[admin/story] spotlight email error:', err)
+              await sendSpotlightLiveEmail(listing.email, listing.name, result.storyUrl).catch((err) =>
+                console.error('[admin/story_publish] spotlight email error:', err)
               );
             }
           } else if (result.skipped) {
             storyStatus = 'skipped';
+            storyUrl = result.storyUrl;
+            storySlug = result.postSlug;
           } else {
             storyStatus = 'failed';
-            console.error('[admin/story] spotlight failed:', result.error);
+            console.error('[admin/story_publish] failed:', result.error);
           }
         } catch (err) {
-          console.error('[admin/story] founder spotlight error:', err);
+          console.error('[admin/story_publish] error:', err);
           storyStatus = 'failed';
         }
         break;
@@ -211,8 +241,13 @@ export async function POST(req: NextRequest) {
     }
 
     const responseAction = action as AdminAction;
-    if (responseAction === 'approve' || responseAction === 'story') {
-      return NextResponse.json({ ok: true, storyStatus, ...(storyUrl ? { storyUrl } : {}) });
+    if (responseAction === 'approve' || responseAction === 'story' || responseAction === 'story_publish' || responseAction === 'story_regenerate') {
+      return NextResponse.json({
+        ok: true,
+        storyStatus,
+        ...(storyUrl ? { storyUrl } : {}),
+        ...(storySlug ? { storySlug } : {}),
+      });
     }
 
     return NextResponse.json({ ok: true });

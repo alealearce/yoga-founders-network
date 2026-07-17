@@ -229,7 +229,23 @@ Reuse the full `daily-social` stack:
   (Blotato supports `scheduledTime`; see the peptide custom-scheduling pattern).
 - Auto-DM/notify the founder on the platforms where they were tagged.
 
-## 6b. Phase 2 — Get Featured engine (approved 2026-07-16, building)
+## 6c. Phase 3 — Draft-then-publish + cross-links (LIVE 2026-07-17)
+
+After the first real submission (Susan Horning) exposed four gaps, the flow is
+now draft-first: 'story'/'approve' generate an UNPUBLISHED draft;
+`/admin/spotlight/{listingId}` previews the post + hero slide; "Publish &
+Share" (`story_publish`) flips it live, fires the carousel, and emails the
+member; `story_regenerate` discards an unpublished draft. Admin has a Stories
+tab (`/admin?tab=stories`) with readable Q&A everywhere. Cross-links: listing
+profile ↔ spotlight post (derived from `story_post_id`, published only).
+Hero-image fix: slide renderer proxies photos server-side forcing JPEG (Satori
+can't decode WebP — the black-hero incident) with a branded flower-mark
+fallback; `usablePhotos()` validates URLs at generation; get-featured uploads
+are PREPENDED so the founder's own photo leads. `blog_posts.pull_quote` persists
+the quote for the later share. `reshareSpotlightCarousel()` exists for
+correcting a bad share (bypasses the already-shared guard).
+
+## 6b. Phase 2 — Get Featured engine (LIVE 2026-07-16; invites cron armed weekdays 16:30 UTC)
 
 Converts the seeded directory (621 approved unclaimed listings, 613 with emails,
 0 with stories as of 2026-07-16) into spotlighted members:

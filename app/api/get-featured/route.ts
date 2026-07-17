@@ -83,9 +83,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Freshly uploaded photos go FIRST — the founder's own upload (usually a
+    // portrait) should lead the feature, ahead of seeded/scraped photos.
     const validNewImages = (new_images ?? []).filter(isOwnStorageUrl);
     const existingImages = listing.images ?? [];
-    const mergedImages = Array.from(new Set([...existingImages, ...validNewImages])).slice(0, MAX_IMAGES);
+    const mergedImages = Array.from(new Set([...validNewImages, ...existingImages])).slice(0, MAX_IMAGES);
 
     const { error: updateError } = await supabase
       .from('listings')
