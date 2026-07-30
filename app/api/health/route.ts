@@ -85,21 +85,74 @@ async function checkBlogFresh(): Promise<Status> {
   }
 }
 
+// The daily-social cron (16:00 UTC, showcase carousels) publishes partially
+// rather than stalling: a dead Blotato account fails its platform every day
+// while the rest keep posting (fb/linkedin/threads/bluesky failed silently
+// Jul 22–30 2026 this way — "Account not found"). Two signatures, both read
+// from social_posts:
+//  - per CONFIGURED platform: rows in the last 3 days are failure-only →
+//    that account is dead (2+ fails and 0 publishes; one-off flakes pass).
+//    Only platforms currently enabled by env are judged, so dropping a dead
+//    platform's env vars clears its alarm without waiting out the window.
+//  - overall: no published showcase row in 60h → the cron itself is dead
+import { configuredPlatforms } from '@/lib/social/blotato';
+
+const SOCIAL_WINDOW_MS = 3 * 24 * 60 * 60 * 1000;
+const SHOWCASE_MAX_AGE_MS = 60 * 60 * 60 * 1000;
+
+async function checkSocialFresh(): Promise<Status> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return 'fail';
+  try {
+    const since = new Date(Date.now() - SOCIAL_WINDOW_MS).toISOString();
+    const res = await fetch(
+      `${url}/rest/v1/social_posts?select=kind,platform,status,created_at&created_at=gte.${since}&order=created_at.desc&limit=200`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(6000) },
+    );
+    if (!res.ok) return 'fail';
+    const rows: { kind: string; platform: string; status: string; created_at: string }[] =
+      await res.json();
+
+    const newestShowcase = rows.find((r) => r.kind === 'showcase' && r.status === 'published');
+    if (!newestShowcase) return 'fail';
+    if (Date.now() - new Date(newestShowcase.created_at).getTime() > SHOWCASE_MAX_AGE_MS) return 'fail';
+
+    const enabled = new Set<string>(configuredPlatforms());
+    const byPlatform = new Map<string, { published: number; failed: number }>();
+    for (const r of rows) {
+      if (!enabled.has(r.platform)) continue;
+      const entry = byPlatform.get(r.platform) ?? { published: 0, failed: 0 };
+      if (r.status === 'published') entry.published++;
+      if (r.status === 'failed') entry.failed++;
+      byPlatform.set(r.platform, entry);
+    }
+    for (const { published, failed } of Array.from(byPlatform.values())) {
+      if (failed >= 2 && published === 0) return 'fail';
+    }
+    return 'ok';
+  } catch {
+    return 'fail';
+  }
+}
+
 export async function GET() {
   if (cache && Date.now() - cache.at < CACHE_TTL_MS) {
     return NextResponse.json({ ...cache.payload, cached: true }, { status: cache.httpStatus });
   }
 
-  const [database, resend, blog] = await Promise.all([
+  const [database, resend, blog, social] = await Promise.all([
     checkDatabase(),
     checkResend(),
     checkBlogFresh(),
+    checkSocialFresh(),
   ]);
 
   const checks: Record<string, Status> = {
     database,
     resend,
     blog,
+    social,
     // Presence-only (never the value): validating these would cost tokens/charges.
     anthropic: process.env.ANTHROPIC_API_KEY ? 'ok' : 'fail',
     siteUrl: /^https:\/\//.test(process.env.NEXT_PUBLIC_SITE_URL ?? '') ? 'ok' : 'fail',
