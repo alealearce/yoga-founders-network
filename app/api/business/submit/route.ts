@@ -35,8 +35,11 @@ const SubmitSchema = z.object({
 });
 
 // Only accept photo URLs that came from our own storage bucket.
+// trim(): the Vercel env value carries a trailing newline; supabase-js
+// survives it via new URL() but a raw startsWith comparison does not —
+// untrimmed it silently dropped every submitted photo (Brahma Kumaris, 2026-08-07).
 function isOwnStorageUrl(url: string): boolean {
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   return !!base && url.startsWith(`${base}/storage/v1/object/public/listing-images/`);
 }
 
