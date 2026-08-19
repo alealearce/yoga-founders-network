@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import type { Listing, Review } from "@/lib/supabase/types";
 import { MapPin, Globe, Mail, Phone, BadgeCheck, Star, Instagram, Facebook, Youtube, ArrowRight } from "lucide-react";
+import { guideForCity } from "@/lib/cityGuides";
 import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import { getListingUrl } from "@/lib/utils/listingUrl";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
@@ -197,6 +198,23 @@ export default async function ListingPage({ params }: Props) {
                   </span>
                 </p>
               )}
+
+              {/* The city guide, when one covers this city. A listing page is a
+                  dead end; the guide is the page built to be found, so every
+                  listing should point at it. */}
+              {(() => {
+                const guide = listing.type === "studio" ? guideForCity(listing.city) : undefined;
+                if (!guide) return null;
+                return (
+                  <Link
+                    href={`/guides/${guide.slug}`}
+                    className="mt-4 inline-flex items-center gap-2 border-b border-accent pb-0.5 font-sans text-sm text-accent-text"
+                  >
+                    All {guide.studioCount} yoga studios in {guide.city}
+                    <ArrowRight size={14} aria-hidden />
+                  </Link>
+                );
+              })()}
 
             </div>
 

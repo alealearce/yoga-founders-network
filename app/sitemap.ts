@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/config/site";
 import { createAdminClient } from "@/lib/supabase/server";
 import { getListingUrl } from "@/lib/utils/listingUrl";
+import { CITY_GUIDES } from "@/lib/cityGuides";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE.url;
@@ -58,5 +59,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...listingRoutes, ...blogRoutes];
+  // City guides — the shape already earning this site's search traffic (its
+  // best page is a city guide, not a listing), so they sit above listings.
+  const guideRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${base}/guides`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    ...CITY_GUIDES.map((g) => ({
+      url: `${base}/guides/${g.slug}`,
+      lastModified: new Date(g.generatedAt),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
+  ];
+
+  return [...staticRoutes, ...guideRoutes, ...listingRoutes, ...blogRoutes];
 }

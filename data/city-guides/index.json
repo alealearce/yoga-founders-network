@@ -1,0 +1,114 @@
+[
+  {
+    "slug": "yoga-studios-new-york",
+    "city": "New York",
+    "country": "United States",
+    "title": "Yoga Studios in New York",
+    "studioCount": 71,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-seattle",
+    "city": "Seattle",
+    "country": "United States",
+    "title": "Yoga Studios in Seattle",
+    "studioCount": 40,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-toronto",
+    "city": "Toronto",
+    "country": "Canada",
+    "title": "Yoga Studios in Toronto",
+    "studioCount": 40,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-los-angeles",
+    "city": "Los Angeles",
+    "country": "United States",
+    "title": "Yoga Studios in Los Angeles",
+    "studioCount": 35,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-ottawa",
+    "city": "Ottawa",
+    "country": "Canada",
+    "title": "Yoga Studios in Ottawa",
+    "studioCount": 21,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-portland",
+    "city": "Portland",
+    "country": "United States",
+    "title": "Yoga Studios in Portland",
+    "studioCount": 21,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-vancouver",
+    "city": "Vancouver",
+    "country": "Canada",
+    "title": "Yoga Studios in Vancouver",
+    "studioCount": 20,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-san-diego",
+    "city": "San Diego",
+    "country": "United States",
+    "title": "Yoga Studios in San Diego",
+    "studioCount": 20,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-washington",
+    "city": "Washington",
+    "country": "United States",
+    "title": "Yoga Studios in Washington",
+    "studioCount": 20,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-san-francisco",
+    "city": "San Francisco",
+    "country": "United States",
+    "title": "Yoga Studios in San Francisco",
+    "studioCount": 19,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-calgary",
+    "city": "Calgary",
+    "country": "Canada",
+    "title": "Yoga Studios in Calgary",
+    "studioCount": 18,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-phoenix",
+    "city": "Phoenix",
+    "country": "United States",
+    "title": "Yoga Studios in Phoenix",
+    "studioCount": 16,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-chicago",
+    "city": "Chicago",
+    "country": "United States",
+    "title": "Yoga Studios in Chicago",
+    "studioCount": 15,
+    "generatedAt": "2026-08-19"
+  },
+  {
+    "slug": "yoga-studios-montreal",
+    "city": "Montreal",
+    "country": "Canada",
+    "title": "Yoga Studios in Montreal",
+    "studioCount": 15,
+    "generatedAt": "2026-08-19"
+  }
+]

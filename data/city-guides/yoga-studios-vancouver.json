@@ -1,0 +1,376 @@
+{
+  "slug": "yoga-studios-vancouver",
+  "city": "Vancouver",
+  "country": "Canada",
+  "title": "Yoga Studios in Vancouver",
+  "generatedAt": "2026-08-19",
+  "studioCount": 20,
+  "verifiedCount": 10,
+  "ratedCount": 10,
+  "topStyles": [
+    {
+      "style": "Vinyasa",
+      "count": 9
+    },
+    {
+      "style": "Yin",
+      "count": 8
+    },
+    {
+      "style": "Restorative",
+      "count": 8
+    },
+    {
+      "style": "Hatha",
+      "count": 7
+    },
+    {
+      "style": "Hot Yoga",
+      "count": 5
+    }
+  ],
+  "entries": [
+    {
+      "name": "Ashtanga Yoga Vancouver",
+      "url": "/yogastudio/ashtanga-yoga-vancouver",
+      "address": "1385 West 6th Avenue",
+      "website": "https://www.ashtangayogavancouver.com",
+      "styles": [
+        "Ashtanga"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.8,
+        "count": 35
+      }
+    },
+    {
+      "name": "Dharmalab",
+      "url": "/yogastudio/dharmalab-vancouver",
+      "address": "1814 Pandora Street",
+      "website": null,
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "Granville Yoga & Spin",
+      "url": "/yogastudio/granville-yoga-spin-vancouver",
+      "address": "1468 Southwest Marine Drive",
+      "website": "https://www.granvilleyogaspin.ca/",
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "Havyn Hot Studio",
+      "url": "/yogastudio/havyn-hot-studio-vancouver",
+      "address": "242-2083 Alma Street",
+      "website": "https://havynhot.com",
+      "styles": [
+        "Hot Yoga",
+        "Vinyasa",
+        "Yin",
+        "Restorative"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.6,
+        "count": 56
+      }
+    },
+    {
+      "name": "Jaybird Studio",
+      "url": "/yogastudio/jaybird-studio-yaletown-vancouver",
+      "address": "1232 Richards Street",
+      "website": "https://www.jaybirdjaybird.com",
+      "styles": [
+        "Vinyasa",
+        "Hot Yoga",
+        "Restorative"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.5,
+        "count": 52
+      }
+    },
+    {
+      "name": "Karma Teachers",
+      "url": "/yogastudio/karma-teachers-vancouver",
+      "address": "45 West Hastings Street",
+      "website": "https://www.karmateachers.org",
+      "styles": [
+        "Hatha",
+        "Vinyasa",
+        "Yin",
+        "Restorative",
+        "Meditation"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.8,
+        "count": 38
+      }
+    },
+    {
+      "name": "Modo Yoga",
+      "url": "/yogastudio/modo-yoga-vancouver",
+      "address": "121 East 2nd Avenue",
+      "website": null,
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "Modo Yoga East Vancouver",
+      "url": "/yogastudio/modo-yoga-east-vancouver",
+      "address": "560 E 15th Avenue",
+      "website": "https://modoyoga.com/east-vancouver/",
+      "styles": [
+        "Hot Yoga",
+        "Vinyasa",
+        "Yin",
+        "Hatha",
+        "Restorative",
+        "Meditation"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.6,
+        "count": 98
+      }
+    },
+    {
+      "name": "Open Door Yoga",
+      "url": "/yogastudio/open-door-yoga-vancouver",
+      "address": "200-2940 Main Street",
+      "website": "https://opendooryoga.bc.ca",
+      "styles": [
+        "Hatha",
+        "Vinyasa",
+        "Yin",
+        "Prenatal & Postnatal"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.6,
+        "count": 62
+      }
+    },
+    {
+      "name": "Orijin Yoga",
+      "url": "/yogastudio/orijin-yoga-vancouver",
+      "address": "3665 Kingsway",
+      "website": "https://www.orijinyoga.com/",
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "Oxygen Yoga",
+      "url": "/yogastudio/oxygen-yoga-vancouver",
+      "address": "564 West Broadway",
+      "website": null,
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "Oxygen Yoga & Fitness",
+      "url": "/yogastudio/oxygen-yoga-fitness-vancouver",
+      "address": "2760 East Hastings Street",
+      "website": "https://oxygenyogaandfitness.com/woodland-east-vancouver-location/",
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "Oxygen Yoga & Fitness West End",
+      "url": "/yogastudio/oxygen-yoga-fitness-west-end-vancouver",
+      "address": "1777 Haro Street",
+      "website": "https://oxygenyogaandfitness.com/oxygen-vancouver-west-end/",
+      "styles": [
+        "Hot Yoga",
+        "Vinyasa",
+        "Hatha",
+        "Yin",
+        "Restorative"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.4,
+        "count": 72
+      }
+    },
+    {
+      "name": "Oxygen Yoga and Fitness-West End",
+      "url": "/yogastudio/oxygen-yoga-and-fitness-west-end-vancouver",
+      "address": "1777 Haro Street",
+      "website": null,
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "STRETCH",
+      "url": "/yogastudio/stretch-yoga-vancouver",
+      "address": "180 East Pender Street",
+      "website": "https://www.stretchvancouver.com",
+      "styles": [
+        "Vinyasa",
+        "Hatha",
+        "Yin",
+        "Restorative"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.7,
+        "count": 45
+      }
+    },
+    {
+      "name": "The Yoga Bar",
+      "url": "/yogastudio/the-yoga-bar-yaletown-vancouver",
+      "address": "1050 Homer Street #280",
+      "website": "https://www.the-yogabar.com",
+      "styles": [
+        "Vinyasa",
+        "Hatha",
+        "Yin",
+        "Restorative"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.7,
+        "count": 42
+      }
+    },
+    {
+      "name": "Uphoria Yoga",
+      "url": "/yogastudio/uphoria-yoga-vancouver",
+      "address": "88 East Broadway",
+      "website": null,
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "Vancity Yoga",
+      "url": "/yogastudio/vancity-yoga-vancouver",
+      "address": "255 East Pender Street",
+      "website": "https://vancityyoga.com/",
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "Yoga West",
+      "url": "/yogastudio/yoga-west-vancouver",
+      "address": "2662 West 4th Avenue",
+      "website": null,
+      "styles": [],
+      "levels": [],
+      "languages": [],
+      "verified": false,
+      "rating": null
+    },
+    {
+      "name": "YYoga Downtown Flow",
+      "url": "/yogastudio/yyoga-downtown-flow-vancouver",
+      "address": "888 Burrard Street",
+      "website": "https://yyoga.ca",
+      "styles": [
+        "Vinyasa",
+        "Hatha",
+        "Yin",
+        "Restorative",
+        "Hot Yoga",
+        "Meditation"
+      ],
+      "levels": [
+        "All Levels"
+      ],
+      "languages": [
+        "English"
+      ],
+      "verified": true,
+      "rating": {
+        "avg": 4.5,
+        "count": 134
+      }
+    }
+  ]
+}
