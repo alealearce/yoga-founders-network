@@ -274,7 +274,7 @@ export default async function HomePage() {
           </p>
           <h2 className="font-serif text-[clamp(2.25rem,5.5vw,3.875rem)] leading-[1.08] tracking-[-0.01em] text-primary-on mt-4 max-w-2xl [text-wrap:balance]">
             {COPY.submitCta.title}{" "}
-            <em className="text-accent">{COPY.submitCta.titleAccent}</em>
+            <em className="text-accent-dark">{COPY.submitCta.titleAccent}</em>
           </h2>
           <p className="font-sans text-base lg:text-lg text-primary-on/70 max-w-xl mt-5 mb-9">
             {COPY.submitCta.subtitle}

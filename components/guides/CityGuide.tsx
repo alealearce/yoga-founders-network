@@ -5,7 +5,7 @@ import { SITE } from "@/lib/config/site";
 /**
  * City studio guide — the Warm Register applied to a long index: hairlines
  * instead of cards, Instrument Serif at a single weight (never font-bold),
- * turmeric on lines and large text only, 2px radius.
+ * violet on lines and large text only, 2px radius.
  *
  * This is an index, not a ranking. Studios are alphabetical and the page says
  * why — see the note in scripts/build-city-guides.mjs.

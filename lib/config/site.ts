@@ -8,15 +8,15 @@ export const COLORS = {
   bg:               "#FAF6EF",
   surfaceLow:       "#F3EDE0",
   surfaceCard:      "#FFFDF8",
-  primary:          "#231E17",
-  primaryContainer: "#3A322A",
+  primary:          "#1F1F24",
+  primaryContainer: "#34343B",
   onPrimary:        "#FAF6EF",
   secondaryContainer: "#EAE1CF",
   onSurface:        "#231E17",
   onSurfaceVariant: "#75695A",
   outlineVariant:   "#E5DCCB",
-  accent:           "#A2620F",
-  accentText:       "#8A530C",
+  accent:           "#5B2BB8",
+  accentText:       "#4A2299",
 } as const;
 
 // ── Site Identity ────────────────────────────────────────────────────────────
@@ -87,7 +87,7 @@ export const CHATBOT = {
 // ── Homepage Copy ────────────────────────────────────────────────────────────
 export const COPY = {
   hero: {
-    // headlineAccent renders as the italic turmeric line after the headline.
+    // headlineAccent renders as the italic violet line after the headline.
     headline:       "A network of the world's yoga spaces",
     headlineAccent: "and people.",
     subheadline: "Studios, teachers, schools, and retreats — every entry reviewed before it appears.",

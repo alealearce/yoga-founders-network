@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  /* Accent tokens as RGB triplets (Tailwind alpha works). Violet — matches
+     the social carousels (#7b2ff7 gradient), deepened so it reads on paper. */
+  :root {
+    --accent:      91 43 184;   /* #5B2BB8 */
+    --accent-text: 74 34 153;   /* #4A2299 */
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -16,7 +23,7 @@
   }
 
   ::selection {
-    background-color: #ead9bd;
+    background-color: #ddd3f2;
   }
 }
 

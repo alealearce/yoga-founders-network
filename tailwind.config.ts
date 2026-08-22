@@ -4,7 +4,8 @@
  * Colors must stay in sync with COLORS in lib/config/site.ts
  *
  * Rules of the system:
- * - Warm paper ground, warm ink text, one turmeric accent (line + text only).
+ * - Warm paper ground, warm ink text, one violet accent (line + text only).
+ *   Violet matches the social carousels (app/api/social/image/route.tsx).
  * - Radius is 2px on everything; pills are reserved for the verification stamp
  *   and circular icons (rounded-full).
  * - No elevation: the shadow tokens render as 1px hairline rings so legacy
@@ -16,16 +17,17 @@ import type { Config } from "tailwindcss";
 const BG                    = "#FAF6EF"  // Warm paper background
 const SURFACE_LOW           = "#F3EDE0"  // Secondary sectioning
 const SURFACE_LOWEST        = "#FFFDF8"  // Raised cards
-const PRIMARY               = "#231E17"  // Warm ink — primary actions
-const PRIMARY_CONTAINER     = "#3A322A"  // Hover state
+const PRIMARY               = "#1F1F24"  // Dark grey — primary actions + dark panels
+const PRIMARY_CONTAINER     = "#34343B"  // Hover state
 const ON_PRIMARY            = "#FAF6EF"  // Text on primary
 const SECONDARY_CONTAINER   = "#EAE1CF"  // Secondary buttons
 const ON_SURFACE            = "#231E17"  // High-contrast text
 const ON_SURFACE_VARIANT    = "#75695A"  // Secondary text
 const OUTLINE_VARIANT       = "#E5DCCB"  // Hairlines
 const SURFACE_HIGHEST       = "#F3EDE0"  // Input backgrounds
-const ACCENT                = "#A2620F"  // Turmeric — lines & large text
-const ACCENT_TEXT           = "#8A530C"  // Turmeric, darkened for small text
+const ACCENT                = "#5B2BB8"  // Violet — lines & large text
+const ACCENT_TEXT           = "#4A2299"  // Violet, darkened for small text
+const ACCENT_ON_DARK        = "#C4ADF7"  // Lilac — accent text on ink panels
 
 const config: Config = {
   content: [
@@ -45,9 +47,13 @@ const config: Config = {
           container: PRIMARY_CONTAINER,
           on:        ON_PRIMARY,
         },
+        // Accent reads from CSS variables (RGB triplets in globals.css) so the
+        // whole site can be re-accented from one place. ACCENT / ACCENT_TEXT
+        // above stay as the documented defaults.
         accent: {
-          DEFAULT: ACCENT,
-          text:    ACCENT_TEXT,
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          text:    "rgb(var(--accent-text) / <alpha-value>)",
+          dark:    ACCENT_ON_DARK,
         },
         "secondary-container": SECONDARY_CONTAINER,
         "on-surface":         ON_SURFACE,
