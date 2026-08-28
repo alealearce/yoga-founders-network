@@ -9,7 +9,8 @@ import type { Listing } from '@/lib/supabase/types';
 
 /**
  * Daily cron: publish a listing-showcase carousel to social via Blotato —
- * a rotating member of the directory. (The blog-digest cron was retired
+ * each directory member exactly once, never repeated; the cron idles when
+ * every listing has been featured. (The blog-digest cron was retired
  * 2026-07-16 — blog stays for SEO only; ?kind=blog remains for manual runs.)
  *
  * Auth: Authorization: Bearer ${CRON_SECRET} (Vercel Cron sets this).
@@ -176,29 +177,28 @@ async function pickListing(supabase: ReturnType<typeof createAdminClient>, id: s
     const { data } = await supabase.from('listings').select('*').eq('id', id).maybeSingle();
     return (data as Listing) ?? null;
   }
-  // Pull lightweight candidate rows for ALL approved listings, ordered
-  // least-recently-featured first, then filter for ones that have a usable
-  // image. (Filtering must happen across every candidate, not a pre-limited
-  // window, or image-less imported rows would crowd out the eligible ones.)
+  // Each listing is showcased ONCE, ever (owner decision 2026-08-28 — the old
+  // least-recently-featured rotation started repeating businesses once the
+  // pool ran dry). Only never-featured approved listings are candidates; when
+  // none remain the cron goes quiet until someone new signs up. Filter for a
+  // usable image across ALL candidates, not a pre-limited window, or image-less
+  // imported rows would crowd out the eligible ones.
   const { data } = await supabase
     .from('listings')
-    .select('id, type, images, logo_url, owner_id, last_featured_at, created_at')
+    .select('id, type, images, logo_url, owner_id, created_at')
     .eq('status', 'approved')
-    .order('last_featured_at', { ascending: true, nullsFirst: true })
+    .is('last_featured_at', null)
     .order('created_at', { ascending: true });
-  type Lite = Pick<Listing, 'id' | 'type' | 'images' | 'logo_url' | 'owner_id' | 'last_featured_at'>;
+  type Lite = Pick<Listing, 'id' | 'type' | 'images' | 'logo_url' | 'owner_id'>;
   const eligible = ((data as Lite[]) ?? []).filter((l) => (l.images && l.images.length > 0) || l.logo_url);
   if (eligible.length === 0) return null;
 
   const preferred = WEEKDAY_TYPE[new Date().getUTCDay()];
   const firstOf = (pool: Lite[]) => (preferred && pool.find((l) => l.type === preferred)) || pool[0];
 
-  // Prioritize claimed members (owner_id set) that haven't been featured in the
-  // last 7 days — so a lone member doesn't repeat daily — else fall through to
-  // any eligible (seeded) listing. As members claim, they take over the rotation.
-  const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
-  const claimedFresh = eligible.filter((l) => l.owner_id && (!l.last_featured_at || new Date(l.last_featured_at).getTime() < weekAgo));
-  const chosen = claimedFresh.length ? firstOf(claimedFresh) : firstOf(eligible);
+  // Claimed members (owner_id set) jump the queue ahead of seeded listings.
+  const claimed = eligible.filter((l) => l.owner_id);
+  const chosen = claimed.length ? firstOf(claimed) : firstOf(eligible);
 
   const { data: full } = await supabase.from('listings').select('*').eq('id', chosen.id).maybeSingle();
   return (full as Listing) ?? null;
@@ -218,7 +218,9 @@ async function runShowcase(supabase: ReturnType<typeof createAdminClient>, id: s
   }
 
   const listing = await pickListing(supabase, id);
-  if (!listing) return { ok: false, reason: 'no eligible listing to feature' };
+  // Empty queue = every listing has had its one feature. Not a failure — the
+  // cron idles until a new signup arrives (health check reads this the same way).
+  if (!listing) return { ok: true, skipped: 'every eligible listing has already been featured once' };
 
   const url = `${SITE.url}${getListingUrl(listing.type, listing.slug)}`;
   const label = TYPE_LABEL[listing.type] ?? 'Member';

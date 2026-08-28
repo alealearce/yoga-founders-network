@@ -94,11 +94,25 @@ async function checkBlogFresh(): Promise<Status> {
 //    that account is dead (2+ fails and 0 publishes; one-off flakes pass).
 //    Only platforms currently enabled by env are judged, so dropping a dead
 //    platform's env vars clears its alarm without waiting out the window.
-//  - overall: no published showcase row in 60h → the cron itself is dead
+//  - overall: no published showcase row in 60h AND a never-featured listing is
+//    waiting → the cron itself is dead. Each listing is showcased once, ever
+//    (2026-08-28), so an empty queue makes a quiet cron 'skipped', not 'fail'.
 import { configuredPlatforms } from '@/lib/social/blotato';
 
 const SOCIAL_WINDOW_MS = 3 * 24 * 60 * 60 * 1000;
 const SHOWCASE_MAX_AGE_MS = 60 * 60 * 60 * 1000;
+
+// A never-featured approved listing with a usable image exists — i.e. the
+// showcase cron has work queued. Mirrors pickListing in admin/daily-social.
+async function showcaseQueueHasWork(url: string, key: string): Promise<boolean> {
+  const res = await fetch(
+    `${url}/rest/v1/listings?select=images,logo_url&status=eq.approved&last_featured_at=is.null&limit=100`,
+    { headers: { apikey: key, Authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(6000) },
+  );
+  if (!res.ok) return true; // can't tell — assume work so a real stall still alarms
+  const rows: { images: string[] | null; logo_url: string | null }[] = await res.json();
+  return rows.some((l) => (l.images && l.images.length > 0) || l.logo_url);
+}
 
 async function checkSocialFresh(): Promise<Status> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -115,8 +129,10 @@ async function checkSocialFresh(): Promise<Status> {
       await res.json();
 
     const newestShowcase = rows.find((r) => r.kind === 'showcase' && r.status === 'published');
-    if (!newestShowcase) return 'fail';
-    if (Date.now() - new Date(newestShowcase.created_at).getTime() > SHOWCASE_MAX_AGE_MS) return 'fail';
+    const stale =
+      !newestShowcase ||
+      Date.now() - new Date(newestShowcase.created_at).getTime() > SHOWCASE_MAX_AGE_MS;
+    if (stale) return (await showcaseQueueHasWork(url, key)) ? 'fail' : 'skipped';
 
     const enabled = new Set<string>(configuredPlatforms());
     const byPlatform = new Map<string, { published: number; failed: number }>();
