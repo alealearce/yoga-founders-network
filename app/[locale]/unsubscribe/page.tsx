@@ -2,7 +2,7 @@ import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/server";
 
 export const metadata = {
-  title: "Unsubscribed — Yoga Founders Network",
+  title: "Unsubscribed",
   robots: { index: false },
 };
 

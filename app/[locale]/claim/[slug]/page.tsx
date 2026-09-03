@@ -3,7 +3,7 @@ import { createClient, createAdminClient } from "@/lib/supabase/server";
 import ClaimForm from "./ClaimForm";
 
 export const metadata = {
-  title: "Claim your listing — Yoga Founders Network",
+  title: "Claim your listing",
   robots: { index: false },
 };
 

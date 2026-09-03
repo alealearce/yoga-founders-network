@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import { Instrument_Serif, Manrope } from "next/font/google";
 import { notFound } from "next/navigation";
 import { routing } from "@/routing";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { SITE } from "@/lib/config/site";
+import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import "@/app/globals.css";
 
 // Single display weight by design — hierarchy comes from scale, not boldness.
@@ -43,11 +41,14 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     title: SITE.name,
     description: SITE.description,
+    // Explicit path — /en/opengraph-image would 307-redirect to this.
+    images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE.name,
     description: SITE.description,
+    images: ["/twitter-image"],
   },
   icons: {
     icon: "/images/favicon.png",
@@ -102,8 +103,6 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  const messages = await getMessages();
-
   return (
     <html
       lang={locale}
@@ -118,11 +117,9 @@ export default async function LocaleLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
-        <NextIntlClientProvider messages={messages}>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </NextIntlClientProvider>
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

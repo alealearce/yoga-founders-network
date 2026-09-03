@@ -418,7 +418,9 @@ function markdownToHtml(md: string): string {
     if (/^---+$/.test(trimmed)) { flushPara(); closeList(); output.push("<hr>"); continue; }
     if (/^### /.test(trimmed)) { flushPara(); closeList(); output.push(`<h3>${inline(trimmed.slice(4))}</h3>`); continue; }
     if (/^## /.test(trimmed))  { flushPara(); closeList(); output.push(`<h2>${inline(trimmed.slice(3))}</h2>`); continue; }
-    if (/^# /.test(trimmed))   { flushPara(); closeList(); output.push(`<h1>${inline(trimmed.slice(2))}</h1>`); continue; }
+    // Demoted to h2 — the post title above is the page's only h1, and this
+    // already picks up the prose-h2 styling defined below.
+    if (/^# /.test(trimmed))   { flushPara(); closeList(); output.push(`<h2>${inline(trimmed.slice(2))}</h2>`); continue; }
 
     if (/^[-*] /.test(trimmed)) {
       flushPara();

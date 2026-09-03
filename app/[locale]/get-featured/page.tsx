@@ -5,7 +5,7 @@ import { SITE } from "@/lib/config/site";
 import GetFeaturedForm from "./GetFeaturedForm";
 
 export const metadata: Metadata = {
-  title: "Get Featured — Yoga Founders Network",
+  title: "Get Featured",
   robots: { index: false },
 };
 

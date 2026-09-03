@@ -4,6 +4,8 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { getListingUrl } from "@/lib/utils/listingUrl";
 import { CITY_GUIDES } from "@/lib/cityGuides";
 
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE.url;
 

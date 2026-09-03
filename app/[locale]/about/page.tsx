@@ -5,7 +5,7 @@ import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
-  title: "About Yoga Founders Network — Global Yoga Directory & Community",
+  title: "About — Global Yoga Directory & Community",
   description: `${SITE.tagline}. Learn about the mission behind Yoga Founders Network — a global directory and community built to help yoga studios, teachers, schools, and founders grow.`,
   alternates: { canonical: `${SITE.url}/about` },
   openGraph: {

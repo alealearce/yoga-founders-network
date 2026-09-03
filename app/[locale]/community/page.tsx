@@ -23,7 +23,7 @@ function categoryLabel(id: string): string {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: `The Journal — ${SITE.name}`,
+  title: "The Journal",
   description: "Insights, guides, and wisdom for yoga students — how to find the right studio, choose a teacher, deepen your practice, and more.",
   alternates: { canonical: `${SITE.url}/community` },
   openGraph: {

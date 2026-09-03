@@ -6,7 +6,7 @@ import Badge from "@/components/ui/Badge";
 import { getListingUrl } from "@/lib/utils/listingUrl";
 
 export const metadata = {
-  title: "My Dashboard — Yoga Founders Network",
+  title: "My Dashboard",
   robots: { index: false },
 };
 

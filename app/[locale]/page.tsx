@@ -9,7 +9,7 @@ import ListingCard from "@/components/directory/ListingCard";
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 
 export const metadata: Metadata = {
-  title: `${SITE.name} — ${SITE.tagline}`,
+  title: SITE.tagline,
   description: SITE.description,
   alternates: { canonical: SITE.url },
   openGraph: {
