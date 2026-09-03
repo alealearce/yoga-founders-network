@@ -20,28 +20,39 @@ function baseTemplate(title: string, bodyHtml: string): string {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title}</title>
+  <style>
+    /* Phones: the card goes edge to edge and padding tightens so type keeps
+       its real size instead of the whole email shrinking to fit. */
+    @media only screen and (max-width: 600px) {
+      .yf-outer { padding: 16px 8px !important; }
+      .yf-card { width: 100% !important; max-width: 100% !important; }
+      .yf-header { padding: 24px 20px !important; }
+      .yf-body { padding: 28px 20px 24px !important; }
+      .yf-footer { padding: 20px 20px 24px !important; }
+    }
+  </style>
 </head>
 <body style="margin:0;padding:0;background-color:${BG};font-family:Georgia,'Times New Roman',serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:${BG};padding:40px 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" class="yf-outer" style="background-color:${BG};padding:40px 20px;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border:1px solid ${BORDER};border-radius:8px;overflow:hidden;">
+        <table width="100%" cellpadding="0" cellspacing="0" class="yf-card" style="width:100%;max-width:600px;background-color:#ffffff;border:1px solid ${BORDER};border-radius:8px;overflow:hidden;">
           <!-- Header -->
           <tr>
-            <td style="background-color:${SAGE};padding:32px 40px;text-align:center;">
+            <td class="yf-header" style="background-color:${SAGE};padding:32px 40px;text-align:center;">
               <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-family:Arial,sans-serif;">Yoga Founders Network</p>
               <h1 style="margin:8px 0 0;color:#ffffff;font-size:22px;font-weight:normal;font-family:Georgia,'Times New Roman',serif;">${title}</h1>
             </td>
           </tr>
           <!-- Body -->
           <tr>
-            <td style="padding:40px 40px 32px;color:#2d2d2d;font-size:16px;line-height:1.7;">
+            <td class="yf-body" style="padding:40px 40px 32px;color:#2d2d2d;font-size:16px;line-height:1.7;">
               ${bodyHtml}
             </td>
           </tr>
           <!-- Footer -->
           <tr>
-            <td style="padding:24px 40px;border-top:1px solid ${BORDER};text-align:center;">
+            <td class="yf-footer" style="padding:24px 40px;border-top:1px solid ${BORDER};text-align:center;">
               <p style="margin:0;font-size:12px;color:#888;font-family:Arial,sans-serif;">
                 Yoga Founders Network &mdash; Connecting the global yoga community<br/>
                 <a href="https://yogafoundersnetwork.com" style="color:${SAGE};text-decoration:none;">yogafoundersnetwork.com</a>
@@ -58,7 +69,7 @@ function baseTemplate(title: string, bodyHtml: string): string {
 
 // ── Welcome Email ──────────────────────────────────────────────────────────
 
-export async function sendWelcomeEmail(to: string, name: string) {
+export function buildWelcomeEmail(name: string): { subject: string; html: string } {
   const subject = 'Welcome to Yoga Founders Network — your listing is under review';
   const body = `
     <p style="margin:0 0 16px;">Dear ${name},</p>
@@ -68,12 +79,12 @@ export async function sendWelcomeEmail(to: string, name: string) {
     <p style="margin:0;">With gratitude,<br/>The Yoga Founders Network Team</p>
   `;
 
-  return getResend().emails.send({
-    from: FROM_EMAIL,
-    to,
-    subject,
-    html: baseTemplate('Your Listing is Being Reviewed', body),
-  });
+  return { subject, html: baseTemplate('Your Listing is Being Reviewed', body) };
+}
+
+export async function sendWelcomeEmail(to: string, name: string) {
+  const { subject, html } = buildWelcomeEmail(name);
+  return getResend().emails.send({ from: FROM_EMAIL, to, subject, html });
 }
 
 // ── "You're Featured" Email ────────────────────────────────────────────────
