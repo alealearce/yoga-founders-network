@@ -8,7 +8,7 @@ import { routing } from "@/routing";
 const BASE = SITE.url;
 
 interface Props {
-  params: { locale: string; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
 }
 
 // Guides are files in the repo, so every page prerenders. The locale has to be
@@ -20,7 +20,8 @@ export function generateStaticParams() {
   return routing.locales.flatMap((locale) => CITY_GUIDES.map((g) => ({ locale, slug: g.slug })));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const guide = getCityGuide(params.slug);
   if (!guide) return {};
 
@@ -43,7 +44,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function CityGuidePage({ params }: Props) {
+export default async function CityGuidePage(props: Props) {
+  const params = await props.params;
   const guide = getCityGuide(params.slug);
   if (!guide) notFound();
 

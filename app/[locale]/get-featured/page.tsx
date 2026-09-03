@@ -16,11 +16,12 @@ interface InviteListing {
   story_post_id: string | null;
 }
 
-export default async function GetFeaturedPage({
-  searchParams,
-}: {
-  searchParams: { token?: string };
-}) {
+export default async function GetFeaturedPage(
+  props: {
+    searchParams: Promise<{ token?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const { token } = searchParams;
 
   let listing: InviteListing | null = null;

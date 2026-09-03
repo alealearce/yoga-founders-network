@@ -35,10 +35,11 @@ const LISTING_COLUMNS =
 type StoryPostsMap = Record<string, { slug: string; title: string; is_published: boolean }>;
 
 interface AdminPageProps {
-  searchParams: { tab?: string };
+  searchParams: Promise<{ tab?: string }>;
 }
 
-export default async function AdminPage({ searchParams }: AdminPageProps) {
+export default async function AdminPage(props: AdminPageProps) {
+  const searchParams = await props.searchParams;
   const initialTab: "pending" | "stories" | "all" =
     searchParams.tab === "stories" || searchParams.tab === "all" ? searchParams.tab : "pending";
 

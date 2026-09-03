@@ -35,6 +35,7 @@ import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import type { JSX } from 'react';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

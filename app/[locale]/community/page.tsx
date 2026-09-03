@@ -37,11 +37,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function CommunityPage({
-  searchParams,
-}: {
-  searchParams: { category?: string };
-}) {
+export default async function CommunityPage(
+  props: {
+    searchParams: Promise<{ category?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = await createClient();
 
   let query = supabase
