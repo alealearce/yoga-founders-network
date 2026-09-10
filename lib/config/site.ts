@@ -110,6 +110,20 @@ export const COPY = {
     titleAccent: "in the network.",
     subtitle: "Listing is free. A real person reviews every submission — most are live within two days, with a verification mark your students can trust.",
     cta:      "List your space — free",
+    // Business framework (2026-09-09). The listing stays free; these are the
+    // belief, the if-this-then-that, the proof, and the promises around it.
+    belief:   "Yoga grows its impact in society one open door at a time.",
+    steps: [
+      { action: "List your space",   result: "a real person reviews it and it's live within two days." },
+      { action: "Get verified",      result: "you're a Founder in the network, with the mark your students can trust." },
+      { action: "Tell your story",   result: "a Member Spotlight in the Journal and a carousel on our channels." },
+    ],
+    proof: ["621 spaces listed", "62 verified founders", "154 Journal pieces", "561 social posts"],
+    guarantee: "Guarantee: live within two days, or you hear from us with the reason.",
+    bonus:     "Bonus: every founder who joins gets their story told, in the Journal and on our channels, free.",
+    capacity:  "Every entry is read by a person. Ten new spotlights a month.",
+    partnerLine: "Run a yoga alliance, a teacher training, a festival, or a studio group?",
+    partnerCta:  "Let's collaborate: a spotlight series for your community.",
   },
   footer: {
     tagline: "Helping Yoga grow its Impact in Society",

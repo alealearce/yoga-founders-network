@@ -276,15 +276,57 @@ export default async function HomePage() {
             {COPY.submitCta.title}{" "}
             <em className="text-accent-dark">{COPY.submitCta.titleAccent}</em>
           </h2>
-          <p className="font-sans text-base lg:text-lg text-primary-on/70 max-w-xl mt-5 mb-9">
+          <p className="font-sans text-base lg:text-lg text-primary-on/70 max-w-xl mt-5">
             {COPY.submitCta.subtitle}
           </p>
+          <p className="font-serif text-xl lg:text-2xl text-accent-dark mt-6 max-w-xl">
+            {COPY.submitCta.belief}
+          </p>
+
+          {/* If this, then that */}
+          <ol className="mt-8 max-w-xl space-y-3 border-t border-primary-on/15 pt-6">
+            {COPY.submitCta.steps.map((s, i) => (
+              <li key={s.action} className="flex gap-4 font-sans text-sm lg:text-base text-primary-on/85">
+                <span className="font-serif text-accent-dark tabular-nums w-6 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                <span><span className="font-bold text-primary-on">{s.action}:</span> {s.result}</span>
+              </li>
+            ))}
+          </ol>
+
+          {/* Proof strip */}
+          <div className="mt-8 flex flex-wrap border-y border-primary-on/15 font-sans text-[11px] font-bold tracking-[0.18em] uppercase text-primary-on/60 max-w-xl">
+            {COPY.submitCta.proof.map((label, i, arr) => (
+              <span key={label} className={`py-2.5 pr-5 ${i < arr.length - 1 ? "mr-5 border-r border-primary-on/15" : ""}`}>
+                {label}
+              </span>
+            ))}
+          </div>
+
+          <ul className="mt-6 max-w-xl space-y-2 font-sans text-sm text-primary-on/80">
+            {[COPY.submitCta.guarantee, COPY.submitCta.bonus, COPY.submitCta.capacity].map((line) => (
+              <li key={line} className="flex gap-3">
+                <span aria-hidden className="mt-2 w-1.5 h-1.5 shrink-0 rounded-full bg-accent-dark" />
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+
           <Link
             href="/submit"
-            className="inline-flex items-center px-7 py-3.5 rounded-[2px] font-sans text-sm font-bold bg-primary-on text-primary hover:bg-accent hover:text-primary-on transition-colors duration-300"
+            className="mt-9 inline-flex items-center px-7 py-3.5 rounded-[2px] font-sans text-sm font-bold bg-primary-on text-primary hover:bg-accent hover:text-primary-on transition-colors duration-300"
           >
             {COPY.submitCta.cta}
           </Link>
+
+          <p className="font-sans text-sm text-primary-on/60 max-w-xl mt-8">
+            {COPY.submitCta.partnerLine}{" "}
+            <a
+              href={`mailto:${SITE.email}?subject=Spotlight%20series%20for%20our%20community`}
+              className="text-primary-on underline underline-offset-4 hover:text-accent-dark"
+            >
+              {COPY.submitCta.partnerCta}
+            </a>
+          </p>
         </div>
       </section>
     </>
