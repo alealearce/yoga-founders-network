@@ -188,13 +188,23 @@ export async function GET(req: NextRequest) {
   // 1. Fetch existing slugs + titles so the model avoids duplicates.
   const { data: existing, error: fetchErr } = await supabase
     .from('blog_posts')
-    .select('slug, title, category, city')
+    .select('slug, title, category, city, published_at')
     .order('published_at', { ascending: false })
     .limit(200);
 
   if (fetchErr) {
     console.error('[daily-blog] fetch existing error:', fetchErr);
     return NextResponse.json({ error: 'Failed to fetch existing posts' }, { status: 500 });
+  }
+
+  // Same-day guard. Two cron slots hit this route (18:07 and a 22:07 retry,
+  // added 2026-09-14 after the 2026-09-12 run published nothing). If a post
+  // already went out in the last 20h the retry is a no-op, so a good day
+  // never gets two posts.
+  const newestAt = (existing ?? [])[0]?.published_at;
+  if (!dry && newestAt && Date.now() - new Date(newestAt).getTime() < 20 * 60 * 60 * 1000) {
+    console.log(`[daily-blog] skipped: newest post published ${newestAt}`);
+    return NextResponse.json({ ok: true, skipped: 'already published today', newestAt });
   }
 
   const existingSummary = (existing ?? [])
