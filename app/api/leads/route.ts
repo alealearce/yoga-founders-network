@@ -3,8 +3,16 @@ import { z } from 'zod';
 import { createAdminClient } from '@/lib/supabase/server';
 import { sendLeadEmail } from '@/lib/email/resend';
 import { rateLimit } from '@/lib/rateLimit';
+import { refusedByGate } from '@/lib/botGate';
 
 export const runtime = 'nodejs';
+
+// Per-sender caps over 24h, counted in the database (the IP limit above is
+// per-instance memory and misses bursts). A person asking for quotes contacts
+// a few businesses; the 2026-09-28 vendorroster scam hit 23 with one message.
+const MAX_LEADS_PER_EMAIL = 3;
+const MAX_SAME_MESSAGE = 3;
+const DAY_MS = 24 * 60 * 60_000;
 
 const LeadSchema = z.object({
   listing_id:   z.string().uuid(),
@@ -23,6 +31,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
+    // Refused submissions get the same answer as real ones, so a bot learns nothing.
+    if (refusedByGate(body, 'lead')) return NextResponse.json({ ok: true });
     const parsed = LeadSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -44,6 +54,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Listing not found' }, { status: 404 });
     }
 
+    const since = new Date(Date.now() - DAY_MS).toISOString();
+    const [{ count: bySender }, { count: byMessage }] = await Promise.all([
+      supabase.from('leads').select('id', { count: 'exact', head: true })
+        .ilike('sender_email', sender_email.trim()).gte('created_at', since),
+      supabase.from('leads').select('id', { count: 'exact', head: true })
+        .eq('message', message).gte('created_at', since),
+    ]);
+    if ((bySender ?? 0) >= MAX_LEADS_PER_EMAIL || (byMessage ?? 0) >= MAX_SAME_MESSAGE) {
+      console.warn(`[leads] capped: ${sender_email} (sender ${bySender}, same message ${byMessage})`);
+      return NextResponse.json({ ok: true });
+    }
+
     // Insert lead record
     const { error: insertError } = await supabase.from('leads').insert({
       listing_id,
@@ -61,7 +83,7 @@ export async function POST(req: NextRequest) {
     // Send notification email to the listing owner (or listing email if no owner)
     const recipientEmail = listing.email;
     if (recipientEmail) {
-      sendLeadEmail(
+      await sendLeadEmail(
         recipientEmail,
         sender_name,
         sender_email,
