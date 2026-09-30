@@ -20,7 +20,7 @@ import { buildStoryCaption } from '@/lib/social/caption';
 import { configuredPlatforms, SINGLE_IMAGE_ONLY, uploadAll, publish, clampCaption, type Platform } from '@/lib/social/blotato';
 import type { Listing } from '@/lib/supabase/types';
 
-const MODEL = 'claude-sonnet-4-5-20250929';
+const MODEL = 'claude-sonnet-5-5';
 const IMG_BASE = process.env.SOCIAL_PUBLIC_BASE_URL || SITE.url;
 
 const TYPE_LABEL: Record<string, string> = {

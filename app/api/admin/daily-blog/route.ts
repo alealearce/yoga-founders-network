@@ -10,7 +10,7 @@ import { createAdminClient } from '@/lib/supabase/server';
 
 export const maxDuration = 300; // 5 min — Claude generation can be slow
 
-const MODEL = 'claude-sonnet-4-5-20250929';
+const MODEL = 'claude-sonnet-5-5';
 
 const SYSTEM_PROMPT = `You are the automated editorial system for Yoga Founders Network (yogafoundersnetwork.com) — the global directory for yoga studios, teachers, schools, retreats, and products.
 
