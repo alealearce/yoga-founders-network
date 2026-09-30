@@ -144,13 +144,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Send emails — fire-and-forget to keep response fast
-    sendWelcomeEmail(email, name).catch((err) =>
-      console.error('[business/submit] welcome email error:', err)
-    );
-    sendAdminNewListing(name, type, email).catch((err) =>
-      console.error('[business/submit] admin email error:', err)
-    );
+    // Await both (in parallel) so Vercel doesn't kill the sends; .catch keeps a failure from failing the request
+    await Promise.all([
+      sendWelcomeEmail(email, name).catch((err) =>
+        console.error('[business/submit] welcome email error:', err)
+      ),
+      sendAdminNewListing(name, type, email).catch((err) =>
+        console.error('[business/submit] admin email error:', err)
+      ),
+    ]);
 
     return NextResponse.json({ ok: true, slug }, { status: 201 });
   } catch (err) {
