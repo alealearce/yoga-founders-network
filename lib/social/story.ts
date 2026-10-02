@@ -116,7 +116,7 @@ async function generateStoryPost(listing: Listing, photos: string[]): Promise<Ge
     max_tokens: 4096,
     system: SYSTEM_PROMPT,
     tools: [SPOTLIGHT_TOOL],
-    tool_choice: { type: 'tool', name: 'publish_spotlight' },
+    tool_choice: { type: 'auto' },
     messages: [{ role: 'user', content: buildUserPrompt(listing, photos) }],
   });
   const toolBlock = message.content.find((b) => b.type === 'tool_use');
