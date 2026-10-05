@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
-import { SITE } from '@/lib/config/site';
+import { SITE, ADMIN } from '@/lib/config/site';
 
 export async function GET(req: NextRequest) {
   // Verify this is called by Vercel Cron
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
 
   await resend.emails.send({
     from: SITE.fromEmail,
-    to:   SITE.email,
+    to:   [...ADMIN.emails],
     subject: `${count} listing${count > 1 ? 's' : ''} pending review for 48h+ — Yoga Founders Network`,
     html: `
       <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:24px;">

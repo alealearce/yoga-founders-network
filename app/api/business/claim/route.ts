@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createAdminClient } from '@/lib/supabase/server';
 import { rateLimit } from '@/lib/rateLimit';
-import { SITE } from '@/lib/config/site';
+import { SITE, ADMIN } from '@/lib/config/site';
 
 const ClaimSchema = z.object({
   slug:    z.string().min(1).max(120),
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     await resend.emails.send({
       from: SITE.fromEmail,
-      to:   SITE.email,
+      to:   [...ADMIN.emails],
       subject: `Claim request for "${listing.name}" — Yoga Founders Network`,
       html: `
         <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:24px;">

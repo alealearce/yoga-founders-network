@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import { SITE } from '@/lib/config/site';
+import { SITE, ADMIN } from '@/lib/config/site';
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY ?? 'placeholder');
@@ -7,6 +7,8 @@ function getResend() {
 
 const FROM_EMAIL = 'Yoga Founders Network <hello@yogafoundersnetwork.com>';
 const ADMIN_EMAIL = 'hello@yogafoundersnetwork.com';
+// Admin alerts go straight to the owner's inbox, not through the brand address
+const ADMIN_ALERT_TO = [...ADMIN.emails];
 
 // ── Brand styles (inline, for email client compatibility) ──────────────────
 const SAGE = '#111111';
@@ -244,7 +246,7 @@ export async function sendAdminStorySubmittedEmail(listingName: string) {
 
   return getResend().emails.send({
     from: FROM_EMAIL,
-    to: ADMIN_EMAIL,
+    to: ADMIN_ALERT_TO,
     subject,
     html: baseTemplate('Spotlight Story Submitted', body),
   });
@@ -358,7 +360,7 @@ export async function sendAdminNewListing(
 
   return getResend().emails.send({
     from: FROM_EMAIL,
-    to: ADMIN_EMAIL,
+    to: ADMIN_ALERT_TO,
     subject,
     html: baseTemplate('New Listing Submission', body),
   });
@@ -399,7 +401,7 @@ export async function sendAdminClaimRequest(opts: {
 
   return getResend().emails.send({
     from: FROM_EMAIL,
-    to: ADMIN_EMAIL,
+    to: ADMIN_ALERT_TO,
     subject,
     html: baseTemplate('Listing Claim Request', body),
     replyTo: claimerEmail,
@@ -440,7 +442,7 @@ export async function sendEscalationEmail({
 
   return getResend().emails.send({
     from: FROM_EMAIL,
-    to: [ADMIN_EMAIL, 'hi@arce.ca'],
+    to: ADMIN_ALERT_TO,
     subject: userEmail
       ? `🔑 Password help requested by ${userEmail} — Yoga Founders Network`
       : `⚠️ Lotus escalated a conversation — Yoga Founders Network`,
