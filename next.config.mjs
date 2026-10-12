@@ -40,6 +40,10 @@ const nextConfig = {
       { source: '/services/retreats', destination: '/retreatcenter', permanent: true },
       { source: '/services/products', destination: '/yogaproducts',  permanent: true },
       { source: '/services/workshops',destination: '/yogaworkshops', permanent: true },
+
+      // Nirvana Yoga School: two keyword-titled listings merged into one (2026-10-12).
+      { source: '/retreatcenter/3-day-meditation-retreat-rishikesh-rishikesh-6i2xr', destination: '/yogaschool/nirvana-yoga-school-rishikesh-6i2xr', permanent: true },
+      { source: '/yogaproducts/200-hour-yoga-course-rishikesh-rishikesh-04fj6',      destination: '/yogaschool/nirvana-yoga-school-rishikesh-6i2xr', permanent: true },
     ];
   },
 
