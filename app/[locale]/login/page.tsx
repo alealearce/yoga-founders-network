@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Eye, EyeOff } from "lucide-react";
 
 type FormState = "idle" | "loading" | "error";
+
+const LINK_ERROR =
+  "That email link has expired or was already used. Sign in below, or reset your password for a new link.";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,6 +18,14 @@ export default function LoginPage() {
   const [showPw,   setShowPw]   = useState(false);
   const [status,   setStatus]   = useState<FormState>("idle");
   const [message,  setMessage]  = useState("");
+
+  // The auth callback sends a failed email link here with ?error=.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has("error")) {
+      setStatus("error");
+      setMessage(LINK_ERROR);
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
