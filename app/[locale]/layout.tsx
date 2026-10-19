@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, Manrope } from "next/font/google";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { routing } from "@/routing";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -120,6 +121,14 @@ export default async function LocaleLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
+        {/* GA4 loads after window.onload, off the LCP path. */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-BTPMTFCD4G"
+          strategy="lazyOnload"
+        />
+        <Script id="gtag-init" strategy="lazyOnload">
+          {`window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-BTPMTFCD4G');`}
+        </Script>
       </body>
     </html>
   );
