@@ -263,7 +263,7 @@ function ShowcaseHero({ name, kind, city, country, img }: { name: string; kind: 
           {name}
         </div>
         {loc ? (
-          <div style={{ display: 'flex', fontFamily: 'Manrope', fontWeight: 500, fontSize: '34px', color: 'rgba(255,255,255,0.86)', marginTop: '18px' }}>📍 {loc}</div>
+          <div style={{ display: 'flex', fontFamily: 'Manrope', fontWeight: 500, fontSize: '34px', color: 'rgba(255,255,255,0.86)', marginTop: '18px' }}>{loc}</div>
         ) : null}
         <div style={{ display: 'flex', marginTop: '34px' }}><SwipeChip color="#ffffff" /></div>
       </div>
@@ -299,7 +299,7 @@ function ShowcaseCta({ name, handle }: { name: string; handle: string }) {
     <div style={{ width: W, height: H, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(150deg, ${PURPLE_B} 0%, #1a1030 100%)`, padding: '78px' }}>
       <FlowerOfLife size={140} color="#ffffff" sw={2.5} />
       <div style={{ display: 'flex', fontFamily: 'Manrope', fontWeight: 700, fontSize: '24px', letterSpacing: '4px', color: 'rgba(255,255,255,0.7)', marginTop: '50px' }}>
-        ✨ FEATURED TODAY
+        FEATURED TODAY
       </div>
       <div style={{ display: 'flex', textAlign: 'center', fontFamily: 'Manrope', fontWeight: 800, fontSize: '60px', lineHeight: 1.1, color: '#ffffff', marginTop: '20px', maxWidth: '860px' }}>
         Discover {name} on Yoga Founders Network

@@ -65,7 +65,7 @@ const BLOG_SYS = `You write for Yoga Founders Network's Instagram — the global
 Voice: calm, grounded, encouraging, inclusive. Knowledgeable but never preachy or salesy.
 Return ONLY minified JSON: {"points":["...","...","..."],"hook":"..."}.
 - points: EXACTLY 3 takeaways from the post, each a punchy standalone line, max ~90 characters, no numbering, no trailing period required.
-- hook: 1–2 short scroll-stopping caption lines. No hashtags, no links, no emojis-as-filler (one tasteful emoji ok).`;
+- hook: 1–2 short scroll-stopping caption lines. No hashtags, no links, no emojis.`;
 
 function fallbackPoints(post: Pick<BlogPost, 'excerpt' | 'content'>): string[] {
   const source = (post.excerpt || post.content || '').replace(/[#*_>`]/g, ' ');
@@ -95,11 +95,11 @@ export async function buildBlogContent(post: Pick<BlogPost, 'title' | 'slug' | '
   }
 
   const caption = [
-    `📌 ${post.title}`,
+    post.title,
     '',
     hook,
     '',
-    `🔗 Read the full piece on The Journal → ${url}`,
+    `Read the full piece on The Journal → ${url}`,
     '',
     hashtags,
   ].join('\n');
@@ -115,7 +115,7 @@ const TYPE_LABEL: Record<string, string> = {
 
 const SHOW_SYS = `You write warm, genuine Instagram captions for Yoga Founders Network spotlighting a member of our global yoga directory.
 Voice: calm, grounded, encouraging, celebratory but not gushing. Inclusive of all levels.
-Write 2–4 short lines that make a reader want to discover this listing. No hashtags, no links, no @handles — those are appended separately. One tasteful emoji max. Output ONLY the caption text.`;
+Write 2–4 short lines that make a reader want to discover this listing. No hashtags, no links, no @handles — those are appended separately. No emojis. Output ONLY the caption text.`;
 
 /** A short, safe blurb for the showcase "why" slide and as caption fallback. */
 export function showcaseBlurb(listing: Pick<Listing, 'description' | 'long_description' | 'tagline'>): string {
@@ -152,15 +152,15 @@ export async function buildShowcaseCaption(
   const handle = listing.social_instagram ? igHandle(listing.social_instagram) : '';
   const website = listing.website ? cleanWebsite(listing.website) : '';
   return [
-    `✨ Featured ${label}: ${listing.name}`,
-    loc ? `📍 ${loc}` : '',
+    `Featured ${label}: ${listing.name}`,
+    loc,
     '',
     body,
     '',
-    `🔗 Discover ${listing.name} on Yoga Founders Network → ${url}`,
-    website ? `🌐 ${website}` : '',
-    handle ? (opts.isMember ? `🤝 In collaboration with ${handle}` : `📸 Follow along → ${handle}`) : '',
-    !opts.isMember ? `📣 Is this your space? Claim your free listing → yogafoundersnetwork.com` : '',
+    `Discover ${listing.name} on Yoga Founders Network → ${url}`,
+    website,
+    handle ? (opts.isMember ? `In collaboration with ${handle}` : `Follow along → ${handle}`) : '',
+    !opts.isMember ? `Is this your space? Claim your free listing → yogafoundersnetwork.com` : '',
     '',
     hashtags,
   ]
