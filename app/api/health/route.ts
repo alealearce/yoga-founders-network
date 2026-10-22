@@ -61,6 +61,26 @@ async function checkResend(): Promise<Status> {
   }
 }
 
+// Anthropic key present AND still accepted. Anthropic disables a key it thinks
+// leaked without asking (it did on 2026-10-22), and a presence-only check kept
+// reporting 'ok'. GET /v1/models costs no tokens and answers 401 for a dead key.
+// Only a rejected key fails: a 429, 5xx or timeout is Anthropic's side, not the
+// key, so it reports 'skipped' instead of paging. Can't see exhausted credits.
+async function checkAnthropic(): Promise<Status> {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) return 'fail';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/models?limit=1', {
+      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      signal: AbortSignal.timeout(6000),
+    });
+    if (res.ok) return 'ok';
+    return res.status === 401 || res.status === 403 ? 'fail' : 'skipped';
+  } catch {
+    return 'skipped';
+  }
+}
+
 // The daily-blog cron publishes one post a day (18:07 UTC). If the newest
 // published post is older than 36h, today's run failed — this catches a
 // silently dead blog (invalid Anthropic key, exhausted credits, retired
@@ -157,9 +177,10 @@ export async function GET() {
     return NextResponse.json({ ...cache.payload, cached: true }, { status: cache.httpStatus });
   }
 
-  const [database, resend, blog, social] = await Promise.all([
+  const [database, resend, anthropic, blog, social] = await Promise.all([
     checkDatabase(),
     checkResend(),
+    checkAnthropic(),
     checkBlogFresh(),
     checkSocialFresh(),
   ]);
@@ -167,10 +188,9 @@ export async function GET() {
   const checks: Record<string, Status> = {
     database,
     resend,
+    anthropic,
     blog,
     social,
-    // Presence-only (never the value): validating these would cost tokens/charges.
-    anthropic: process.env.ANTHROPIC_API_KEY ? 'ok' : 'fail',
     siteUrl: /^https:\/\//.test(process.env.NEXT_PUBLIC_SITE_URL ?? '') ? 'ok' : 'fail',
     // 'skipped' when the site doesn't use Stripe (e.g. no key configured yet).
     stripe: process.env.STRIPE_SECRET_KEY ? 'ok' : 'skipped',
