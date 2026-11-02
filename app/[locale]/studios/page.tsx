@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import type { Listing } from "@/lib/supabase/types";
+import { fetchApprovedListings } from "@/lib/supabase/listings";
 import { YOGA_CATEGORIES } from "@/lib/config/categories";
 import { getIpLocation } from "@/lib/utils/ipLocation";
 import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
@@ -26,17 +26,7 @@ export default async function StudiosPage() {
     getIpLocation(),
   ]);
 
-  const { data, count } = await supabase
-    .from("listings")
-    .select("*", { count: "exact" })
-    .eq("status", "approved")
-    .eq("type", "studio")
-    .order("is_featured", { ascending: false })
-    .order("rating_avg", { ascending: false })
-    .limit(500);
-
-  const studios: Listing[] = data ?? [];
-  const total = count ?? 0;
+  const { listings: studios, total } = await fetchApprovedListings(supabase, "studio");
 
   return (
     <>

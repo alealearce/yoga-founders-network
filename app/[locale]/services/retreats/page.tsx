@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { fetchApprovedListings } from "@/lib/supabase/listings";
 import { getIpLocation } from "@/lib/utils/ipLocation";
-import type { Listing } from "@/lib/supabase/types";
 import { YOGA_CATEGORIES } from "@/lib/config/categories";
 import { SITE, DEFAULT_OG_IMAGE } from "@/lib/config/site";
 import SearchBar from "@/components/directory/SearchBar";
@@ -26,17 +26,7 @@ export default async function RetreatsPage() {
     getIpLocation(),
   ]);
 
-  const { data, count } = await supabase
-    .from("listings")
-    .select("*", { count: "exact" })
-    .eq("status", "approved")
-    .eq("type", "retreat")
-    .order("is_featured", { ascending: false })
-    .order("rating_avg", { ascending: false })
-    .limit(500);
-
-  const retreats: Listing[] = data ?? [];
-  const total = count ?? 0;
+  const { listings: retreats, total } = await fetchApprovedListings(supabase, "retreat");
 
   return (
     <>
