@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createAdminClient } from '@/lib/supabase/server';
 import { sendWelcomeEmail, sendAdminNewListing } from '@/lib/email/resend';
+import { LISTING_LIMITS } from '@/lib/utils/listing-limits';
 
 const SubmitSchema = z.object({
-  name:        z.string().min(2).max(100),
+  name:        z.string().min(2).max(LISTING_LIMITS.name),
   type:        z.enum(['studio', 'teacher', 'school', 'retreat', 'product', 'workshop']),
   email:       z.string().email(),
   website:     z.string().url().optional().or(z.literal('')),
@@ -12,7 +13,7 @@ const SubmitSchema = z.object({
   address:     z.string().max(200).optional().or(z.literal('')),
   city:        z.string().min(2).max(100),
   country:     z.string().min(2).max(100),
-  description: z.string().max(2000).optional(),
+  description: z.string().max(LISTING_LIMITS.description).optional(),
   yoga_styles: z.array(z.string().max(60)).max(20).optional(),
   languages:   z.array(z.string().max(40)).max(20).optional(),
   tagline:     z.string().max(200).optional(),
