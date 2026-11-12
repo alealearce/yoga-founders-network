@@ -7,6 +7,7 @@ import { YOGA_CATEGORIES, SCHOOL_CERTIFICATIONS, PRODUCT_CATEGORIES, LISTING_LAN
 import YogaSilhouette from "@/components/ui/YogaSilhouette";
 import CountrySelect from "@/components/ui/CountrySelect";
 import { compressImage } from "@/lib/utils/compressImage";
+import { LISTING_LIMITS } from "@/lib/utils/listing-limits";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
@@ -189,6 +190,7 @@ export default function SubmitPage() {
                     type="text"
                     required
                     value={form.name}
+                    maxLength={LISTING_LIMITS.name}
                     onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                     placeholder="Your studio or practice name"
                     className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
@@ -303,10 +305,14 @@ export default function SubmitPage() {
                   required
                   rows={5}
                   value={form.description}
+                  maxLength={LISTING_LIMITS.description}
                   onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                   placeholder="Describe your studio, teaching style, what makes you unique, who your students are..."
                   className="w-full px-4 py-3 rounded-xl bg-surface-low font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
                 />
+                <p className="text-xs text-on-surface-variant mt-1 text-right">
+                  {(form.description ?? '').length}/{LISTING_LIMITS.description}
+                </p>
               </div>
             </div>
 
