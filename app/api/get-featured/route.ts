@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { z } from 'zod';
 import { createAdminClient } from '@/lib/supabase/server';
 import { sendStoryReceivedEmail, sendAdminStorySubmittedEmail } from '@/lib/email/resend';
+import { autoSpotlight } from '@/lib/moderation/auto';
+
+// The spotlight is written after the response is sent (after()).
+export const maxDuration = 300;
 import { FOUNDER_QUESTIONS } from '@/lib/config/site';
 
 const MAX_IMAGES = 6;
@@ -62,7 +66,7 @@ export async function POST(req: NextRequest) {
 
     const { data: listing, error: findError } = await supabase
       .from('listings')
-      .select('id, name, email, images, story_post_id')
+      .select('id, name, email, images, story_post_id, status')
       .eq('invite_token', token)
       .maybeSingle();
 
@@ -110,7 +114,18 @@ export async function POST(req: NextRequest) {
     if (listing.email) {
       await sendStoryReceivedEmail(listing.email, listing.name);
     }
-    await sendAdminStorySubmittedEmail(listing.name);
+    if (listing.status === 'approved') {
+      // Written, checked and published on its own; Alejandro hears the outcome
+      // (live, or held with the reasons) from autoSpotlight.
+      after(() =>
+        autoSpotlight(listing.id).then(
+          (outcome) => console.log('[get-featured] spotlight:', outcome.status, outcome.detail ?? ''),
+          (err) => console.error('[get-featured] spotlight error:', err)
+        )
+      );
+    } else {
+      await sendAdminStorySubmittedEmail(listing.name);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {

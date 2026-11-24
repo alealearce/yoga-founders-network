@@ -4,6 +4,7 @@ import { sendApprovalEmail, sendRejectionEmail, sendSpotlightLiveEmail } from '@
 import { SITE, isAdminEmail } from '@/lib/config/site';
 import { getListingUrl } from '@/lib/utils/listingUrl';
 import { generateSpotlightDraft, publishSpotlight, regenerateSpotlightDraft, type SpotlightResult } from '@/lib/social/story';
+import { autoSpotlight } from '@/lib/moderation/auto';
 
 export const maxDuration = 300;
 
@@ -61,22 +62,28 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // Founder Spotlight: generates an UNPUBLISHED draft when the listing
-        // qualifies — the admin previews and publishes it from the Stories
-        // tab. Never let a spotlight failure fail the approval.
+        // Member Spotlight: written, checked and published on its own when the
+        // listing qualifies (lib/moderation/auto.ts). A draft that fails the
+        // check stays unpublished for the Stories tab. The member's spotlight
+        // email and the admin outcome email are sent from there. Never let a
+        // spotlight failure fail the approval.
         try {
-          const result = await generateSpotlightDraft(id);
-          storyStatus = statusFromDraft(result);
-          storySlug = result.postSlug;
+          const outcome = await autoSpotlight(id, { notify: false });
+          storyStatus =
+            outcome.status === 'published' ? 'published'
+            : outcome.status === 'held' ? 'draft'
+            : outcome.status;
+          storySlug = outcome.postSlug;
+          storyUrl = outcome.storyUrl;
         } catch (err) {
-          console.error('[admin/approve] spotlight draft error:', err);
+          console.error('[admin/approve] spotlight error:', err);
           storyStatus = 'failed';
         }
 
         // Send approval email to listing owner. Awaited — un-awaited promises
         // die when Vercel freezes the function after the response is sent.
-        // The spotlight link is NOT included here — the member gets the
-        // spotlight-live email when the admin publishes the draft.
+        // The spotlight link is NOT included here: the member gets the
+        // spotlight-live email when the spotlight is published.
         if (listing?.email && listing?.name && listing?.slug) {
           const listingUrl = `${SITE.url}${getListingUrl(listing.type, listing.slug)}`;
           await sendApprovalEmail(listing.email, listing.name, listing.name, listingUrl).catch((err) =>

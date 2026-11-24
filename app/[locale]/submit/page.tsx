@@ -49,6 +49,8 @@ export default function SubmitPage() {
   const [form,    setForm]    = useState(INITIAL);
   const [status,  setStatus]  = useState<FormState>("idle");
   const [message, setMessage] = useState("");
+  // Set when the listing passed the automatic check and is already live.
+  const [liveUrl, setLiveUrl] = useState<string | null>(null);
   const [uploading,   setUploading]   = useState(false);
   const [uploadError, setUploadError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -118,7 +120,12 @@ export default function SubmitPage() {
       const data = await res.json();
       if (res.ok) {
         setStatus("success");
-        setMessage(data.message ?? "Thank you! We'll review your listing within 2–3 business days.");
+        setLiveUrl(data.live && data.url ? data.url : null);
+        setMessage(
+          data.live
+            ? "Your listing is live on Yoga Founders Network. We have emailed you the link."
+            : "Thank you. Your listing needs a quick look from our team before it goes live. We will email you as soon as it is up."
+        );
         setForm(INITIAL);
       } else {
         setStatus("error");
@@ -136,17 +143,17 @@ export default function SubmitPage() {
         <div className="max-w-md text-center py-20">
           <div className="flex justify-center mb-6"><YogaSilhouette pose="lotus" size={64} color="#231E17" /></div>
           <h1 className="font-serif text-display-sm text-on-surface mb-4">
-            You&apos;re in the queue!
+            {liveUrl ? "You\u2019re live" : "You\u2019re in the queue"}
           </h1>
           <p className="font-sans text-base text-on-surface-variant leading-relaxed mb-8">
             {message}
           </p>
           <a
-            href="/"
+            href={liveUrl ?? "/"}
             className="inline-flex px-6 py-3 rounded-[2px] font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
             style={{ background: "#231E17" }}
           >
-            Back to Home
+            {liveUrl ? "View Your Listing" : "Back to Home"}
           </a>
         </div>
       </div>
@@ -715,7 +722,7 @@ export default function SubmitPage() {
               <a href="/terms" className="underline hover:text-on-surface-variant">Terms of Use</a>{" "}
               and{" "}
               <a href="/privacy" className="underline hover:text-on-surface-variant">Privacy Policy</a>.
-              We review all listings within 2–3 business days.
+              Most listings go live right away. A few wait for a quick review.
             </p>
           </form>
         </div>

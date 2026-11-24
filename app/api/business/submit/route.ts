@@ -1,7 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { z } from 'zod';
 import { createAdminClient } from '@/lib/supabase/server';
-import { sendWelcomeEmail, sendAdminNewListing } from '@/lib/email/resend';
+import { sendWelcomeEmail, sendApprovalEmail, sendAdminAutoEmail, escapeHtml } from '@/lib/email/resend';
+import { decideListing, autoSpotlight, listingPublicUrl } from '@/lib/moderation/auto';
+import { SITE } from '@/lib/config/site';
+
+// The spotlight for an auto-approved listing is written after the response is
+// sent (after()); it needs the same room the admin approve route has.
+export const maxDuration = 300;
 import { LISTING_LIMITS } from '@/lib/utils/listing-limits';
 
 const SubmitSchema = z.object({
@@ -105,7 +111,8 @@ export async function POST(req: NextRequest) {
     const supabase = createAdminClient();
     const slug = slugify(name, city ?? '');
 
-    const { error: insertError } = await supabase.from('listings').insert({
+    const cleanedStory = cleanFounderStory(founder_story);
+    const { data: inserted, error: insertError } = await supabase.from('listings').insert({
       name,
       slug,
       type:          type as import('@/lib/supabase/types').ListingType,
@@ -132,30 +139,90 @@ export async function POST(req: NextRequest) {
       social_facebook:  normalizeSocial(social_facebook,  'facebook'),
       social_youtube:   normalizeSocial(social_youtube,   'youtube'),
       social_tiktok:    normalizeSocial(social_tiktok,    'tiktok'),
-      founder_story:  cleanFounderStory(founder_story),
+      founder_story:  cleanedStory,
       founder_images: (founder_images ?? []).filter(isOwnStorageUrl),
       story_opt_out:  story_opt_out ?? false,
-    });
+    }).select('id').single();
 
-    if (insertError) {
+    if (insertError || !inserted) {
       console.error('[business/submit] insert error:', insertError);
       return NextResponse.json(
-        { error: `DB error: ${insertError.message}` },
+        { error: `DB error: ${insertError?.message ?? 'no row returned'}` },
         { status: 500 }
       );
     }
 
+    // Auto-approve: a clean submission goes live now; a doubtful one stays
+    // pending and Alejandro gets the reasons. See lib/moderation/.
+    const holdReasons = await decideListing(inserted.id, {
+      name, type, email, website, description, tagline, city, country, founder_story: cleanedStory,
+    });
+    let live = holdReasons.length === 0;
+    if (live) {
+      const { error: approveError } = await supabase
+        .from('listings')
+        .update({ status: 'approved' })
+        .eq('id', inserted.id);
+      if (approveError) {
+        console.error('[business/submit] auto-approve update error:', approveError);
+        holdReasons.push('It passed the check but could not be set live.');
+        live = false;
+      }
+    }
+
+    const listingUrl = listingPublicUrl(type, slug);
+    const safeName = escapeHtml(name);
+    const who = `${safeName} (${type}, ${escapeHtml(city)}, ${escapeHtml(country)}), sent by ${escapeHtml(email)}`;
+
     // Await both (in parallel) so Vercel doesn't kill the sends; .catch keeps a failure from failing the request
     await Promise.all([
-      sendWelcomeEmail(email, name).catch((err) =>
-        console.error('[business/submit] welcome email error:', err)
+      (live ? sendApprovalEmail(email, name, name, listingUrl) : sendWelcomeEmail(email, name)).catch((err) =>
+        console.error('[business/submit] member email error:', err)
       ),
-      sendAdminNewListing(name, type, email).catch((err) =>
-        console.error('[business/submit] admin email error:', err)
-      ),
+      sendAdminAutoEmail(
+        live
+          ? {
+              needsReview: false,
+              subject: `Live, no action needed: ${name}`,
+              heading: 'New Listing Is Live',
+              intro: `${who}. It passed the spam check and is live.`,
+              reasons: [],
+              ctaUrl: listingUrl,
+              ctaLabel: 'View the Listing',
+            }
+          : {
+              needsReview: true,
+              subject: `Needs your review: ${name}`,
+              heading: 'New Listing Waiting',
+              intro: `${who}. It was not put live.`,
+              reasons: holdReasons,
+              ctaUrl: `${SITE.url}/admin`,
+              ctaLabel: 'Review in Admin',
+            }
+      ).catch((err) => console.error('[business/submit] admin email error:', err)),
     ]);
 
-    return NextResponse.json({ ok: true, slug }, { status: 201 });
+    // Member Spotlight for a listing that just went live: written, checked and
+    // published after the response. Skips itself when the listing does not
+    // qualify; the daily pending-check retries one that failed.
+    if (live) {
+      after(() =>
+        autoSpotlight(inserted.id).then(
+          (outcome) => console.log('[business/submit] spotlight:', outcome.status, outcome.detail ?? ''),
+          (err) => console.error('[business/submit] spotlight error:', err)
+        )
+      );
+    }
+
+    return NextResponse.json(
+      {
+        ok: true,
+        slug,
+        live,
+        ...(live ? { url: listingUrl } : {}),
+      },
+      { status: 201 }
+    );
   } catch (err) {
     console.error('[business/submit] error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

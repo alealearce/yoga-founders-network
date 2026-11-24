@@ -366,6 +366,54 @@ export async function sendAdminNewListing(
   });
 }
 
+// ── Admin: auto-approve outcome ───────────────────────────────────────────
+// One email per automatic decision (lib/moderation/auto.ts). The subject says
+// whether he has to do anything: "Live, no action needed" or "Needs your review".
+
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+export async function sendAdminAutoEmail(opts: {
+  needsReview: boolean;
+  subject: string;
+  heading: string;
+  /** Trusted HTML written by us; listing names inside it must already be escaped. */
+  intro: string;
+  /** Plain text, escaped here. Why it was held, or notes on a live one. */
+  reasons: string[];
+  ctaUrl: string;
+  ctaLabel: string;
+}) {
+  const reasonList = opts.reasons.length
+    ? `<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;border:1px solid ${BORDER};border-radius:4px;overflow:hidden;">
+      <tr>
+        <td style="padding:16px;background-color:${BG};">
+          <p style="margin:0 0 8px;font-size:13px;font-family:Arial,sans-serif;color:#888;">${opts.needsReview ? 'Why it is waiting for you' : 'Notes'}</p>
+          ${opts.reasons.map((r) => `<p style="margin:0 0 8px;font-size:14px;font-family:Arial,sans-serif;">${escapeHtml(r)}</p>`).join('')}
+        </td>
+      </tr>
+    </table>`
+    : '';
+  const body = `
+    <p style="margin:0 0 16px;">${opts.intro}</p>
+    ${reasonList}
+    <p style="margin:0 0 24px;text-align:center;">
+      <a href="${opts.ctaUrl}" style="display:inline-block;background-color:${SAGE};color:#ffffff;padding:14px 32px;border-radius:4px;text-decoration:none;font-family:Arial,sans-serif;font-size:15px;letter-spacing:0.5px;">${opts.ctaLabel}</a>
+    </p>
+    ${opts.needsReview ? '' : `<p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif;">Went live on its own. If it should not be up, remove it in <a href="${SITE.url}/admin" style="color:#888;">the admin</a>.</p>`}
+  `;
+
+  return getResend().emails.send({
+    from: FROM_EMAIL,
+    to: ADMIN_ALERT_TO,
+    subject: opts.subject,
+    html: baseTemplate(opts.heading, body),
+  });
+}
+
+export { escapeHtml };
+
 // ── Admin: Listing Claim Request ──────────────────────────────────────────
 
 export async function sendAdminClaimRequest(opts: {
