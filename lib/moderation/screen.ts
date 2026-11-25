@@ -84,7 +84,8 @@ export function websiteHost(website: string | null | undefined): string | null {
 }
 
 // A profile on one of these is not "the same website" as another profile there.
-const SHARED_HOSTS = /(^|\.)(youtube\.com|youtu\.be|instagram\.com|facebook\.com|linktr\.ee|tiktok\.com|wixsite\.com|wordpress\.com|blogspot\.com|google\.com|business\.site|mindbodyonline\.com|linkedin\.com)$/;
+// Booking platforms are here too: every workshop a school runs sits on the same one.
+const SHARED_HOSTS = /(^|\.)(youtube\.com|youtu\.be|instagram\.com|facebook\.com|linktr\.ee|tiktok\.com|wixsite\.com|wordpress\.com|blogspot\.com|google\.com|business\.site|mindbodyonline\.com|linkedin\.com|bookwhen\.com|eventbrite\.[a-z.]+|momoyoga\.com|punchpass\.com|acuityscheduling\.com|calendly\.com|ticketsource\.co\.uk|ticketsource\.com|ticketsource\.us|eversports\.[a-z.]+)$/;
 
 export function isSharedHost(host: string): boolean {
   return SHARED_HOSTS.test(host);
@@ -118,7 +119,11 @@ export function screenListing(input: ScreenInput, ctx: ScreenContext): string[] 
   for (const other of ctx.related) {
     if (other.status === 'rejected') {
       reasons.push(`You rejected "${other.name}" from the same ${other.sameEmail ? 'email' : 'website'} before.`);
-    } else if (other.sameHost && other.type === input.type) {
+    } else if (
+      other.sameHost && other.type === input.type &&
+      // One school lists many workshops from one website; only the same workshop twice is a duplicate.
+      (input.type !== 'workshop' || normalizeText(other.name) === normalizeText(input.name))
+    ) {
       reasons.push(`Possible duplicate: "${other.name}" (${other.type}, ${other.status}) uses the same website.`);
     }
   }

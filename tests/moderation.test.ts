@@ -65,6 +65,21 @@ test('same website and type as an existing listing is held; another type is not'
   assert.deepEqual(screenListing(school, { ...quiet, related: [{ ...dup, type: 'retreat' }] }), []);
 });
 
+test('a school can list many workshops; the same workshop twice is held', () => {
+  const workshop = { ...school, name: 'Aerial Yoga CPD Weekend', type: 'workshop', website: 'https://coachhouse.example/aerial-cpd' };
+  const other = { name: 'Restorative Yoga CPD Day', type: 'workshop', status: 'approved', sameHost: true, sameEmail: true };
+  assert.deepEqual(screenListing(workshop, { ...quiet, related: [other] }), []);
+  const same = { ...other, name: 'aerial  yoga CPD weekend' };
+  assert.match(screenListing(workshop, { ...quiet, related: [same] }).join(' '), /Possible duplicate/);
+});
+
+test('booking platforms are shared hosts', () => {
+  for (const h of ['bookwhen.com', 'www.eventbrite.co.uk', 'eventbrite.com', 'momoyoga.com']) {
+    assert.equal(isSharedHost(h.replace(/^www\./, '')), true, h);
+  }
+  assert.equal(isSharedHost('coachhousestudio.uk'), false);
+});
+
 test('a sender he rejected before is held', () => {
   const rejected = { name: '200 Hour Yoga Course Rishikesh', type: 'product', status: 'rejected', sameHost: true, sameEmail: false };
   assert.match(screenListing(school, { ...quiet, related: [rejected] }).join(' '), /You rejected/);
